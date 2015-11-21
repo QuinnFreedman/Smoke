@@ -88,9 +88,6 @@ abstract public class Main{
 	//Game Loop
 	public static void gameLoop(){
 		while(!gamePaused){
-			if(t % KEYFRAME_INTERVAL == 0){
-				doGameLogic();
-			}
 			simulate();
 			render();
 			
@@ -100,11 +97,6 @@ abstract public class Main{
 				Thread.sleep(DELAY);
 			} catch (InterruptedException e) {e.printStackTrace();}
 		}
-	}
-	
-	//read in user input and do logic/pathfinding for all NPCs
-	private static void doGameLogic(){
-		player.doLogic();
 	}
 	
 	//move sprites

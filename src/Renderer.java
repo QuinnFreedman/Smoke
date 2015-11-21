@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 import javax.swing.JPanel;
 
 public abstract class Renderer{
-	static final float scale = 2;
+	static final float scale = 2f;
 	static RenderMode renderMode = RenderMode.WORLD;
 	
 	@SuppressWarnings("serial")

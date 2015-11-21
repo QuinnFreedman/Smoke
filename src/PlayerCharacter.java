@@ -6,6 +6,7 @@ public class PlayerCharacter extends Character{
 	static boolean rightPressed = false;
 	static boolean upPressed    = false;
 	static boolean downPressed  = false;
+	private static Direction moveDirection = Direction.NONE;
 	//private final int diagonalSpeed = (int) (this.speed/Math.sqrt(2));
 	
 	//DEBUG
@@ -26,14 +27,32 @@ public class PlayerCharacter extends Character{
 		int dx = 0;
 		int dy = 0;
 		if(upPressed){
-			dy = -1;
+			moveDirection = Direction.NORTH;
 		}else if(downPressed){
-			dy = 1;
-		}else if(rightPressed){
-			dx = 1;
+			moveDirection = Direction.SHOUTH;
 		}else if(leftPressed){
-			dx = -1;
+			moveDirection = Direction.WEST;
+		}else if(rightPressed){
+			moveDirection = Direction.EAST;
 		}
+		
+		switch (moveDirection) {
+		case NORTH:
+			dy = -1;
+			break;
+		case SHOUTH:
+			dy = 1;
+			break;
+		case EAST:
+			dx = 1;
+			break;
+		case WEST:
+			dx = -1;
+			break;
+		case NONE:
+			break;
+		}
+		moveDirection = Direction.NONE;
 		
 		int tile_y = this.previousPosition.y/TopDownGraphics.tileWidthHeight_Pixels + dy;
 		int tile_x = this.previousPosition.x/TopDownGraphics.tileWidthHeight_Pixels + dx;
@@ -68,13 +87,16 @@ public class PlayerCharacter extends Character{
 		*/
 	}
 	
-	
+	private static enum Direction{
+		NORTH,SHOUTH,EAST,WEST,NONE
+	}
 	
 	static void handleKeyboardInput(KeyEvent e, boolean keyPressed){
 		int c = e.getKeyCode();
 		if(c == KeyEvent.VK_LEFT){
 			leftPressed = keyPressed;
 			if(keyPressed){
+				moveDirection = Direction.WEST;
 				rightPressed = false;
 				downPressed = false;
 				upPressed = false;
@@ -82,6 +104,7 @@ public class PlayerCharacter extends Character{
 		}else if(c == KeyEvent.VK_RIGHT){
 			rightPressed = keyPressed;
 			if(keyPressed){
+				moveDirection = Direction.EAST;
 				leftPressed = false;
 				downPressed = false;
 				upPressed = false;
@@ -89,6 +112,7 @@ public class PlayerCharacter extends Character{
 		}else if(c == KeyEvent.VK_UP){
 			upPressed = keyPressed;
 			if(keyPressed){
+				moveDirection = Direction.NORTH;
 				leftPressed = false;
 				rightPressed = false;
 				downPressed = false;
@@ -96,6 +120,7 @@ public class PlayerCharacter extends Character{
 		}else if(c == KeyEvent.VK_DOWN){
 			downPressed = keyPressed;
 			if(keyPressed){
+				moveDirection = Direction.SHOUTH;
 				leftPressed = false;
 				rightPressed = false;
 				upPressed = false;

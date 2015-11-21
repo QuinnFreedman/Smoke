@@ -12,12 +12,9 @@ public class Level{
 		this.size = new Dimension((map.length > 0) ? map[0].length : 0, map.length);
 		this.collisionMap = new boolean[this.size.height][this.size.width];
 		for (int y = 0; y < map.length; y++) {
-			System.out.print("y = "+y+" : ");
 			for (int x = 0; x < map[0].length; x++) {
 				collisionMap[y][x] = textureMap[y][x] <= 0;
-				System.out.print(collisionMap[y][x] ? " * " : " - ");
 			}
-			System.out.println();
 		}
 	}
 	public Dimension getSize() { return size; }

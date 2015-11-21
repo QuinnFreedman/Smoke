@@ -5,6 +5,8 @@ public class Character extends Entity {
 	int speed = 5; //pixels/keyframe
 	private Race race;
 	private String cclass;
+	private int keyframeCountdown = 0;
+	private static final int KEYFRAME_INTERVAL = 6;
 
 	Race getRace(){ return this.race; }
 	String getCclass(){ return this.cclass; }
@@ -17,8 +19,15 @@ public class Character extends Entity {
 	
 	//move position toward target
 	void simulate(){
-		final float dx = (this.targetPosition.x - this.previousPosition.x)/Main.KEYFRAME_INTERVAL;
-		final float dy = (this.targetPosition.y - this.previousPosition.y)/Main.KEYFRAME_INTERVAL;
+		if(keyframeCountdown == 0){
+			keyframeCountdown = KEYFRAME_INTERVAL - 1;
+			doLogic();
+		}else{
+			keyframeCountdown--;
+		}
+		
+		final float dx = (this.targetPosition.x - this.previousPosition.x)/KEYFRAME_INTERVAL;
+		final float dy = (this.targetPosition.y - this.previousPosition.y)/KEYFRAME_INTERVAL;
 		
 		this.actualPosition.x += dx;
 		this.actualPosition.y += dy;

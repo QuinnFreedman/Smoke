@@ -58,5 +58,10 @@ abstract class TopDownGraphics {
 				viewportWidth*tileWidthHeight_Pixels, 
 				viewportHeight*tileWidthHeight_Pixels, 
 				Main.canvas);
+		
+		g.drawImage(Main.testNPC.getSprite(t),
+				Main.testNPC.position.x - viewportUpperLeft.x, 
+				Main.testNPC.position.y - viewportUpperLeft.y, 
+				Main.canvas);
 	}
 }

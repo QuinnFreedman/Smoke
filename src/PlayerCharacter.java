@@ -96,7 +96,7 @@ public class PlayerCharacter extends Character{
 		if(c == KeyEvent.VK_LEFT){
 			leftPressed = keyPressed;
 			if(keyPressed){
-				moveDirection = Direction.WEST;
+				moveDirection = moveDirection == Direction.EAST ? Direction.NONE : Direction.WEST;
 				rightPressed = false;
 				downPressed = false;
 				upPressed = false;
@@ -104,7 +104,7 @@ public class PlayerCharacter extends Character{
 		}else if(c == KeyEvent.VK_RIGHT){
 			rightPressed = keyPressed;
 			if(keyPressed){
-				moveDirection = Direction.EAST;
+				moveDirection = moveDirection == Direction.WEST ? Direction.NONE : Direction.EAST;
 				leftPressed = false;
 				downPressed = false;
 				upPressed = false;
@@ -112,7 +112,7 @@ public class PlayerCharacter extends Character{
 		}else if(c == KeyEvent.VK_UP){
 			upPressed = keyPressed;
 			if(keyPressed){
-				moveDirection = Direction.NORTH;
+				moveDirection = moveDirection == Direction.SHOUTH ? Direction.NONE : Direction.NORTH;
 				leftPressed = false;
 				rightPressed = false;
 				downPressed = false;
@@ -120,7 +120,7 @@ public class PlayerCharacter extends Character{
 		}else if(c == KeyEvent.VK_DOWN){
 			downPressed = keyPressed;
 			if(keyPressed){
-				moveDirection = Direction.SHOUTH;
+				moveDirection = moveDirection == Direction.NORTH ? Direction.NONE : Direction.SHOUTH;
 				leftPressed = false;
 				rightPressed = false;
 				upPressed = false;

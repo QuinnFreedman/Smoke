@@ -10,6 +10,10 @@ public class Character extends Entity {
 
 	Race getRace(){ return this.race; }
 	String getCclass(){ return this.cclass; }
+	Point getMapLocation(){
+		return new Point(this.targetPosition.x/TopDownGraphics.tileWidthHeight_Pixels,
+						 this.targetPosition.y/TopDownGraphics.tileWidthHeight_Pixels);
+	}
 	
 	//read user input or do AI logic
 	void doLogic(){
@@ -42,10 +46,8 @@ public class Character extends Entity {
 		this.race = race;
 		this.cclass = cclass;
 	}
+
 	
-	private static enum Direction{
-		NORTH,SOUTH,EAST,WEST
-	}
 	static enum Race{
 		HUMAN,ELF,ORC
 	}

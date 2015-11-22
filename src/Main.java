@@ -17,6 +17,9 @@ abstract public class Main{
 	private static Level level;
 	static JPanel canvas;
 	
+	//DEBUG
+	static NPCCharacter testNPC;
+	
 	public static Level getLevel() {
 		return level;
 	}
@@ -69,6 +72,12 @@ abstract public class Main{
 				5*TopDownGraphics.tileWidthHeight_Pixels), 
 			Character.Race.HUMAN, 
 			"Mage");
+		testNPC = new NPCCharacter(new Point(
+				1*TopDownGraphics.tileWidthHeight_Pixels,
+				1*TopDownGraphics.tileWidthHeight_Pixels), 
+			Character.Race.HUMAN, 
+			"Assassin");
+		testNPC.setTarget(player);
 		int[][] map = new int[10][10];
 		for(int y = 0; y < 10; y++){
 			for (int x = 0; x < 10; x++) {
@@ -102,6 +111,7 @@ abstract public class Main{
 	//move sprites
 	private static void simulate(){
 		player.simulate();
+		testNPC.simulate();
 	}
 	
 	//draw sprites

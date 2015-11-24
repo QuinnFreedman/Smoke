@@ -52,16 +52,18 @@ abstract class TopDownGraphics {
 				}
 			}
 		}
-		
-		//draw player character
-		g.drawImage(Main.getPlayer().getSprite(t),
-				viewportWidth*tileWidthHeight_Pixels, 
-				viewportHeight*tileWidthHeight_Pixels, 
-				Main.canvas);
-		
+		//DEBUG only
+		//draw npcs
 		g.drawImage(Main.testNPC.getSprite(t),
 				Main.testNPC.position.x - viewportUpperLeft.x, 
 				Main.testNPC.position.y - viewportUpperLeft.y, 
 				Main.canvas);
+		
+		//draw player character
+				g.drawImage(Main.getPlayer().getSprite(t),
+						viewportWidth*tileWidthHeight_Pixels, 
+						viewportHeight*tileWidthHeight_Pixels, 
+						Main.canvas);
+				
 	}
 }

@@ -21,4 +21,12 @@ public class Level{
 	public int[][] getTextureMap() { return textureMap; }
 	public boolean[][] getCollsionMap() { return collisionMap; }
 	public ArrayList<Chunk> getChunks() { return chunks; }
+	
+	public boolean collides(Point p){
+		if(p.x < 0 || p.y < 0 || p.x >= size.width || p.y >= size.height){
+			return true;
+		}
+		
+		return collisionMap[p.y][p.x];
+	}
 }

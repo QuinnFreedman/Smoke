@@ -13,6 +13,8 @@ public class Character extends Entity {
 	
 	Race getRace(){ return this.race; }
 	String getCclass(){ return this.cclass; }
+	
+	@Override
 	Point getMapLocation(){
 		return new Point(this.targetPosition.x/TopDownGraphics.tileWidthHeight_Pixels,
 						 this.targetPosition.y/TopDownGraphics.tileWidthHeight_Pixels);

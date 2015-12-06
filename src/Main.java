@@ -73,12 +73,12 @@ abstract public class Main{
 			Character.Race.HUMAN, 
 			"Mage");
 		testNPC = new NPCCharacter(new Point(
-				1*TopDownGraphics.tileWidthHeight_Pixels,
-				1*TopDownGraphics.tileWidthHeight_Pixels), 
+				((int) (Math.random()*9))*TopDownGraphics.tileWidthHeight_Pixels,
+				((int) (Math.random()*9))*TopDownGraphics.tileWidthHeight_Pixels), 
 			Character.Race.HUMAN, 
 			"Assassin");
 		testNPC.setTarget(player);
-		testNPC.setFollowMode(NPCCharacter.AIMode.TRAIL);
+		testNPC.setFollowMode(NPCCharacter.AIMode.FLEE);
 		int[][] map = new int[10][10];
 		for(int y = 0; y < 10; y++){
 			for (int x = 0; x < 10; x++) {

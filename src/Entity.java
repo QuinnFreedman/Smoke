@@ -21,4 +21,9 @@ class Entity{
 		return null;
 	}
 	
+	Point getMapLocation(){
+		return new Point(this.position.x/TopDownGraphics.tileWidthHeight_Pixels,
+						 this.position.y/TopDownGraphics.tileWidthHeight_Pixels);
+	}
+	
 }

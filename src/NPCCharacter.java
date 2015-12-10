@@ -25,8 +25,8 @@ public class NPCCharacter extends Character{
 		HUNT,TRAIL,FLEE,IDLE,NONE
 	}
 	
-	NPCCharacter(Point position, Race race, String cclass) {
-		super(position, race, cclass);
+	NPCCharacter(Level level, Point position, Race race, String cclass) {
+		super(level, position, race, cclass);
 		this.inverseSpeed = 8;
 		this.sprite = Main.loadImage("character_tiles/"+this.getRace()+"_"+this.getCclass());
 	}
@@ -86,11 +86,7 @@ public class NPCCharacter extends Character{
 				}
 			}
 			
-			if(adjacentTarget != null){
-				self.targetPosition = new Point(
-						adjacentTarget.x * TopDownGraphics.tileWidthHeight_Pixels,
-						adjacentTarget.y * TopDownGraphics.tileWidthHeight_Pixels);
-			}
+			self.moveTo(adjacentTarget);
 		
 		}
 		static void trail(Entity target, NPCCharacter self, int distance){
@@ -151,30 +147,28 @@ public class NPCCharacter extends Character{
 								(int) (currentLocation.y + Math.signum(dy)));
 					}
 					
-					if(adjacentTarget != null &&
-							!Main.getLevel().collides(adjacentTarget)){
-						self.targetPosition = new Point(
-								adjacentTarget.x * TopDownGraphics.tileWidthHeight_Pixels,
-								adjacentTarget.y * TopDownGraphics.tileWidthHeight_Pixels);
+					if(adjacentTarget != null && !Main.getLevel().collides(adjacentTarget)){
+						self.moveTo(adjacentTarget);
+						//TODO REMOVE self.targetPosition = adjacentTarget.scale(TopDownGraphics.tileWidthHeight_Pixels);
 					}else if(adjacentTarget != null){
 						self.isPathing = true;
 					}
 				}
 	
 				if(self.isPathing){
-					targetLocation = new Point(
-							targetLocation.x / TopDownGraphics.tileWidthHeight_Pixels,
-							targetLocation.y / TopDownGraphics.tileWidthHeight_Pixels);
+					targetLocation = targetLocation.scale(1f/TopDownGraphics.tileWidthHeight_Pixels);
 					if(self.pathingTarget == null || !self.pathingTarget.equals(targetLocation)){
+						System.out.println("A* pathfinding");
 						self.pathingTarget = targetLocation;
 						self.path = Pathing.getPath(self.getMapLocation(), self.pathingTarget, 
 								Main.getLevel().getCollsionMap());
 						self.pathIndex = 0;
+						System.out.println(self.path);
 					}
+					
 					if(self.pathIndex < self.path.size() - Math.max(0, followDistance - 1)){
-						self.targetPosition = new Point(
-								self.path.get(self.pathIndex).x * TopDownGraphics.tileWidthHeight_Pixels,
-								self.path.get(self.pathIndex).y * TopDownGraphics.tileWidthHeight_Pixels);
+						self.moveTo(self.path.get(self.pathIndex));
+						//self.targetPosition = self.path.get(self.pathIndex).scale(TopDownGraphics.tileWidthHeight_Pixels);
 						self.pathIndex++;
 					}else{
 						self.isPathing = false;

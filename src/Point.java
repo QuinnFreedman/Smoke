@@ -28,6 +28,10 @@ public class Point{
 			return false;
 		return true;
 	}
+	
+	public Point scale(float scalar){
+		return new Point((int) (this.x * scalar), (int) (this.y * scalar));
+	}
 
 	Point(int x, int y){
 		this.x = x;

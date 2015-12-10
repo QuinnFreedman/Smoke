@@ -14,10 +14,10 @@ public class PlayerCharacter extends Character{
 	
 	public BufferedImage getSprite(int t) {
 		return this.sprite;
-	};
+	}
 	
-	PlayerCharacter(Point position, Race race, String cclass) {
-		super(position, race, cclass);
+	PlayerCharacter(Level level, Point mapPosition, Race race, String cclass) {
+		super(level, mapPosition, race, cclass);
 		this.sprite = Main.loadImage("character_tiles/"+this.getRace()+"_"+this.getCclass());
 	}
 	
@@ -54,13 +54,12 @@ public class PlayerCharacter extends Character{
 		}
 		moveDirection = Direction.NONE;
 		
-		int tile_y = this.previousPosition.y/TopDownGraphics.tileWidthHeight_Pixels + dy;
-		int tile_x = this.previousPosition.x/TopDownGraphics.tileWidthHeight_Pixels + dx;
+		Point tilePoint = new Point(
+				this.previousPosition.x/TopDownGraphics.tileWidthHeight_Pixels + dx,
+				this.previousPosition.y/TopDownGraphics.tileWidthHeight_Pixels + dy);
 		
-		if(tile_x >= 0 && tile_x < Main.getLevel().getSize().width &&
-				tile_y >= 0 && tile_y < Main.getLevel().getSize().height &&
-				!Main.getLevel().getCollsionMap()[tile_y][tile_x]){
-			this.targetPosition = new Point(this.previousPosition.x + dx * TopDownGraphics.tileWidthHeight_Pixels, this.previousPosition.y + dy * TopDownGraphics.tileWidthHeight_Pixels);
+		if(!Main.getLevel().collides(tilePoint)){
+			this.moveTo(tilePoint);
 		}
 		
 		/*

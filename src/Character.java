@@ -1,3 +1,5 @@
+import java.awt.Dimension;
+
 public class Character extends Entity {
 	Point targetPosition;
 	Point previousPosition;
@@ -16,8 +18,31 @@ public class Character extends Entity {
 	
 	@Override
 	Point getMapLocation(){
-		return new Point(this.targetPosition.x/TopDownGraphics.tileWidthHeight_Pixels,
-						 this.targetPosition.y/TopDownGraphics.tileWidthHeight_Pixels);
+		return this.targetPosition == null ? 
+				this.position.scale(1f/TopDownGraphics.tileWidthHeight_Pixels) :
+				this.targetPosition.scale(1f/TopDownGraphics.tileWidthHeight_Pixels);
+	}
+	
+	@Override
+	public Dimension getSize(){
+		//TODO calculate 2x1 / 1x2, 1x1 based on moving direction
+		return new Dimension(1, 1);
+	}
+	
+	void moveTo(Point p){
+		if(p != null){
+			this.getChunk().modifyChunkCollider(this, -1);
+			this.targetPosition = p.scale(TopDownGraphics.tileWidthHeight_Pixels);
+			if(p.x < this.getChunk().getPosition().x ||
+					p.y < this.getChunk().getPosition().y ||
+					p.x >= this.getChunk().getPosition().x + this.getChunk().getSize().width ||
+					p.y >= this.getChunk().getPosition().y + this.getChunk().getSize().height
+					){
+				//TODO fix indexOutOfBoundsException
+				this.moveChunk(Main.getLevel().getChunk(p));
+			}
+			this.getChunk().modifyChunkCollider(this, 1);
+		}
 	}
 	
 	//read user input or do AI logic
@@ -37,7 +62,6 @@ public class Character extends Entity {
 		}else{
 			keyframeCountdown--;
 		}
-		
 		final float dx = (this.targetPosition.x - this.previousPosition.x)/inverseSpeed;
 		final float dy = (this.targetPosition.y - this.previousPosition.y)/inverseSpeed;
 		
@@ -48,10 +72,10 @@ public class Character extends Entity {
 		this.position.y = Math.round(this.actualPosition.y);
 	}
 	
-	Character(Point position, Race race, String cclass){
-		this.position = new Point(position);
-		this.targetPosition = new Point(position);
-		this.previousPosition = new Point(position);
+	Character(Level level, Point mapPosition, Race race, String cclass){
+		super(level, mapPosition, new Dimension(1,1));
+		this.targetPosition = mapPosition.scale(TopDownGraphics.tileWidthHeight_Pixels);
+		this.previousPosition = new Point(targetPosition);
 		this.race = race;
 		this.cclass = cclass;
 	}

@@ -2,6 +2,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -18,7 +19,7 @@ abstract public class Main{
 	static JPanel canvas;
 	
 	//DEBUG
-	static NPCCharacter testNPC;
+	static ArrayList<NPCCharacter> testNPCs;
 	
 	public static Level getLevel() {
 		return level;
@@ -34,7 +35,7 @@ abstract public class Main{
 	//******************************************	
 	public static BufferedImage loadImage(String address){
 		address = "images/"+address+".png";
-		System.out.println(address+"...");
+		System.out.println("loading "+address+"...");
 		BufferedImage image = null;
 		try {
 			image = ImageIO.read(Main.class.getResource(address));
@@ -67,28 +68,45 @@ abstract public class Main{
 		window.addKeyListener(new KeyboardHandler());
 		window.setVisible(true);
 		
-		player = new PlayerCharacter(new Point(
-				5*TopDownGraphics.tileWidthHeight_Pixels,
-				5*TopDownGraphics.tileWidthHeight_Pixels), 
-			Character.Race.HUMAN, 
-			"Mage");
-		testNPC = new NPCCharacter(new Point(
-				((int) (Math.random()*9))*TopDownGraphics.tileWidthHeight_Pixels,
-				((int) (Math.random()*9))*TopDownGraphics.tileWidthHeight_Pixels), 
-			Character.Race.HUMAN, 
-			"Assassin");
-		testNPC.setTarget(player);
-		testNPC.setFollowMode(NPCCharacter.AIMode.FLEE);
-		int[][] map = new int[10][10];
-		for(int y = 0; y < 10; y++){
-			for (int x = 0; x < 10; x++) {
+		//make world
+		int[][] map = new int[100][100];
+		for(int y = 0; y < map.length; y++){
+			for (int x = 0; x < map[0].length; x++) {
 				map[y][x] = (int) Math.round(Math.random()+0.3);
 			}
 		}
 		TopDownGraphics.loadTextures();
 		level = new Level(map);
 		//make world
-		//pass bits of world to Chunk()
+		
+		player = new PlayerCharacter(level,
+				new Point(5, 4), 
+				Character.Race.HUMAN, 
+				"Mage");
+		////DEBUG
+		NPCCharacter testNPC = new NPCCharacter(level,
+				new Point((int) (Math.random()*8), (int) (Math.random()*9)), 
+				Character.Race.HUMAN, 
+				"Assassin");
+		testNPC.setTarget(player);
+		testNPC.setFollowMode(NPCCharacter.AIMode.FLEE);
+		NPCCharacter testNPC2 = new NPCCharacter(level,
+				new Point((int) (Math.random()*8), (int) (Math.random()*9)), 
+				Character.Race.HUMAN, 
+				"Assassin");
+		testNPC2.setTarget(player);
+		testNPC2.setFollowMode(NPCCharacter.AIMode.FLEE);
+		NPCCharacter testNPC3 = new NPCCharacter(level,
+				new Point((int) (Math.random()*9), (int) (Math.random()*9)), 
+				Character.Race.HUMAN, 
+				"knight");
+		testNPC3.setTarget(player);
+		testNPC3.setFollowMode(NPCCharacter.AIMode.TRAIL);
+		testNPCs = new ArrayList<NPCCharacter>();
+		testNPCs.add(testNPC);
+		testNPCs.add(testNPC2);
+		testNPCs.add(testNPC3);
+		
 		gameLoop();
 	}
 	//##########################################
@@ -111,8 +129,17 @@ abstract public class Main{
 	
 	//move sprites
 	private static void simulate(){
-		player.simulate();
-		testNPC.simulate();
+		ArrayList<Chunk> activeChunks = level.getAdjacentChunks(player.getMapLocation());
+		
+		for (Chunk chunk : activeChunks) {
+			chunk.updateEntities();
+			for(Entity entity : chunk.getEntities()){
+				if(entity instanceof Character){
+					((Character) entity).simulate();
+				}
+			}
+			chunk.updateEntities();
+		}
 	}
 	
 	//draw sprites

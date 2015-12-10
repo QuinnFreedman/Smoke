@@ -54,10 +54,12 @@ abstract class TopDownGraphics {
 		}
 		//DEBUG only
 		//draw npcs
-		g.drawImage(Main.testNPC.getSprite(t),
-				Main.testNPC.position.x - viewportUpperLeft.x, 
-				Main.testNPC.position.y - viewportUpperLeft.y, 
+		for(NPCCharacter testNPC : Main.testNPCs){
+		g.drawImage(testNPC.getSprite(t),
+				testNPC.position.x - viewportUpperLeft.x, 
+				testNPC.position.y - viewportUpperLeft.y, 
 				Main.canvas);
+		}
 		
 		//draw player character
 				g.drawImage(Main.getPlayer().getSprite(t),

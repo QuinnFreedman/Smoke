@@ -103,8 +103,10 @@ public abstract class Pathing{
 					currentTile = currentTile.parent;
 				}
 			}else{
-				//System.out.println("pathing error");
+				System.out.println("pathing error");
 			}
+		}else{
+			System.out.println("pathing error");
 		}
 		ArrayList<Point> pointPath = new ArrayList<Point>(path.size());
 		for(int i = path.size() - 1; i >= 0; i--){

@@ -2,12 +2,14 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 
 public class Level{
-	private ArrayList<Chunk> chunks;
+	private Chunk[][] chunks;
 	private int[][] textureMap;
 	private boolean[][] collisionMap;
 	private Dimension size;
+	private static Dimension chunkSize = TopDownGraphics.getViewportSize();
 	
 	public Level(int[][] map) {
+		System.out.println(chunkSize);
 		this.textureMap = map;
 		this.size = new Dimension((map.length > 0) ? map[0].length : 0, map.length);
 		this.collisionMap = new boolean[this.size.height][this.size.width];
@@ -16,17 +18,49 @@ public class Level{
 				collisionMap[y][x] = textureMap[y][x] <= 0;
 			}
 		}
+		int xChunks = Math.max(1, Math.round(((float) this.size.width) / chunkSize.width));
+		int yChunks = Math.max(1, Math.round(((float) this.size.height) / chunkSize.height));
+		chunks = new Chunk[yChunks][xChunks];
+		for(int y = 0; y < yChunks; y++){
+			for(int x = 0; x < xChunks; x++){
+				/*Dimension specialSize = new Dimension(chunkSize);
+				if(y == yChunks - 1){
+					specialSize.height = this.size.height - (y * chunkSize.height);
+				}
+				if(x == xChunks - 1){
+					specialSize.width = this.size.width - (x * chunkSize.width);
+				}*/
+				chunks[y][x] = new Chunk(new Point(x * chunkSize.width, y * chunkSize.height),
+						this, chunkSize);
+			}
+		}
 	}
 	public Dimension getSize() { return size; }
 	public int[][] getTextureMap() { return textureMap; }
 	public boolean[][] getCollsionMap() { return collisionMap; }
-	public ArrayList<Chunk> getChunks() { return chunks; }
+	public Chunk[][] getChunks() { return chunks; }
 	
 	public boolean collides(Point p){
 		if(p.x < 0 || p.y < 0 || p.x >= size.width || p.y >= size.height){
 			return true;
 		}
 		
-		return collisionMap[p.y][p.x];
+		return (collisionMap[p.y][p.x] || getChunk(p).collides(p));
+	}
+	public Chunk getChunk(Point p) {
+		return chunks[p.y / chunkSize.height][p.x / chunkSize.width];
+	}
+	public ArrayList<Chunk> getAdjacentChunks(Point p) {
+		ArrayList<Chunk> adjacentChunks = new ArrayList<Chunk>();
+		for(int y =  -1; y <= 1; y++){
+			for(int x = -1; x <= 1; x++){
+				int yy = p.y / chunkSize.height + y;
+				int xx = p.x / chunkSize.width + x;
+				if(yy >= 0 && yy < chunks.length && xx >= 0 && xx < chunks[0].length){
+					adjacentChunks.add(chunks[yy][xx]);
+				}
+			}
+		}
+		return adjacentChunks;
 	}
 }

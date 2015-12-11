@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
+import javax.swing.DebugGraphics;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -50,6 +51,9 @@ abstract public class Main{
 	//SETUP
 	public static void main(String[] args){
 		Setup();
+		
+		new PathingDebug();
+		gameLoop();
 	}
 	
 	private static void Setup(){
@@ -106,8 +110,7 @@ abstract public class Main{
 		testNPCs.add(testNPC);
 		testNPCs.add(testNPC2);
 		testNPCs.add(testNPC3);
-		
-		gameLoop();
+
 	}
 	//##########################################
 	

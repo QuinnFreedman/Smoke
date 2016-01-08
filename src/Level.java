@@ -48,6 +48,9 @@ public class Level{
 		return (collisionMap[p.y][p.x] || getChunk(p).collides(p));
 	}
 	public Chunk getChunk(Point p) {
+		if(p.x < 0 || p.y < 0 || p.x >= size.width || p.x >= size.height){
+			return null;
+		}
 		return chunks[p.y / chunkSize.height][p.x / chunkSize.width];
 	}
 	public ArrayList<Chunk> getAdjacentChunks(Point p) {

@@ -32,6 +32,18 @@ public class Point{
 	public Point scale(float scalar){
 		return new Point((int) (this.x * scalar), (int) (this.y * scalar));
 	}
+	
+	public Point translate(int x, int y) {
+		return new Point(this.x + x, this.y + y);
+	}
+	
+	public Point add(Point p) {
+		return new Point(this.x + p.x, this.y + p.y);
+	}
+	
+	public Point subtract(Point p) {
+		return new Point(this.x - p.x, this.y - p.y);
+	}
 
 	Point(int x, int y){
 		this.x = x;

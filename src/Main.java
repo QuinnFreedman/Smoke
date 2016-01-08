@@ -1,3 +1,4 @@
+import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
@@ -41,7 +42,7 @@ abstract public class Main{
 		try {
 			image = ImageIO.read(Main.class.getResource(address));
 		} catch (IOException e) {
-			System.out.println(address+" not found!");
+			System.out.println("Error: "+address+" not found!");
 			e.printStackTrace();
 		}
 		return image;
@@ -114,6 +115,8 @@ abstract public class Main{
 		testNPCs.add(testNPC);
 		testNPCs.add(testNPC2);
 		testNPCs.add(testNPC3);
+		
+		new Tree(level, new Point(3,4), new Dimension(1,2));
 
 	}
 	//##########################################

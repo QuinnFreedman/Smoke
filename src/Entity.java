@@ -45,7 +45,8 @@ class Entity{
 		this.position = mapPosition.scale(TopDownGraphics.tileWidthHeight_Pixels);
 		this.size = new Dimension(size);
 		this.chunk = level.getChunk(mapPosition);
-		this.chunk.getEntities().add(this);
+		this.chunk.scheduleAddEntity(this);
+		this.chunk.updateEntities();
 		this.chunk.modifyChunkCollider(this, 1);
 	}
 	

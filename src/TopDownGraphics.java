@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,8 +11,12 @@ abstract class TopDownGraphics {
 	private static final int viewportWidth = 6;
 	private static final int viewportHeight = 4;
 	static final int tileWidthHeight_Pixels = 32;
-	static Map<Integer, BufferedImage> cachedTextures = Collections.synchronizedMap(new HashMap<Integer, BufferedImage>());
-	static Map<Integer, String> mapTextures = Collections.synchronizedMap(new HashMap<Integer, String>());
+	static Map<Integer, BufferedImage> cachedTextures = Collections.synchronizedMap(
+			new HashMap<Integer, BufferedImage>()
+		);
+	static Map<Integer, String> mapTextures = Collections.synchronizedMap(
+			new HashMap<Integer, String>()
+		);
 	private static Point viewportUpperLeft;
 	
 	public static void loadTextures(){
@@ -54,9 +59,38 @@ abstract class TopDownGraphics {
 				}
 			}
 		}
+		//calculate visible chunks
+		Point viewportUpperLeftOnMap = Main.getPlayer().getMapLocation().translate(
+				-viewportWidth, -viewportHeight);
+		ArrayList<Chunk> visibleChunks = new ArrayList<Chunk>();
+		
+		Chunk[] testChunks = new Chunk[4];
+		testChunks[0] = Main.getLevel().getChunk(viewportUpperLeftOnMap);
+		testChunks[1] = Main.getLevel().getChunk(viewportUpperLeftOnMap.translate(viewportWidth, 0));
+		testChunks[2] = Main.getLevel().getChunk(viewportUpperLeftOnMap.translate(
+				viewportWidth, viewportHeight
+			));
+		testChunks[3] = Main.getLevel().getChunk(viewportUpperLeftOnMap.translate(0, viewportHeight));
+		
+		for(Chunk a : testChunks) {
+			if(a != null && !visibleChunks.contains(a)) { visibleChunks.add(a); }
+		}
+		
+		//draw all entities in visible chunks
+		for(Chunk chunk : visibleChunks) {
+			for(Entity e : chunk.getEntities()) {
+				g.drawImage(e.getSprite(t),
+						e.position.x - viewportUpperLeft.x, 
+						e.position.y - viewportUpperLeft.y,
+						Main.canvas);
+			}
+		}
+		
 		//DEBUG only
+		
+		/*
 		//draw npcs
-		for(NPCCharacter testNPC : Main.testNPCs){
+		for(NPCCharacter testNPC : Main.testNPCs) {
 		g.drawImage(testNPC.getSprite(t),
 				testNPC.position.x - viewportUpperLeft.x, 
 				testNPC.position.y - viewportUpperLeft.y, 
@@ -68,6 +102,6 @@ abstract class TopDownGraphics {
 				viewportWidth*tileWidthHeight_Pixels, 
 				viewportHeight*tileWidthHeight_Pixels, 
 				Main.canvas);
-				
+		*/
 	}
 }

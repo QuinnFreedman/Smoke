@@ -7,18 +7,24 @@ public class PlayerCharacter extends Character{
 	static boolean upPressed    = false;
 	static boolean downPressed  = false;
 	private static Direction moveDirection = Direction.NONE;
-	//private final int diagonalSpeed = (int) (this.speed/Math.sqrt(2));
 	
-	//DEBUG
-	private BufferedImage sprite;
+	private Character.AnimationSet sprite;
 	
 	public BufferedImage getSprite(int t) {
-		return this.sprite;
+		if(PlayerCharacter.moveDirection == Direction.NONE) {
+			return this.sprite.get(Direction.SHOUTH)
+					   .get(0);
+		} else {
+			return this.sprite.get(PlayerCharacter.moveDirection)
+							  .get((t / 2) % this.animFrames);
+		}
 	}
 	
 	PlayerCharacter(Level level, Point mapPosition, Race race, String cclass) {
 		super(level, mapPosition, race, cclass);
-		this.sprite = Main.loadImage("character_tiles/"+this.getRace()+"_"+this.getCclass());
+		this.animFrames = 7;
+		this.sprite = new Character.AnimationSet("Harper", this.animFrames);
+		
 	}
 	
 	@Override
@@ -26,14 +32,16 @@ public class PlayerCharacter extends Character{
 		super.doLogic();
 		int dx = 0;
 		int dy = 0;
-		if(upPressed){
+		if(upPressed) {
 			moveDirection = Direction.NORTH;
-		}else if(downPressed){
+		} else if(downPressed) {
 			moveDirection = Direction.SHOUTH;
-		}else if(leftPressed){
+		} else if(leftPressed) {
 			moveDirection = Direction.WEST;
-		}else if(rightPressed){
+		} else if(rightPressed) {
 			moveDirection = Direction.EAST;
+		} else {
+			moveDirection = Direction.NONE;
 		}
 		
 		switch (moveDirection) {
@@ -52,7 +60,7 @@ public class PlayerCharacter extends Character{
 		case NONE:
 			break;
 		}
-		moveDirection = Direction.NONE;
+		
 		
 		Point tilePoint = new Point(
 				this.previousPosition.x/TopDownGraphics.tileWidthHeight_Pixels + dx,
@@ -60,6 +68,8 @@ public class PlayerCharacter extends Character{
 		
 		if(!Main.getLevel().collides(tilePoint)){
 			this.moveTo(tilePoint);
+		} else {
+			this.moveDirection = Direction.NONE;
 		}
 		
 		/*
@@ -86,16 +96,12 @@ public class PlayerCharacter extends Character{
 		*/
 	}
 	
-	private static enum Direction{
-		NORTH,SHOUTH,EAST,WEST,NONE
-	}
-	
 	static void handleKeyboardInput(KeyEvent e, boolean keyPressed){
 		int c = e.getKeyCode();
 		if(c == KeyEvent.VK_LEFT){
 			leftPressed = keyPressed;
 			if(keyPressed){
-				moveDirection = moveDirection == Direction.EAST ? Direction.NONE : Direction.WEST;
+				//moveDirection = moveDirection == Direction.EAST ? Direction.NONE : Direction.WEST;
 				rightPressed = false;
 				downPressed = false;
 				upPressed = false;
@@ -103,7 +109,7 @@ public class PlayerCharacter extends Character{
 		}else if(c == KeyEvent.VK_RIGHT){
 			rightPressed = keyPressed;
 			if(keyPressed){
-				moveDirection = moveDirection == Direction.WEST ? Direction.NONE : Direction.EAST;
+				//moveDirection = moveDirection == Direction.WEST ? Direction.NONE : Direction.EAST;
 				leftPressed = false;
 				downPressed = false;
 				upPressed = false;
@@ -111,7 +117,7 @@ public class PlayerCharacter extends Character{
 		}else if(c == KeyEvent.VK_UP){
 			upPressed = keyPressed;
 			if(keyPressed){
-				moveDirection = moveDirection == Direction.SHOUTH ? Direction.NONE : Direction.NORTH;
+				//moveDirection = moveDirection == Direction.SHOUTH ? Direction.NONE : Direction.NORTH;
 				leftPressed = false;
 				rightPressed = false;
 				downPressed = false;
@@ -119,7 +125,7 @@ public class PlayerCharacter extends Character{
 		}else if(c == KeyEvent.VK_DOWN){
 			downPressed = keyPressed;
 			if(keyPressed){
-				moveDirection = moveDirection == Direction.NORTH ? Direction.NONE : Direction.SHOUTH;
+				//moveDirection = moveDirection == Direction.NORTH ? Direction.NONE : Direction.SHOUTH;
 				leftPressed = false;
 				rightPressed = false;
 				upPressed = false;

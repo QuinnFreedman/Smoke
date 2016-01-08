@@ -1,4 +1,7 @@
 import java.awt.Dimension;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.util.ArrayList;
 
 public class Character extends Entity {
 	Point targetPosition;
@@ -79,8 +82,90 @@ public class Character extends Entity {
 		this.race = race;
 		this.cclass = cclass;
 	}
-
 	
+	protected class AnimationSet {
+		private ArrayList<BufferedImage> north;
+		private ArrayList<BufferedImage> south;
+		private ArrayList<BufferedImage> east;
+		private ArrayList<BufferedImage> west;
+		private ArrayList<BufferedImage> idle;
+		
+		private ArrayList<BufferedImage> getByName(String s){
+			switch(s){
+			case "up":
+				return this.north;
+			case "down":
+				return this.south;
+			case "left":
+				return this.west;
+			case "right":
+				return this.east;
+			default:
+				return null;
+			}
+		}
+
+		public void setWest(ArrayList<BufferedImage> img) {
+			this.west = img;
+		}
+		public void setEast(ArrayList<BufferedImage> img) {
+			this.east = img;
+		}
+		public void setNorth(ArrayList<BufferedImage> img) {
+			this.north = img;
+		}
+		public void setSouth(ArrayList<BufferedImage> img) {
+			this.south = img;
+		}
+		public void setIdle(ArrayList<BufferedImage> img) {
+			this.south = img;
+		}
+		
+		ArrayList<BufferedImage> get(Direction direction) {
+			switch(direction){
+			case EAST:
+				return east;
+			case NONE:
+				return idle;
+			case NORTH:
+				return north;
+			case SHOUTH:
+				return south;
+			case WEST:
+				return west;
+			default:
+				return null;
+			
+			}
+		}
+		
+		AnimationSet() {
+			north = new ArrayList<BufferedImage>();
+			south = new ArrayList<BufferedImage>();
+			east = new ArrayList<BufferedImage>();
+			west = new ArrayList<BufferedImage>();
+			idle = new ArrayList<BufferedImage>();
+		}
+		
+		AnimationSet(final String name, final int numFrames) {
+			this();
+			
+			final String[] directions = {"up", "down", "left", "right"};
+			String file = "character_tiles/"+name+"/";
+			for(String s : directions) {
+				String dir = file + name + "_" + s + "/" + name + "_" + s + "_";
+				ArrayList<BufferedImage> frames = new ArrayList<BufferedImage>();
+				for(int i = 0; i < numFrames; i++) {
+					frames.add(Main.loadImage(dir + i));
+				}
+				this.getByName(s).addAll(frames);
+			}
+			
+		}
+	}
+	protected static enum Direction{
+		NORTH,SHOUTH,EAST,WEST,NONE
+	}
 	static enum Race{
 		HUMAN,ELF,ORC
 	}

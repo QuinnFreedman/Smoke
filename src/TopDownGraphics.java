@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -27,6 +28,7 @@ abstract class TopDownGraphics {
 		if(Main.getPlayer() == null){
 			return;
 		}
+
 		//draw map
 		viewportUpperLeft = new Point(
 				Main.getPlayer().position.x - (viewportWidth * tileWidthHeight_Pixels),
@@ -62,10 +64,10 @@ abstract class TopDownGraphics {
 		}
 		
 		//draw player character
-				g.drawImage(Main.getPlayer().getSprite(t),
-						viewportWidth*tileWidthHeight_Pixels, 
-						viewportHeight*tileWidthHeight_Pixels, 
-						Main.canvas);
+		g.drawImage(Main.getPlayer().getSprite(t),
+				viewportWidth*tileWidthHeight_Pixels, 
+				viewportHeight*tileWidthHeight_Pixels, 
+				Main.canvas);
 				
 	}
 }

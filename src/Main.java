@@ -87,6 +87,10 @@ abstract public class Main{
 				new Point(5, 4), 
 				Character.Race.HUMAN, 
 				"Mage");
+		
+		//initialize graphics
+		Renderer.initGraphics();
+		
 		////DEBUG
 		NPCCharacter testNPC = new NPCCharacter(level,
 				new Point((int) (Math.random()*8), (int) (Math.random()*9)), 
@@ -147,6 +151,7 @@ abstract public class Main{
 	
 	//draw sprites
 	private static void render(){
+		Renderer.render();
 		canvas.repaint();
 	}
 	

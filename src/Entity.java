@@ -5,6 +5,7 @@ class Entity{
 	protected Dimension size;
 	protected Point position;
 	private Chunk chunk;
+	protected int animFrames = 0;
 
 	public Point getPosition() {
 		return position;

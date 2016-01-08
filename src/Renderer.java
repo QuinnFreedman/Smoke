@@ -43,17 +43,8 @@ public abstract class Renderer{
 		@Override
 		protected void paintComponent(java.awt.Graphics g) {
 			super.paintComponent(g);
-			Graphics2D g2 = (Graphics2D) g;
-			g2.scale(scale, scale);
-			switch (renderMode) {
-			case WORLD:
-				TopDownGraphics.renderWorld(g2, Main.getTime());
-				break;
-			default:
-				break;
-			}
+			((Graphics2D) g).scale(scale, scale);
 			g.drawImage(scene, 0, 0, this);
-			
 		}
 	}
 	

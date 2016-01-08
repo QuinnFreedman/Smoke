@@ -1,5 +1,6 @@
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class Chunk{
 	private Dimension chunkSize;
@@ -44,7 +45,27 @@ public class Chunk{
 			entities.addAll(entitiesToAdd);
 			entitiesToAdd.clear();
 			entitiesToRemove.clear();
+			sortEntites();
 		}
+	}
+	
+	public void sortEntites() {
+		entities.sort(new Comparator<Entity>() {
+			@Override
+			public int compare(Entity o1, Entity o2) {
+				int y1 = o1.getMapLocation().y + o1.getSize().height;
+				int y2 = o2.getMapLocation().y + o2.getSize().height;
+				
+				if(y1 < y2) {
+					return -1;
+				} else if (y1 > y2) {
+					return 1;
+				}
+				
+				return 0;
+				
+			}
+		});
 	}
 	
 	public void modifyChunkCollider(Entity entity, int additive){

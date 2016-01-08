@@ -55,6 +55,7 @@ abstract class TopDownGraphics {
 					g.drawImage(image,
 							x*tileWidthHeight_Pixels - viewportUpperLeft.x, 
 							y*tileWidthHeight_Pixels - viewportUpperLeft.y, 
+							tileWidthHeight_Pixels, tileWidthHeight_Pixels,
 							Main.canvas);
 				}
 			}
@@ -66,11 +67,12 @@ abstract class TopDownGraphics {
 		
 		Chunk[] testChunks = new Chunk[4];
 		testChunks[0] = Main.getLevel().getChunk(viewportUpperLeftOnMap);
-		testChunks[1] = Main.getLevel().getChunk(viewportUpperLeftOnMap.translate(viewportWidth, 0));
+		testChunks[1] = Main.getLevel().getChunk(viewportUpperLeftOnMap.translate(
+				viewportWidth + 1, 0));
 		testChunks[2] = Main.getLevel().getChunk(viewportUpperLeftOnMap.translate(
-				viewportWidth, viewportHeight
-			));
-		testChunks[3] = Main.getLevel().getChunk(viewportUpperLeftOnMap.translate(0, viewportHeight));
+				viewportWidth + 1, viewportHeight + 1));
+		testChunks[3] = Main.getLevel().getChunk(viewportUpperLeftOnMap.translate(
+				0, viewportHeight + 1));
 		
 		for(Chunk a : testChunks) {
 			if(a != null && !visibleChunks.contains(a)) { visibleChunks.add(a); }
@@ -78,30 +80,17 @@ abstract class TopDownGraphics {
 		
 		//draw all entities in visible chunks
 		for(Chunk chunk : visibleChunks) {
+			chunk.sortEntites();
 			for(Entity e : chunk.getEntities()) {
 				g.drawImage(e.getSprite(t),
 						e.position.x - viewportUpperLeft.x, 
 						e.position.y - viewportUpperLeft.y,
+						e.getSize().width * tileWidthHeight_Pixels,
+						e.getSize().height * tileWidthHeight_Pixels,
 						Main.canvas);
 			}
 		}
 		
-		//DEBUG only
-		
-		/*
-		//draw npcs
-		for(NPCCharacter testNPC : Main.testNPCs) {
-		g.drawImage(testNPC.getSprite(t),
-				testNPC.position.x - viewportUpperLeft.x, 
-				testNPC.position.y - viewportUpperLeft.y, 
-				Main.canvas);
-		}
-		
-		//draw player character
-		g.drawImage(Main.getPlayer().getSprite(t),
-				viewportWidth*tileWidthHeight_Pixels, 
-				viewportHeight*tileWidthHeight_Pixels, 
-				Main.canvas);
-		*/
+		Atmosphere.draw(g);
 	}
 }

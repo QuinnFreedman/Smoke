@@ -95,12 +95,12 @@ public class NPCCharacter extends Character{
 				int followDistance = distance;
 				if(target instanceof Character){
 					if(self.followMode == AIMode.TRAIL){
-						if(
+						if(((Character) target).getTrailingPoint() == null || (
 								Math.abs(((Character) target).targetPosition.x - self.targetPosition.x) <= 
 								Math.abs(((Character) target).getTrailingPoint().x - self.targetPosition.x) &&
 								Math.abs(((Character) target).targetPosition.y - self.targetPosition.y) <= 
 								Math.abs(((Character) target).getTrailingPoint().y - self.targetPosition.y)
-							){
+							)){
 							targetLocation = ((Character) target).targetPosition;
 							followDistance = distance + 1;
 						}else{

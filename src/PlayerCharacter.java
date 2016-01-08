@@ -72,28 +72,14 @@ public class PlayerCharacter extends Character{
 			this.moveDirection = Direction.NONE;
 		}
 		
-		/*
-		int y_axis = 0;
-		int x_axis = 0;
-		if(leftPressed && !rightPressed){
-			x_axis = -1;
-		}else if(rightPressed && !leftPressed){
-			x_axis = 1;
-		}
-		
-		if(upPressed && !downPressed){
-			y_axis = -1;
-		}else if(downPressed && !upPressed){
-			y_axis = 1;
-		}
-		if(y_axis != 0 && x_axis != 0){
-			this.targetPosition.x += x_axis*diagonalSpeed;
-			this.targetPosition.y += y_axis*diagonalSpeed;
-		}else{
-			this.targetPosition.x += x_axis*this.speed;
-			this.targetPosition.y += y_axis*this.speed;
-		}
-		*/
+	}
+	
+	@Override
+	void simulate() {
+		super.simulate();
+		final float dx = (this.targetPosition.x - this.previousPosition.x)/inverseSpeed;
+		final float dy = (this.targetPosition.y - this.previousPosition.y)/inverseSpeed;
+		Atmosphere.move(dx * -0.5f, dy * -0.5f);
 	}
 	
 	static void handleKeyboardInput(KeyEvent e, boolean keyPressed){

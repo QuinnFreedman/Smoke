@@ -41,8 +41,10 @@ public class Character extends Entity {
 					p.x >= this.getChunk().getPosition().x + this.getChunk().getSize().width ||
 					p.y >= this.getChunk().getPosition().y + this.getChunk().getSize().height
 					){
-				//TODO fix indexOutOfBoundsException
-				this.moveChunk(Main.getLevel().getChunk(p));
+				Chunk targetChunk = Main.getLevel().getChunk(p);
+				if(targetChunk != null) {
+					this.moveChunk(targetChunk);
+				}
 			}
 			this.getChunk().modifyChunkCollider(this, 1);
 		}

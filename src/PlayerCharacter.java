@@ -12,8 +12,7 @@ public class PlayerCharacter extends Character{
 	
 	public BufferedImage getSprite(int t) {
 		if(PlayerCharacter.moveDirection == Direction.NONE) {
-			return this.sprite.get(Direction.SHOUTH)
-					   .get(0);
+			return this.sprite.get(Direction.SHOUTH).get(0);
 		} else {
 			return this.sprite.get(PlayerCharacter.moveDirection)
 							  .get((t) % this.animFrames);

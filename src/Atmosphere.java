@@ -38,7 +38,7 @@ class Atmosphere {
 		
 		for (int y = -height; y < viewport.height + height; y += height) {
 			for (int x = -width; x < viewport.width + width; x += width) {
-				g.drawImage(smoke, x + position.x, y + position.y, null);
+				g.drawImage(smoke, x + position.x, y + position.y, width, height, null);
 			}
 		}
 	}

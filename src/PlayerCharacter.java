@@ -7,12 +7,13 @@ public class PlayerCharacter extends Character{
 	static boolean upPressed    = false;
 	static boolean downPressed  = false;
 	private static Direction moveDirection = Direction.NONE;
+	private static Direction facingDirection = Direction.SHOUTH;
 	
 	private Character.AnimationSet sprite;
 	
 	public BufferedImage getSprite(int t) {
 		if(PlayerCharacter.moveDirection == Direction.NONE) {
-			return this.sprite.get(Direction.SHOUTH).get(0);
+			return this.sprite.get(PlayerCharacter.facingDirection).get(0);
 		} else {
 			return this.sprite.get(PlayerCharacter.moveDirection)
 							  .get((t) % this.animFrames);
@@ -33,12 +34,16 @@ public class PlayerCharacter extends Character{
 		int dy = 0;
 		if(upPressed) {
 			moveDirection = Direction.NORTH;
+			facingDirection = moveDirection;
 		} else if(downPressed) {
 			moveDirection = Direction.SHOUTH;
+			facingDirection = moveDirection;
 		} else if(leftPressed) {
 			moveDirection = Direction.WEST;
+			facingDirection = moveDirection;
 		} else if(rightPressed) {
 			moveDirection = Direction.EAST;
+			facingDirection = moveDirection;
 		} else {
 			moveDirection = Direction.NONE;
 		}
@@ -86,7 +91,7 @@ public class PlayerCharacter extends Character{
 		if(c == KeyEvent.VK_LEFT){
 			leftPressed = keyPressed;
 			if(keyPressed){
-				//moveDirection = moveDirection == Direction.EAST ? Direction.NONE : Direction.WEST;
+				facingDirection = Direction.WEST;
 				rightPressed = false;
 				downPressed = false;
 				upPressed = false;
@@ -94,7 +99,7 @@ public class PlayerCharacter extends Character{
 		}else if(c == KeyEvent.VK_RIGHT){
 			rightPressed = keyPressed;
 			if(keyPressed){
-				//moveDirection = moveDirection == Direction.WEST ? Direction.NONE : Direction.EAST;
+				facingDirection = Direction.EAST;
 				leftPressed = false;
 				downPressed = false;
 				upPressed = false;
@@ -102,7 +107,7 @@ public class PlayerCharacter extends Character{
 		}else if(c == KeyEvent.VK_UP){
 			upPressed = keyPressed;
 			if(keyPressed){
-				//moveDirection = moveDirection == Direction.SHOUTH ? Direction.NONE : Direction.NORTH;
+				facingDirection = Direction.NORTH;
 				leftPressed = false;
 				rightPressed = false;
 				downPressed = false;
@@ -110,7 +115,7 @@ public class PlayerCharacter extends Character{
 		}else if(c == KeyEvent.VK_DOWN){
 			downPressed = keyPressed;
 			if(keyPressed){
-				//moveDirection = moveDirection == Direction.NORTH ? Direction.NONE : Direction.SHOUTH;
+				facingDirection = Direction.SHOUTH;
 				leftPressed = false;
 				rightPressed = false;
 				upPressed = false;

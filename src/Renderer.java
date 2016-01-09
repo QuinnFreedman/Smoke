@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 
 public abstract class Renderer{
-	static final float scale = 3.0f;
+	static final float scale = 2f;
 	static RenderMode renderMode = RenderMode.WORLD;
 	private static final Dimension size = TopDownGraphics.getViewportSize();
 	private static BufferedImage scene;

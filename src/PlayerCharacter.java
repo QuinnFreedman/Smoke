@@ -83,7 +83,7 @@ public class PlayerCharacter extends Character{
 		super.simulate();
 		final float dx = (this.targetPosition.x - this.previousPosition.x)/inverseSpeed;
 		final float dy = (this.targetPosition.y - this.previousPosition.y)/inverseSpeed;
-		Atmosphere.move(dx * -0.5f, dy * -0.5f);
+		Atmosphere.move(dx * -1.5f, dy * -1.5f);
 	}
 	
 	static void handleKeyboardInput(KeyEvent e, boolean keyPressed){

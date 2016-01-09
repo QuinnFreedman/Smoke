@@ -16,7 +16,7 @@ public class PlayerCharacter extends Character{
 					   .get(0);
 		} else {
 			return this.sprite.get(PlayerCharacter.moveDirection)
-							  .get((t / 2) % this.animFrames);
+							  .get((t) % this.animFrames);
 		}
 	}
 	

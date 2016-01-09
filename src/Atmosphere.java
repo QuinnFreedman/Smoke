@@ -28,6 +28,14 @@ class Atmosphere {
 				TopDownGraphics.getViewportSize().width * TopDownGraphics.tileWidthHeight_Pixels, 
 				TopDownGraphics.getViewportSize().height * TopDownGraphics.tileWidthHeight_Pixels);
 		
+		/*RadialGradientPaint grad =
+		         new RadialGradientPaint(
+		        		 new Point2D.Float(
+		        				 Main.getPlayer().getPosition().x,
+		        				 Main.getPlayer().getPosition().y),
+		        		 10, new float[]{0.0f, 1f},
+		        		 new Color[]{g.getBackground(), Color.white});*/
+		
 		for (int y = -height; y < viewport.height + height; y += height) {
 			for (int x = -width; x < viewport.width + width; x += width) {
 				g.drawImage(smoke, x + position.x, y + position.y, null);

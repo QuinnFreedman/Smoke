@@ -1,5 +1,8 @@
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.RadialGradientPaint;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
 class Atmosphere {
@@ -19,7 +22,7 @@ class Atmosphere {
 		position.y = Math.round(actualPositon.y) % textureSize.height;
 	}
 	
-	static void draw(Graphics2D g) {
+	static void draw(Graphics2D g, int t) {
 		final int width = Math.round(textureSize.width * 
 				(TopDownGraphics.tileWidthHeight_Pixels / 32));
 		final int height = Math.round(textureSize.height * 
@@ -28,18 +31,40 @@ class Atmosphere {
 				TopDownGraphics.getViewportSize().width * TopDownGraphics.tileWidthHeight_Pixels, 
 				TopDownGraphics.getViewportSize().height * TopDownGraphics.tileWidthHeight_Pixels);
 		
-		/*RadialGradientPaint grad =
-		         new RadialGradientPaint(
-		        		 new Point2D.Float(
-		        				 Main.getPlayer().getPosition().x,
-		        				 Main.getPlayer().getPosition().y),
-		        		 10, new float[]{0.0f, 1f},
-		        		 new Color[]{g.getBackground(), Color.white});*/
-		
 		for (int y = -height; y < viewport.height + height; y += height) {
 			for (int x = -width; x < viewport.width + width; x += width) {
 				g.drawImage(smoke, x + position.x, y + position.y, width, height, null);
 			}
 		}
+		
+		float viewRadius = .5f;
+		RadialGradientPaint grad = new RadialGradientPaint(
+		        		 new Point2D.Float(viewport.width/2f, viewport.height/2f),
+		        		 viewport.height/2f,
+		        		 new float[]{0.0f, 1f},
+		        		 new Color[]{new Color(0f,0f,0f,0f), new Color(0f,0f,0f,.9f)});
+		
+		RadialGradientPaint torchlight = new RadialGradientPaint(
+		        		 new Point2D.Float(viewport.width/2f, viewport.height/2f),
+		        		 viewport.height*viewRadius,
+		        		 new float[]{
+		        			 0.0f, 
+		        			 stackedNoise(t)+ 0.25f,
+		        			 0.8f},
+		        		 new Color[]{
+		        			 	new Color(0f,0f,0f,0f), 
+		        			 	new Color(.5f,.4f,0f,.3f * .5f / viewRadius),
+		        			 	new Color(0f,0f,0f,0f)});
+		
+		g.setPaint(grad);
+		g.fillRect(0, 0, viewport.width, viewport.height);
+		g.setPaint(torchlight);
+		g.fillRect(0, 0, viewport.width, viewport.height);
+	}
+	
+	private static float stackedNoise(int t) {
+		return (float) (Math.sin(2 * t)) * 0.003f
+			 + (float) (Math.sin(.7f * t)) * 0.003f
+		 	 + (float) (Math.sin(0.25f * t)) * 0.01f;
 	}
 }

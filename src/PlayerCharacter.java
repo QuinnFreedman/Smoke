@@ -1,11 +1,30 @@
+import java.awt.RenderingHints.Key;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
 public class PlayerCharacter extends Character{
-	static boolean leftPressed  = false;
-	static boolean rightPressed = false;
-	static boolean upPressed    = false;
-	static boolean downPressed  = false;
+	
+	private static class KeyPress {
+		//keys held down
+		static boolean left  = false;
+		static boolean right = false;
+		static boolean up 	 = false;
+		static boolean down  = false;
+		
+		//key pressed since last frame
+		static boolean leftPressed  = false;
+		static boolean rightPressed = false;
+		static boolean upPressed    = false;
+		static boolean downPressed  = false;
+		
+		static void reset() {
+			 leftPressed  = false;
+			 rightPressed = false;
+			 upPressed    = false;
+			 downPressed  = false;
+			
+		}
+	}
 	private static Direction moveDirection = Direction.NONE;
 	private static Direction facingDirection = Direction.SHOUTH;
 	
@@ -32,20 +51,21 @@ public class PlayerCharacter extends Character{
 		super.doLogic();
 		int dx = 0;
 		int dy = 0;
-		if(upPressed) {
+		if(KeyPress.up || KeyPress.upPressed) {
 			moveDirection = Direction.NORTH;
-			facingDirection = moveDirection;
-		} else if(downPressed) {
+		} else if(KeyPress.down || KeyPress.downPressed) {
 			moveDirection = Direction.SHOUTH;
-			facingDirection = moveDirection;
-		} else if(leftPressed) {
+		} else if(KeyPress.left || KeyPress.leftPressed) {
 			moveDirection = Direction.WEST;
-			facingDirection = moveDirection;
-		} else if(rightPressed) {
+		} else if(KeyPress.right || KeyPress.rightPressed) {
 			moveDirection = Direction.EAST;
-			facingDirection = moveDirection;
 		} else {
 			moveDirection = Direction.NONE;
+		}
+		KeyPress.reset();
+		
+		if(moveDirection != Direction.NONE) {
+			facingDirection = moveDirection;
 		}
 		
 		switch (moveDirection) {
@@ -73,7 +93,7 @@ public class PlayerCharacter extends Character{
 		if(!Main.getLevel().collides(tilePoint)){
 			this.moveTo(tilePoint);
 		} else {
-			this.moveDirection = Direction.NONE;
+			moveDirection = Direction.NONE;
 		}
 		
 	}
@@ -89,36 +109,48 @@ public class PlayerCharacter extends Character{
 	static void handleKeyboardInput(KeyEvent e, boolean keyPressed){
 		int c = e.getKeyCode();
 		if(c == KeyEvent.VK_LEFT){
-			leftPressed = keyPressed;
+			if(!KeyPress.left && keyPressed) {
+				KeyPress.leftPressed = true;
+			}
+			KeyPress.left = keyPressed;
 			if(keyPressed){
+				KeyPress.right = false;
+				KeyPress.down = false;
+				KeyPress.up = false;
 				facingDirection = Direction.WEST;
-				rightPressed = false;
-				downPressed = false;
-				upPressed = false;
 			}
 		}else if(c == KeyEvent.VK_RIGHT){
-			rightPressed = keyPressed;
+			if(!KeyPress.right && keyPressed) {
+				KeyPress.rightPressed = true;
+			}
+			KeyPress.right = keyPressed;
 			if(keyPressed){
+				KeyPress.left = false;
+				KeyPress.down = false;
+				KeyPress.up = false;
 				facingDirection = Direction.EAST;
-				leftPressed = false;
-				downPressed = false;
-				upPressed = false;
 			}
 		}else if(c == KeyEvent.VK_UP){
-			upPressed = keyPressed;
+			if(!KeyPress.up && keyPressed) {
+				KeyPress.upPressed = true;
+			}
+			KeyPress.up = keyPressed;
 			if(keyPressed){
+				KeyPress.left = false;
+				KeyPress.right = false;
+				KeyPress.down = false;
 				facingDirection = Direction.NORTH;
-				leftPressed = false;
-				rightPressed = false;
-				downPressed = false;
 			}
 		}else if(c == KeyEvent.VK_DOWN){
-			downPressed = keyPressed;
+			if(!KeyPress.down && keyPressed) {
+				KeyPress.downPressed = true;
+			}
+			KeyPress.down = keyPressed;
 			if(keyPressed){
+				KeyPress.left = false;
+				KeyPress.right = false;
+				KeyPress.up = false;
 				facingDirection = Direction.SHOUTH;
-				leftPressed = false;
-				rightPressed = false;
-				upPressed = false;
 			}
 		}
 	}

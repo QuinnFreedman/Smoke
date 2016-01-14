@@ -91,6 +91,6 @@ abstract class TopDownGraphics {
 			}
 		}
 		
-		Atmosphere.draw(g);
+		Atmosphere.draw(g, t);
 	}
 }

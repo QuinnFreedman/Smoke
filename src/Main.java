@@ -20,9 +20,6 @@ abstract public class Main{
 	private static Level level;
 	static JPanel canvas;
 	
-	//DEBUG
-	static ArrayList<NPCCharacter> testNPCs;
-	
 	public static Level getLevel() {
 		return level;
 	}
@@ -63,7 +60,7 @@ abstract public class Main{
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		canvas = new Renderer.RederPanel();
 		window.getContentPane().add(canvas);
-		canvas.setPreferredSize(new java.awt.Dimension(
+		canvas.setPreferredSize(new Dimension(
 				(int) (TopDownGraphics.getViewportSize().width * 
 						TopDownGraphics.tileWidthHeight_Pixels * Renderer.scale),
 				(int) (TopDownGraphics.getViewportSize().height * 
@@ -108,13 +105,9 @@ abstract public class Main{
 		NPCCharacter testNPC3 = new NPCCharacter(level,
 				new Point((int) (Math.random()*9), (int) (Math.random()*9)), 
 				Character.Race.HUMAN, 
-				"knight");
+				"Knight");
 		testNPC3.setTarget(player);
 		testNPC3.setFollowMode(NPCCharacter.AIMode.TRAIL);
-		testNPCs = new ArrayList<NPCCharacter>();
-		testNPCs.add(testNPC);
-		testNPCs.add(testNPC2);
-		testNPCs.add(testNPC3);
 		
 		new Tree(level, new Point(3,4), new Dimension(1,2));
 

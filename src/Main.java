@@ -71,14 +71,15 @@ abstract public class Main{
 		window.setVisible(true);
 		
 		//make world
-		int[][] map = new int[100][100];
+		/*int[][] map = new int[100][100];
 		for(int y = 0; y < map.length; y++){
 			for (int x = 0; x < map[0].length; x++) {
 				map[y][x] = (int) Math.round(Math.random()+0.3);
 			}
-		}
+		}*/
+		
 		TopDownGraphics.loadTextures();
-		level = new Level(map);
+		level = new Level(WorldBuilder.buildWorld());
 		//make world
 		
 		player = new PlayerCharacter(level,
@@ -109,7 +110,7 @@ abstract public class Main{
 		testNPC3.setTarget(player);
 		testNPC3.setFollowMode(NPCCharacter.AIMode.TRAIL);
 		
-		new Tree(level, new Point(3,4), new Dimension(1,2));
+		//new Tree(level, new Point(3,4), new Dimension(1,2));
 
 	}
 	//##########################################

@@ -9,7 +9,6 @@ public class Level{
 	private static Dimension chunkSize = TopDownGraphics.getViewportSize();
 	
 	public Level(int[][] map) {
-		System.out.println(chunkSize);
 		this.textureMap = map;
 		this.size = new Dimension((map.length > 0) ? map[0].length : 0, map.length);
 		this.collisionMap = new boolean[this.size.height][this.size.width];

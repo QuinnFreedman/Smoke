@@ -57,6 +57,9 @@ public class Point{
 		this.x = p.x;
 		this.y = p.y;
 	}
+	public Point copy() {
+		return new Point(this);
+	}
 }
 
 class FloatPoint{

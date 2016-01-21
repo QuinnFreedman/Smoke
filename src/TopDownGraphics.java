@@ -84,18 +84,28 @@ abstract class TopDownGraphics {
 				-viewportWidth, -viewportHeight);
 		ArrayList<Chunk> visibleChunks = new ArrayList<Chunk>();
 		
-		Chunk[] testChunks = new Chunk[]{
-				Main.getLevel().getChunk(viewportUpperLeftOnMap),
-				Main.getLevel().getChunk(viewportUpperLeftOnMap
-						.translate(viewportWidth + 1, 0)),
-				Main.getLevel().getChunk(viewportUpperLeftOnMap
-						.translate(viewportWidth + 1, viewportHeight + 1)),
-				Main.getLevel().getChunk(viewportUpperLeftOnMap
-						.translate(0, viewportHeight + 1)),
-				Main.getPlayer().getChunk()
+		Point[] testPoints = new Point[] {
+				viewportUpperLeftOnMap.copy(),
+				viewportUpperLeftOnMap.translate(getViewportSize().width, 0),
+				viewportUpperLeftOnMap.translate(getViewportSize().width, getViewportSize().height),
+				viewportUpperLeftOnMap.translate(0, getViewportSize().height)
 		};
-		
-		for(Chunk a : testChunks) {
+
+		int width = Main.getLevel().getSize().width;
+		int height = Main.getLevel().getSize().height;
+		for(Point p : testPoints) {
+			if(p.x >= width) {
+				p.x = width - 1;
+			} else if(p.x < 0) {
+				p.x = 0;
+			}
+			if(p.y >= height) {
+				p.y = height - 1;
+			} else if(p.y < 0) {
+				p.y = 0;
+			}
+
+			Chunk a = Main.getLevel().getChunk(p);
 			if(a != null && !visibleChunks.contains(a)) { visibleChunks.add(a); }
 		}
 		
@@ -106,7 +116,8 @@ abstract class TopDownGraphics {
 			g.fillRect(chunk.getPosition().x * tileWidthHeight_Pixels - viewportUpperLeft.x,
 					chunk.getPosition().y * tileWidthHeight_Pixels - viewportUpperLeft.y,
 					chunk.getSize().width  * tileWidthHeight_Pixels,
-					chunk.getSize().height * tileWidthHeight_Pixels);*/
+					chunk.getSize().height * tileWidthHeight_Pixels);
+			*/
 			chunk.sortEntites();
 			for(Entity e : chunk.getEntities()) {
 				g.drawImage(e.getSprite(t),

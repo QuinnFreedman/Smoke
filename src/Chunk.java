@@ -20,6 +20,12 @@ public class Chunk{
 		return chunkSize;
 	}
 	
+	@Override
+	public String toString() {
+		return "Chunk[x:"+position.x+", y:"+position.y+", width:"+getSize().width+", height:"
+				+getSize().height+", entities:"+entities.size();
+	};
+	
 	Chunk(Point position, Level level, Dimension size){
 		this.position = position;
 		this.chunkSize = size;

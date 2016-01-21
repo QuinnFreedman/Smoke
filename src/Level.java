@@ -4,12 +4,14 @@ import java.util.ArrayList;
 public class Level{
 	private Chunk[][] chunks;
 	private int[][] textureMap;
+	private int[][] spriteMap;
 	private boolean[][] collisionMap;
 	private Dimension size;
 	private static Dimension chunkSize = TopDownGraphics.getViewportSize();
 	
-	public Level(int[][] map) {
+	public Level(int[][] map, int[][] staticSprites) {
 		this.textureMap = map;
+		this.spriteMap = staticSprites;
 		this.size = new Dimension((map.length > 0) ? map[0].length : 0, map.length);
 		this.collisionMap = new boolean[this.size.height][this.size.width];
 		for (int y = 0; y < map.length; y++) {
@@ -36,6 +38,7 @@ public class Level{
 	}
 	public Dimension getSize() { return size; }
 	public int[][] getTextureMap() { return textureMap; }
+	public int[][] getStaticSprites() { return spriteMap; }
 	public boolean[][] getCollsionMap() { return collisionMap; }
 	public Chunk[][] getChunks() { return chunks; }
 	
@@ -44,7 +47,7 @@ public class Level{
 			return true;
 		}
 		
-		return (collisionMap[p.y][p.x] || getChunk(p).collides(p));
+		return (collisionMap[p.y][p.x] || (getChunk(p) != null && getChunk(p).collides(p)));
 	}
 	public Chunk getChunk(Point p) {
 		if(p.x < 0 || p.y < 0 || p.x >= size.width || p.x >= size.height){

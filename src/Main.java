@@ -38,8 +38,8 @@ abstract public class Main{
 		BufferedImage image = null;
 		try {
 			image = ImageIO.read(Main.class.getResource(address));
-		} catch (IOException e) {
-			System.out.println("Error: "+address+" not found!");
+		} catch (Exception e) {
+			System.err.println("Error: "+address+" not found!");
 			e.printStackTrace();
 		}
 		return image;
@@ -79,7 +79,8 @@ abstract public class Main{
 		}*/
 		
 		TopDownGraphics.loadTextures();
-		level = new Level(WorldBuilder.buildWorld());
+		WorldBuilder.WorldData map = WorldBuilder.buildWorld();
+		level = new Level(map.levelTextures, map.staticSprites);
 		//make world
 		
 		player = new PlayerCharacter(level,
@@ -91,7 +92,7 @@ abstract public class Main{
 		Renderer.initGraphics();
 		
 		////DEBUG
-		NPCCharacter testNPC = new NPCCharacter(level,
+		/*NPCCharacter testNPC = new NPCCharacter(level,
 				new Point((int) (Math.random()*8), (int) (Math.random()*9)), 
 				Character.Race.HUMAN, 
 				"Assassin");
@@ -102,7 +103,7 @@ abstract public class Main{
 				Character.Race.HUMAN, 
 				"Assassin");
 		testNPC2.setTarget(player);
-		testNPC2.setFollowMode(NPCCharacter.AIMode.FLEE);
+		testNPC2.setFollowMode(NPCCharacter.AIMode.FLEE);*/
 		NPCCharacter testNPC3 = new NPCCharacter(level,
 				new Point((int) (Math.random()*9), (int) (Math.random()*9)), 
 				Character.Race.HUMAN, 

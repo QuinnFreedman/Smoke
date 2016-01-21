@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 class Tree extends Entity {
 
 	private static BufferedImage sprite;
-	private static boolean[][] collisionMatrix = new boolean[][]{{false},{true}};
+	private static final boolean[][] collisionMatrix = new boolean[][]{{false},{true}};
 	public Tree(Level level, Point mapPosition, Dimension size) {
 		super(level, mapPosition, size);
 		if(sprite == null) {

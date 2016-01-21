@@ -21,7 +21,8 @@ abstract class TopDownGraphics {
 	
 	public static void loadTextures(){
 		mapTextures.put(0, "textures/Default");
-		mapTextures.put(1, "textures/wooden_floor");
+		mapTextures.put(1, "textures/Doyt");
+		mapTextures.put(3, "textures/grass/grass_0");
 		
 	}
 	
@@ -57,6 +58,24 @@ abstract class TopDownGraphics {
 							y*tileWidthHeight_Pixels - viewportUpperLeft.y, 
 							tileWidthHeight_Pixels, tileWidthHeight_Pixels,
 							Main.canvas);
+					
+					int j = Main.getLevel().getStaticSprites()[y][x];
+					if(j == 0){
+						continue;
+					}
+					BufferedImage image2 = cachedTextures.get(j);
+					if(image2 == null){
+						String s = mapTextures.get(j);
+						if(s == null){ continue; }
+						image2 = Main.loadImage(s);
+						cachedTextures.put(j, image2);
+					}
+					
+					g.drawImage(image2,
+							x*tileWidthHeight_Pixels - viewportUpperLeft.x, 
+							y*tileWidthHeight_Pixels - viewportUpperLeft.y, 
+							tileWidthHeight_Pixels, tileWidthHeight_Pixels,
+							Main.canvas);
 				}
 			}
 		}
@@ -65,14 +84,16 @@ abstract class TopDownGraphics {
 				-viewportWidth, -viewportHeight);
 		ArrayList<Chunk> visibleChunks = new ArrayList<Chunk>();
 		
-		Chunk[] testChunks = new Chunk[4];
-		testChunks[0] = Main.getLevel().getChunk(viewportUpperLeftOnMap);
-		testChunks[1] = Main.getLevel().getChunk(viewportUpperLeftOnMap.translate(
-				viewportWidth + 1, 0));
-		testChunks[2] = Main.getLevel().getChunk(viewportUpperLeftOnMap.translate(
-				viewportWidth + 1, viewportHeight + 1));
-		testChunks[3] = Main.getLevel().getChunk(viewportUpperLeftOnMap.translate(
-				0, viewportHeight + 1));
+		Chunk[] testChunks = new Chunk[]{
+				Main.getLevel().getChunk(viewportUpperLeftOnMap),
+				Main.getLevel().getChunk(viewportUpperLeftOnMap
+						.translate(viewportWidth + 1, 0)),
+				Main.getLevel().getChunk(viewportUpperLeftOnMap
+						.translate(viewportWidth + 1, viewportHeight + 1)),
+				Main.getLevel().getChunk(viewportUpperLeftOnMap
+						.translate(0, viewportHeight + 1)),
+				Main.getPlayer().getChunk()
+		};
 		
 		for(Chunk a : testChunks) {
 			if(a != null && !visibleChunks.contains(a)) { visibleChunks.add(a); }
@@ -80,6 +101,12 @@ abstract class TopDownGraphics {
 		
 		//draw all entities in visible chunks
 		for(Chunk chunk : visibleChunks) {
+			//DEBUG: visualize rendered chunks
+			/*g.setColor(Color.RED);
+			g.fillRect(chunk.getPosition().x * tileWidthHeight_Pixels - viewportUpperLeft.x,
+					chunk.getPosition().y * tileWidthHeight_Pixels - viewportUpperLeft.y,
+					chunk.getSize().width  * tileWidthHeight_Pixels,
+					chunk.getSize().height * tileWidthHeight_Pixels);*/
 			chunk.sortEntites();
 			for(Entity e : chunk.getEntities()) {
 				g.drawImage(e.getSprite(t),

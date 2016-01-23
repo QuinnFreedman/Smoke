@@ -22,6 +22,7 @@ abstract class TopDownGraphics {
 	public static void loadTextures(){
 		mapTextures.put(0, "textures/Default");
 		mapTextures.put(1, "textures/Doyt");
+		mapTextures.put(2, "textures/grass/grass_1");
 		mapTextures.put(3, "textures/grass/grass_0");
 		
 	}

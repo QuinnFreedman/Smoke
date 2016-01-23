@@ -108,6 +108,16 @@ public class PlayerCharacter extends Character{
 	
 	static void handleKeyboardInput(KeyEvent e, boolean keyPressed){
 		int c = e.getKeyCode();
+		
+		//TODO DEBUG
+		if(keyPressed){
+			if(c == KeyEvent.VK_COMMA) {
+				Atmosphere.light = !Atmosphere.light;
+			} else if(c == KeyEvent.VK_PERIOD) {
+				Atmosphere.shadow = !Atmosphere.shadow;
+			}
+		}
+		
 		if(c == KeyEvent.VK_LEFT){
 			if(!KeyPress.left && keyPressed) {
 				KeyPress.leftPressed = true;

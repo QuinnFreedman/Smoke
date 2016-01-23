@@ -6,6 +6,10 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
 class Atmosphere {
+	//DEBUG
+	public static boolean shadow = true;
+	public static boolean light = true;
+	
 	private static BufferedImage smoke = Main.loadImage("atmospheres/smoke");
 	private static Dimension textureSize = new Dimension(
 			smoke.getWidth(), smoke.getHeight());
@@ -56,10 +60,15 @@ class Atmosphere {
 		        			 	new Color(.5f,.4f,0f,.3f * .5f / viewRadius),
 		        			 	new Color(0f,0f,0f,0f)});
 		
-		g.setPaint(grad);
-		g.fillRect(0, 0, viewport.width, viewport.height);
-		g.setPaint(torchlight);
-		g.fillRect(0, 0, viewport.width, viewport.height);
+		
+		if(shadow) {
+			g.setPaint(grad);
+			g.fillRect(0, 0, viewport.width, viewport.height);
+		}
+		if(light) {
+			g.setPaint(torchlight);
+			g.fillRect(0, 0, viewport.width, viewport.height);
+		}
 	}
 	
 	private static float stackedNoise(int t) {

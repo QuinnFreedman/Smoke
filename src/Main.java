@@ -111,7 +111,7 @@ abstract public class Main{
 		testNPC3.setTarget(player);
 		testNPC3.setFollowMode(NPCCharacter.AIMode.TRAIL);
 		
-		//new Tree(level, new Point(3,4), new Dimension(1,2));
+		new Tree(level, new Point(3,4), 1);
 
 	}
 	//##########################################

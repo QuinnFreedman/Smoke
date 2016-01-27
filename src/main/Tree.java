@@ -7,6 +7,13 @@ class Tree extends Entity {
 
 	private BufferedImage sprite;
 	private boolean[][] collisionMatrix;
+	/**
+	 * 
+	 * @param level the game level the tree should be added too
+	 * @param mapPosition the coordinates on the map where the tree will be added(upper left corner)
+	 * @param number the number of the sprite of the tree
+	 * @param zindex the zindex of the tree (player character zindex is 0)
+	 */
 	Tree(Level level, Point mapPosition, int number, int zindex) {
 		super(level, mapPosition, new Dimension(0,0));
 		

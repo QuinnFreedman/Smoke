@@ -113,6 +113,9 @@ public abstract class Main{
 		testNPC3.setTarget(player);
 		testNPC3.setFollowMode(NPCCharacter.AIMode.TRAIL);*/
 		
+		
+		
+		//TODO put trees here ********************************
 		new Tree(level, new Point(3,4), 1, 10);
 
 	}

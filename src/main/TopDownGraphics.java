@@ -9,10 +9,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-abstract class TopDownGraphics {
+public abstract class TopDownGraphics {
 	private static final int viewportWidth = 6;
 	private static final int viewportHeight = 4;
-	static final int tileWidthHeight_Pixels = 32;
+	public static final int tileWidthHeight_Pixels = 32;
 	static Map<Integer, BufferedImage> cachedTextures = Collections.synchronizedMap(
 			new HashMap<Integer, BufferedImage>()
 		);
@@ -33,7 +33,7 @@ abstract class TopDownGraphics {
 		
 	}
 	
-	static Dimension getViewportSize() {
+	public static Dimension getViewportSize() {
 		return new Dimension(viewportWidth * 2 + 1, viewportHeight * 2 + 1);
 	}
 	

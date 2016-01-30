@@ -6,9 +6,14 @@ import java.util.Iterator;
 
 class Scene {
 	
-	ArrayList<Animation> animations = new ArrayList<Animation>();
+	private ArrayList<Animation> animations = new ArrayList<Animation>();
+	private int duration;
 	
-	void draw(Graphics2D g, int t) {
+	Scene(int durration) {
+		this.duration = durration;
+	}
+	
+	boolean draw(Graphics2D g, int t) {
 		Iterator<Animation> itr = animations.iterator();
 		while(itr.hasNext()) {
 			Animation anim = itr.next();
@@ -17,9 +22,22 @@ class Scene {
 				itr.remove();
 			}
 		}
+		
+		return t <= this.duration;
+	}
+	
+	void load() {
+		for(Animation anim : animations) {
+			anim.load();
+		}
 	}
 	
 	void addAnimation(Animation animation) {
 		animations.add(animation);
+	}
+	
+	void addAnimation(Animation animation, int time) {
+		animation.setStartTime(time);
+		addAnimation(animation);
 	}
 }

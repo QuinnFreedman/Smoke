@@ -7,12 +7,19 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
-abstract class Renderer{
+public abstract class Renderer{
 	static final float scale = 2f;
-	static RenderMode renderMode = RenderMode.WORLD;
+	private static RenderMode renderMode = RenderMode.WORLD;
 	private static final Dimension size = TopDownGraphics.getViewportSize();
 	private static BufferedImage scene;
 	private static Graphics2D graphics;
+	
+	public static void setRenderMode(RenderMode mode) {
+		renderMode = mode;
+	}
+	public static RenderMode getRenderMode() {
+		return renderMode;
+	}
 	
 	static void initGraphics(){
 		scene = new BufferedImage(
@@ -24,11 +31,14 @@ abstract class Renderer{
 	}
 	
 	static void render(){
+		graphics.clearRect(0, 0, size.width * TopDownGraphics.tileWidthHeight_Pixels, 
+				size.height * TopDownGraphics.tileWidthHeight_Pixels);
 		switch (renderMode) {
 		case WORLD:
-			graphics.clearRect(0, 0, size.width * TopDownGraphics.tileWidthHeight_Pixels, 
-					size.height * TopDownGraphics.tileWidthHeight_Pixels);
 			TopDownGraphics.renderWorld(graphics, Main.getTime());
+			break;
+		case CUTSCENE:
+			cutscene.CutScenes.render(graphics);
 			break;
 		default:
 			break;
@@ -49,7 +59,7 @@ abstract class Renderer{
 		}
 	}
 	
-	static enum RenderMode{
+	public static enum RenderMode{
 		MENU, WORLD, INVENTORY, COMBAT, CUTSCENE
 	}
 }

@@ -178,7 +178,7 @@ public abstract class Main{
 
 		@Override
 		public void keyPressed(KeyEvent e) {
-			switch(Renderer.renderMode){
+			switch(Renderer.getRenderMode()){
 			case COMBAT:
 				break;
 			case CUTSCENE:
@@ -198,7 +198,7 @@ public abstract class Main{
 
 		@Override
 		public void keyReleased(KeyEvent e) {
-			switch(Renderer.renderMode){
+			switch(Renderer.getRenderMode()){
 			case COMBAT:
 				break;
 			case CUTSCENE:

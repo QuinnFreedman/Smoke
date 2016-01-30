@@ -3,6 +3,8 @@ package main;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
+import cutscene.CutScenes;
+
 class PlayerCharacter extends Character{
 	
 	private static class KeyPress {
@@ -116,6 +118,8 @@ class PlayerCharacter extends Character{
 				Atmosphere.light = !Atmosphere.light;
 			} else if(c == KeyEvent.VK_PERIOD) {
 				Atmosphere.shadow = !Atmosphere.shadow;
+			} else if(c == KeyEvent.VK_1) {
+				CutScenes.setScene(CutScenes.SCRUPLES);
 			}
 		}
 		

@@ -19,19 +19,34 @@ public class Animation {
 	private Dimension size;
 	private int startTime = 0;
 	private int endTime = -1;
+	private int t_start = 0;
+	private File framesDir;
+	boolean loaded = false;
 	
 	public Animation(String path, mode animationMode, Point position, Dimension size) {
 		this.animationMode = animationMode;
 		this.position = position;
 		this.size = size;
 		
-		File dir = new File("./assets/images/"+path);
-		assert dir.exists() && dir.isDirectory();
-		
-		File[] files = dir.listFiles();
-		for(File f : files) {
-			String str = f.getPath();
-			frames.add(main.Main.loadImage(str.substring(16, str.lastIndexOf('.'))));
+		framesDir = new File(getClass().getClassLoader().getResource("images").getFile());
+		framesDir = new File(framesDir.getPath()+"/"+path);
+		File[] files = framesDir.listFiles();
+		if(!(framesDir.exists() && framesDir.isDirectory())) {
+			System.err.println("Directory \""+framesDir.getPath()+"\" does not exsist");
+		}
+	}
+	
+	void load(){
+		if(!this.loaded){
+			System.out.println("loading animation frames from: "+framesDir.getPath());
+			File[] files = framesDir.listFiles();
+			System.out.println(files);
+			for(File f : files) {
+				String str = f.getPath();
+				frames.add(main.Main.loadImage(
+						str.substring(str.lastIndexOf("images") + 7, str.lastIndexOf('.'))));
+			}
+			this.loaded = true;
 		}
 	}
 	
@@ -39,9 +54,16 @@ public class Animation {
 		return frames.size();
 	}
 	
-	void step() {
+	void incrementCurrentFrame(int t) {
+		currentFrame = (t - t_start);
+	}
+	
+	void step(int t) {
 		if(paused) {
 			return;
+		}
+		if(t_start == 0) {
+			t_start = t;
 		}
 		
 		switch(animationMode){
@@ -49,21 +71,23 @@ public class Animation {
 			currentFrame = 0;
 			break;
 		case LOOP:
-			currentFrame = (currentFrame + 1) % getFrames();
+			incrementCurrentFrame(t);
+			currentFrame %= getFrames();
 			break;
 		case LOOP_DELAY:
-			t = (t + 1) % (getFrames() + delayTime);
-			currentFrame = (t >= getFrames()) ? 0 : t;
+			incrementCurrentFrame(t);
+			int t2 = t % (getFrames() + delayTime);
+			currentFrame = (t2 >= getFrames()) ? 0 : t2;
 			break;
 		case LOOP_ONCE:
-			currentFrame++;
+			incrementCurrentFrame(t);
 			if(currentFrame >= getFrames()) {
 				currentFrame = 0;
 				paused = true;
 			}
 			break;
 		case PLAY_ONCE:
-			currentFrame++;
+			incrementCurrentFrame(t);
 			if(currentFrame >= getFrames()) {
 				currentFrame = getFrames() - 1;
 				paused = true;
@@ -79,8 +103,9 @@ public class Animation {
 		paused = false;
 	}
 	
-	void setDelayTime(int time) {
+	Animation setDelayTime(int time) {
 		this.delayTime = time;
+		return this;
 	}
 	
 	boolean hasExpired(int t) {
@@ -96,10 +121,10 @@ public class Animation {
 	}
 	
 	void draw(Graphics2D g, int t) {
-		if(t < this.startTime) {
+		if(t < this.startTime || !this.loaded) {
 			return;
 		}
-		this.step();
+		this.step(t);
 		g.drawImage(frames.get(currentFrame), 
 				position.x, position.y, 
 				size.width, size.height, 

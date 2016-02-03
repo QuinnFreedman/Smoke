@@ -117,22 +117,6 @@ public abstract class Main{
 		
 		//TODO put trees here ********************************
 		new Tree(level, new Point(3,4), 1, 10);
-		new Tree(level, new Point(5,0), 1, 10);
-		new Tree(level, new Point(3,0), 1, 10);
-		new Tree(level, new Point(5,6), 1, 10);
-		new Tree(level, new Point(11,3), 1, 10);
-		new Tree(level, new Point(9,1), 1, 10);
-		new Tree(level, new Point(12,4), 1, 10);
-		new Tree(level, new Point(8,8), 1, 10);
-		new Tree(level, new Point(9,9), 1, 10);
-		new Tree(level, new Point(4,8), 1, 10);
-		new Tree(level, new Point(7,6), 1, 10);
-		new Tree(level, new Point(12,8), 1, 10);
-		new Tree(level, new Point(10,10), 1, 10);
-		new Tree(level, new Point(14,3), 1, 10);
-		new Tree(level, new Point(7,1), 1, 10);
-		new Tree(level, new Point(8,0), 1, 10);
-		new Tree(level, new Point(10,4), 1, 10);
 
 	}
 	//##########################################

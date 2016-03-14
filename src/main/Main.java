@@ -4,23 +4,22 @@ import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
-import javax.swing.DebugGraphics;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import cutscene.CutScenes;
 import main.Renderer.RenderMode;
 
 public abstract class Main{
 	private static boolean gamePaused = false;
 	private static int t = 0;
-	private static final int FRAMES_PER_SECOND = 20;
+	private static final int FRAMES_PER_SECOND = 16;
 	private static final int DELAY = 1000/FRAMES_PER_SECOND;
 	protected static final int KEYFRAME_INTERVAL = 6;
+	private static int frames = 0;
+	private static long timeElapsed = 0;
 	private static PlayerCharacter player;
 	private static Level level;
 	static JPanel canvas;
@@ -139,7 +138,21 @@ public abstract class Main{
 			
 			t++;
 			
-			int delay = Math.max(5, (int) (DELAY - (System.currentTimeMillis() - time)));
+			//timing stuff
+			int timeToExecute = (int) (System.currentTimeMillis() - time);
+			frames++;
+			timeElapsed += timeToExecute;
+			
+			if(frames == 100) {
+				System.out.println(timeElapsed / (float) frames);
+				frames = 0;
+				timeElapsed = 0;
+			}
+			
+			if(DELAY - timeToExecute < 3) {
+				System.out.println("!!too slow");
+			}
+			int delay = Math.max(5, DELAY - timeToExecute);
 			try {
 				Thread.sleep(delay);
 			} catch (InterruptedException e) {e.printStackTrace();}

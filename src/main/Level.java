@@ -9,20 +9,17 @@ public class Level{
 	private int[][] spriteMap;
 	private boolean[][] collisionMap;
 	private Dimension size;
-	private static Dimension chunkSize;// = TopDownGraphics.getViewportSize();
+	private static Dimension chunkSize = TopDownGraphics.getViewportSize();
 	
 	Level(int[][] map, int[][] staticSprites) {
 		this.textureMap = map;
 		this.spriteMap = staticSprites;
 		this.size = new Dimension((map.length > 0) ? map[0].length : 0, map.length);
 		
-		//TODO remove
-		chunkSize = this.size;
-		
 		this.collisionMap = new boolean[this.size.height][this.size.width];
 		for (int y = 0; y < map.length; y++) {
 			for (int x = 0; x < map[0].length; x++) {
-				collisionMap[y][x] = textureMap[y][x] <= 0;
+				collisionMap[y][x] = textureMap[y][x] <= 0 || spriteMap[y][x] < 0;
 			}
 		}
 		int xChunks = Math.max(1, Math.round(((float) this.size.width) / chunkSize.width));

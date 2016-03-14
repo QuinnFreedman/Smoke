@@ -26,10 +26,18 @@ public abstract class TopDownGraphics {
 		mapTextures.put(1, "textures/Doyt");
 		mapTextures.put(2, "textures/grass/grass_1");
 		mapTextures.put(3, "textures/grass/grass_0");
-		mapTextures.put(4, "textures/stone_wall");
+		mapTextures.put(4, "textures/Unused/Chapel Floor");
 		mapTextures.put(5, "textures/flagstone");
 		mapTextures.put(6, "textures/wooden_floor");
 		mapTextures.put(7, "textures/Gwassy Doyt");
+		mapTextures.put(51, "textures/Unused/Chapel Corner 4");
+		mapTextures.put(15, "textures/Unused/Chapel Corner 3");
+		mapTextures.put(52, "textures/Unused/Chapel Corner 1");
+		mapTextures.put(25, "textures/Unused/Chapel Corner 2");
+		mapTextures.put(8, "textures/Unused/Chapel Wall Vertical");
+		mapTextures.put(9, "textures/Unused/Chapel Wall Horizontal");
+		mapTextures.put(10, "textures/Unused/Chapel Window");
+		mapTextures.put(11, "textures/Unused/image (9)");
 		
 	}
 	

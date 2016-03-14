@@ -3,7 +3,7 @@ package main;
 import java.awt.Dimension;
 import java.util.ArrayList;
 
-class Level{
+public class Level{
 	private Chunk[][] chunks;
 	private int[][] textureMap;
 	private int[][] spriteMap;
@@ -42,7 +42,7 @@ class Level{
 			}
 		}
 	}
-	Dimension getSize() { return size; }
+	public Dimension getSize() { return size; }
 	int[][] getTextureMap() { return textureMap; }
 	int[][] getStaticSprites() { return spriteMap; }
 	boolean[][] getCollsionMap() { return collisionMap; }

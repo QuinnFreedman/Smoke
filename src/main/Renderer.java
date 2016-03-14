@@ -1,5 +1,6 @@
 package main;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -9,10 +10,17 @@ import javax.swing.JPanel;
 
 public abstract class Renderer{
 	static final float scale = 2f;
-	private static RenderMode renderMode = RenderMode.WORLD;
+	private static RenderMode renderMode = RenderMode.NONE;
 	private static final Dimension size = TopDownGraphics.getViewportSize();
 	private static BufferedImage scene;
 	private static Graphics2D graphics;
+	
+	//transitions
+	private static int fadeTime = 40;
+	private static int fadeDurration = 40;
+	private static int fadeDirection = -1;
+	private static float step = 1f/fadeDurration;
+	private static RenderMode target;
 	
 	public static void setRenderMode(RenderMode mode) {
 		renderMode = mode;
@@ -30,10 +38,27 @@ public abstract class Renderer{
 		graphics.scale(scale, scale);
 	}
 	
+	public static void fadeTo(RenderMode mode, int time) {
+		fadeTime = 0;
+		fadeDurration = time;
+		fadeDirection = 1;
+		target = mode;
+		step = 1f/fadeDurration;
+	}
+	
+	static void fadeFromBlack(int time) {
+		fadeTime = time;
+		fadeDurration = -1;
+		fadeDirection = -1;
+		step = 1f/fadeTime;
+	}
+	
 	static void render(){
 		graphics.clearRect(0, 0, size.width * TopDownGraphics.tileWidthHeight_Pixels, 
 				size.height * TopDownGraphics.tileWidthHeight_Pixels);
 		switch (renderMode) {
+		case NONE:
+			break;
 		case WORLD:
 			TopDownGraphics.renderWorld(graphics, Main.getTime());
 			break;
@@ -43,7 +68,22 @@ public abstract class Renderer{
 		default:
 			break;
 		}
-		//graphics.dispose();
+
+		if(fadeTime != -1) {
+			graphics.setComposite(AlphaComposite.getInstance(
+					AlphaComposite.SRC_OVER, fadeTime * step));
+			graphics.setColor(Color.BLACK);
+			graphics.fillRect(0, 0, size.width * TopDownGraphics.tileWidthHeight_Pixels, 
+					size.height * TopDownGraphics.tileWidthHeight_Pixels);
+			graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
+			fadeTime += fadeDirection;
+			if(fadeTime == fadeDurration) {
+				fadeDirection = -1;
+				setRenderMode(target);
+				target = null;
+			}
+		}
+		
 	}
 	
 	@SuppressWarnings("serial")
@@ -60,6 +100,6 @@ public abstract class Renderer{
 	}
 	
 	public static enum RenderMode{
-		MENU, WORLD, INVENTORY, COMBAT, CUTSCENE
+		MENU, WORLD, INVENTORY, COMBAT, CUTSCENE, NONE
 	}
 }

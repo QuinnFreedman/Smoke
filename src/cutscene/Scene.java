@@ -5,15 +5,17 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 class Scene {
-	
 	private ArrayList<Animation> animations = new ArrayList<Animation>();
 	private int duration;
+	int getDuration() {
+		return duration;
+	}
 	
 	Scene(int durration) {
 		this.duration = durration;
 	}
 	
-	boolean draw(Graphics2D g, int t) {
+	void draw(Graphics2D g, int t) {
 		Iterator<Animation> itr = animations.iterator();
 		while(itr.hasNext()) {
 			Animation anim = itr.next();
@@ -23,7 +25,6 @@ class Scene {
 			}
 		}
 		
-		return t <= this.duration;
 	}
 	
 	void load() {

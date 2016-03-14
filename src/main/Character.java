@@ -57,8 +57,8 @@ class Character extends Entity {
 		if(!previousPosition.equals(targetPosition) || trailingPoint == null){
 			this.trailingPoint = new Point(previousPosition);
 			this.previousPosition = new Point(this.targetPosition);
+			this.actualPosition = new FloatPoint(this.targetPosition);
 		}
-		this.actualPosition = new FloatPoint(this.targetPosition);
 	}
 	
 	//move position toward target
@@ -77,6 +77,10 @@ class Character extends Entity {
 
 		this.position.x = Math.round(this.actualPosition.x);
 		this.position.y = Math.round(this.actualPosition.y);
+		
+		if(this.position.equals(this.targetPosition)) {
+			this.keyframeCountdown = 0;
+		}
 	}
 	
 	Character(Level level, Point mapPosition, Race race, String cclass){

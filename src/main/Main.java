@@ -12,10 +12,13 @@ import javax.swing.DebugGraphics;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import cutscene.CutScenes;
+import main.Renderer.RenderMode;
+
 public abstract class Main{
 	private static boolean gamePaused = false;
 	private static int t = 0;
-	private static final int FRAMES_PER_SECOND = 32;
+	private static final int FRAMES_PER_SECOND = 20;
 	private static final int DELAY = 1000/FRAMES_PER_SECOND;
 	protected static final int KEYFRAME_INTERVAL = 6;
 	private static PlayerCharacter player;
@@ -42,7 +45,6 @@ public abstract class Main{
 			image = ImageIO.read(Main.class.getResource(address));
 		} catch (Exception e) {
 			System.err.println("Error: "+address+" not found!");
-			e.printStackTrace();
 		}
 		return image;
 	}
@@ -53,6 +55,10 @@ public abstract class Main{
 		Setup();
 		
 		//new PathingDebug();
+		//CutScenes.setScene(CutScenes.CANDLE, 20);
+		//Renderer.setRenderMode(RenderMode.CUTSCENE);
+		//Renderer.fadeFromBlack(50);
+		Renderer.setRenderMode(RenderMode.WORLD);
 		gameLoop();
 	}
 	
@@ -140,15 +146,18 @@ public abstract class Main{
 	
 	//##########################################
 	//Game Loop
+	static long time;
 	static void gameLoop(){
 		while(!gamePaused){
+			time = System.currentTimeMillis();
 			simulate();
 			render();
 			
 			t++;
 			
+			int delay = Math.max(5, (int) (DELAY - (System.currentTimeMillis() - time)));
 			try {
-				Thread.sleep(DELAY);
+				Thread.sleep(delay);
 			} catch (InterruptedException e) {e.printStackTrace();}
 		}
 	}

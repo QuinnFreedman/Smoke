@@ -22,6 +22,7 @@ public class Animation {
 	private int t_start = 0;
 	private File framesDir;
 	boolean loaded = false;
+	private float animSpeed = .4f;
 	
 	public Animation(String path, mode animationMode, Point position, Dimension size) {
 		this.animationMode = animationMode;
@@ -33,6 +34,12 @@ public class Animation {
 		File[] files = framesDir.listFiles();
 		if(!(framesDir.exists() && framesDir.isDirectory())) {
 			System.err.println("Directory \""+framesDir.getPath()+"\" does not exsist");
+		}
+		
+		if(size == null) {
+			this.load();
+			this.size = new Dimension(
+					this.frames.get(0).getWidth(), this.frames.get(0).getHeight());
 		}
 	}
 	
@@ -62,6 +69,8 @@ public class Animation {
 		if(paused) {
 			return;
 		}
+		t = Math.round(t * animSpeed);
+		
 		if(t_start == 0) {
 			t_start = t;
 		}

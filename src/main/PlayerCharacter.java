@@ -132,7 +132,6 @@ class PlayerCharacter extends Character{
 				KeyPress.right = false;
 				KeyPress.down = false;
 				KeyPress.up = false;
-				facingDirection = Direction.WEST;
 			}
 		}else if(c == KeyEvent.VK_RIGHT){
 			if(!KeyPress.right && keyPressed) {
@@ -143,7 +142,6 @@ class PlayerCharacter extends Character{
 				KeyPress.left = false;
 				KeyPress.down = false;
 				KeyPress.up = false;
-				facingDirection = Direction.EAST;
 			}
 		}else if(c == KeyEvent.VK_UP){
 			if(!KeyPress.up && keyPressed) {
@@ -154,7 +152,6 @@ class PlayerCharacter extends Character{
 				KeyPress.left = false;
 				KeyPress.right = false;
 				KeyPress.down = false;
-				facingDirection = Direction.NORTH;
 			}
 		}else if(c == KeyEvent.VK_DOWN){
 			if(!KeyPress.down && keyPressed) {
@@ -165,7 +162,6 @@ class PlayerCharacter extends Character{
 				KeyPress.left = false;
 				KeyPress.right = false;
 				KeyPress.up = false;
-				facingDirection = Direction.SHOUTH;
 			}
 		}
 	}

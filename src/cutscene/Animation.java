@@ -22,7 +22,7 @@ public class Animation {
 	private int t_start = 0;
 	private File framesDir;
 	boolean loaded = false;
-	private float animSpeed = .4f;
+	private float animSpeed = .5f;
 	
 	public Animation(String path, mode animationMode, Point position, Dimension size) {
 		this.animationMode = animationMode;

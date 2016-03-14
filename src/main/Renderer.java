@@ -16,7 +16,7 @@ public abstract class Renderer{
 	private static Graphics2D graphics;
 	
 	//transitions
-	private static int fadeTime = 40;
+	private static int fadeTime = -1;
 	private static int fadeDurration = 40;
 	private static int fadeDirection = -1;
 	private static float step = 1f/fadeDurration;

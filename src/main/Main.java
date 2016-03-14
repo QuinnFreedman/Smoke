@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import cutscene.CutScenes;
 import main.Renderer.RenderMode;
 
 public abstract class Main{
@@ -51,13 +52,16 @@ public abstract class Main{
 	//##########################################
 	//SETUP
 	public static void main(String[] args){
+		//enable opengl hardware acceleration
+		System.setProperty("sun.java2d.opengl","False");
+		
 		Setup();
 		
-		//new PathingDebug();
-		//CutScenes.setScene(CutScenes.CANDLE, 20);
-		//Renderer.setRenderMode(RenderMode.CUTSCENE);
-		//Renderer.fadeFromBlack(50);
-		Renderer.setRenderMode(RenderMode.WORLD);
+		//new PathingDebug();;
+		CutScenes.setScene(CutScenes.CANDLE, 20);
+		Renderer.setRenderMode(RenderMode.CUTSCENE);
+		Renderer.fadeFromBlack(50);
+		//Renderer.setRenderMode(RenderMode.WORLD);
 		gameLoop();
 	}
 	

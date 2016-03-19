@@ -33,7 +33,8 @@ class PlayerCharacter extends Character{
 	
 	private Character.AnimationSet sprite;
 	
-	BufferedImage getSprite(int t) {
+	@Override
+	protected BufferedImage getSprite(int t) {
 		if(PlayerCharacter.moveDirection == Direction.NONE) {
 			return this.sprite.get(PlayerCharacter.facingDirection).get(0);
 		} else {
@@ -50,7 +51,7 @@ class PlayerCharacter extends Character{
 	}
 	
 	@Override
-	void doLogic() {
+	protected void doLogic() {
 		super.doLogic();
 		int dx = 0;
 		int dy = 0;
@@ -102,7 +103,7 @@ class PlayerCharacter extends Character{
 	}
 	
 	@Override
-	void simulate() {
+	protected void simulate() {
 		super.simulate();
 		final float dx = (this.targetPosition.x - this.previousPosition.x)/inverseSpeed;
 		final float dy = (this.targetPosition.y - this.previousPosition.y)/inverseSpeed;

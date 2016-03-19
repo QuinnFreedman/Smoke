@@ -3,47 +3,47 @@ package main;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 
-class Entity{
+public class Entity{
 	protected Dimension size;
 	protected Point position;
 	protected int zindex;
 	private Chunk chunk;
 	protected int animFrames = 0;
 
-	Point getPosition() {
+	protected Point getPosition() {
 		return position;
 	}
-	void setPosition(Point position) {
+	protected void setPosition(Point position) {
 		this.position = position;
 	}
-	Dimension getSize() {
+	protected Dimension getSize() {
 		return size;
 	}
-	void setSize(Dimension size) {
+	protected void setSize(Dimension size) {
 		this.size = size;
 	}
 	Chunk getChunk() {
 		return chunk;
 	}
-	boolean[][] getCollsionMatrix(){
+	protected boolean[][] getCollsionMatrix(){
 		//TODO
 		return null;
 	}
-	void moveChunk(Chunk c) {
+	protected void moveChunk(Chunk c) {
 		this.getChunk().scheduleRemoveEntity(this);
 		this.chunk = c;
 		c.scheduleAddEntity(this);
 	}
-	BufferedImage getSprite(int t){
+	protected BufferedImage getSprite(int t){
 		return null;
 	}
 	
-	Point getMapLocation(){
+	protected Point getMapLocation(){
 		return new Point(this.position.x/TopDownGraphics.tileWidthHeight_Pixels,
 						 this.position.y/TopDownGraphics.tileWidthHeight_Pixels);
 	}
 	
-	Entity(Level level, Point mapPosition, Dimension size) {
+	protected Entity(Level level, Point mapPosition, Dimension size) {
 		System.out.println("new "+this.getClass().getSimpleName()+" @ "+mapPosition);
 		this.position = mapPosition.scale(TopDownGraphics.tileWidthHeight_Pixels);
 		this.size = new Dimension(size);

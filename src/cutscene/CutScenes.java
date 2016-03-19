@@ -64,10 +64,8 @@ public abstract class CutScenes {
 		//scruples
 		SCRUPLES.addAnimation(new Animation("animation_frames/Scruples", 
 				Animation.mode.LOOP_DELAY, 
-				new Point(
-						TopDownGraphics.getViewportSize().width / 2 - 1, 
-						TopDownGraphics.getViewportSize().height / 2 - 1)
-								.scale(TopDownGraphics.tileWidthHeight_Pixels),
+				new Point(TopDownGraphics.getViewportSize_pixels().width,
+						TopDownGraphics.getViewportSize_pixels().height),
 				new Dimension(TopDownGraphics.tileWidthHeight_Pixels * 3, 
 						TopDownGraphics.tileWidthHeight_Pixels * 3)).setDelayTime(20));
 		
@@ -76,5 +74,6 @@ public abstract class CutScenes {
 				Animation.mode.LOOP, 
 				new Point(0, 0),
 				new Dimension((int) (222 * 2.3), (int) (130 * 2.3))));
+		//CANDLE.addPostProcess(PostProcess.CANDLE_POST_PROCESS);
 	};
 }

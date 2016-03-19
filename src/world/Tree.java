@@ -1,9 +1,14 @@
-package main;
+package world;
 
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 
-class Tree extends Entity {
+import main.Entity;
+import main.Level;
+import main.Main;
+import main.Point;
+
+public class Tree extends Entity {
 
 	private BufferedImage sprite;
 	private boolean[][] collisionMatrix;
@@ -14,7 +19,7 @@ class Tree extends Entity {
 	 * @param number the number of the sprite of the tree
 	 * @param zindex the zindex of the tree (player character zindex is 0)
 	 */
-	Tree(Level level, Point mapPosition, int number, int zindex) {
+	public Tree(Level level, Point mapPosition, int number, int zindex) {
 		super(level, mapPosition, new Dimension(0,0));
 		
 		this.sprite = Main.loadImage("static_entities/tree_"+number);
@@ -43,12 +48,12 @@ class Tree extends Entity {
 	}
 	
 	@Override
-	BufferedImage getSprite(int t) {
+	protected BufferedImage getSprite(int t) {
 		return this.sprite;
 	}
 	
 	@Override
-	boolean[][] getCollsionMatrix(){
+	protected boolean[][] getCollsionMatrix(){
 		return collisionMatrix;
 	}
 	

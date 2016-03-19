@@ -10,6 +10,8 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import proceduralGeneration.WorldBuilder;
+import world.Tree;
 import cutscene.CutScenes;
 import main.Renderer.RenderMode;
 
@@ -55,17 +57,18 @@ public abstract class Main{
 		//enable opengl hardware acceleration
 		System.setProperty("sun.java2d.opengl","False");
 		
-		Setup();
+		setupWindow();
+		setupWorld();
 		
 		//new PathingDebug();;
 		CutScenes.setScene(CutScenes.CANDLE, 20);
-		Renderer.setRenderMode(RenderMode.CUTSCENE);
 		Renderer.fadeFromBlack(50);
+		Renderer.setRenderMode(RenderMode.CUTSCENE);
 		//Renderer.setRenderMode(RenderMode.WORLD);
 		gameLoop();
 	}
 	
-	private static void Setup(){
+	private static void setupWindow(){
 		//make window
 		JFrame window = new JFrame();
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -80,7 +83,8 @@ public abstract class Main{
 		window.setFocusTraversalKeysEnabled(false);
 		window.addKeyListener(new KeyboardHandler());
 		window.setVisible(true);
-		
+	}
+	private static void setupWorld(){
 		//make world
 		/*int[][] map = new int[100][100];
 		for(int y = 0; y < map.length; y++){
@@ -90,9 +94,9 @@ public abstract class Main{
 		}*/
 		
 		TopDownGraphics.loadTextures();
-		WorldBuilder.WorldData map = WorldBuilder.buildWorld();
-		level = new Level(map.levelTextures, map.staticSprites);
 		//make world
+		WorldBuilder.WorldData map = WorldBuilder.buildWorld();
+		level = new Level(map.getLevelTextures(), map.getStaticSprites());
 		
 		player = new PlayerCharacter(level,
 				new Point(5, 4), 

@@ -12,7 +12,6 @@ public class Animation {
 	private ArrayList<BufferedImage> frames = new ArrayList<BufferedImage>();
 	private int currentFrame = 0;
 	private mode animationMode;
-	private int t = 0;
 	private boolean paused = false;
 	private int delayTime = 0;
 	private Point position;
@@ -31,7 +30,6 @@ public class Animation {
 		
 		framesDir = new File(getClass().getClassLoader().getResource("images").getFile());
 		framesDir = new File(framesDir.getPath()+"/"+path);
-		File[] files = framesDir.listFiles();
 		if(!(framesDir.exists() && framesDir.isDirectory())) {
 			System.err.println("Directory \""+framesDir.getPath()+"\" does not exsist");
 		}

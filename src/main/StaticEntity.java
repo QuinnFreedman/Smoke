@@ -9,7 +9,8 @@ class Structure extends Entity {
 
 	private boolean[][] collisionMatrix;
 	
-	boolean[][] getCollsionMatrix(){
+	@Override
+	protected boolean[][] getCollsionMatrix(){
 		return collisionMatrix;
 	}
 }

@@ -1,6 +1,6 @@
-package main;
+package proceduralGeneration;
 
-abstract class WorldBuilder {
+public abstract class WorldBuilder {
 	static final int[][] levelTextures = new int[][]{
 		{ 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, 1},
 		{ 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, 1},
@@ -36,14 +36,16 @@ abstract class WorldBuilder {
 	};
 	
 	
-	static WorldData buildWorld() {
+	public static WorldData buildWorld() {
 		assert levelTextures.length > 10 && levelTextures[0].length > 10;
 		return new WorldData(levelTextures, staticSprites);
 	}
 		
-	static class WorldData {
-		int[][] levelTextures;
-		int[][] staticSprites;
+	public static class WorldData {
+		private int[][] levelTextures;
+		private int[][] staticSprites;
+		public int[][] getLevelTextures() { return levelTextures; }
+		public int[][] getStaticSprites() { return staticSprites; }
 		WorldData(int[][] levelTextures, int[][] staticSprites) {
 			this.levelTextures = levelTextures;
 			this.staticSprites = staticSprites;

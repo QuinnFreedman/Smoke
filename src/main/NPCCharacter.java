@@ -33,12 +33,13 @@ class NPCCharacter extends Character{
 		this.sprite = Main.loadImage("character_tiles/"+this.getRace()+"_"+this.getCclass());
 	}
 	
-	BufferedImage getSprite(int t) {
+	@Override
+	protected BufferedImage getSprite(int t) {
 		return this.sprite;
 	}
 	
 	@Override
-	void doLogic() {
+	protected void doLogic() {
 		super.doLogic();
 		switch (followMode) {
 		case TRAIL:

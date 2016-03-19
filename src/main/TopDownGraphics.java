@@ -47,6 +47,11 @@ public abstract class TopDownGraphics {
 		return new Dimension(viewportWidth * 2 + 1, viewportHeight * 2 + 1);
 	}
 	
+	public static Dimension getViewportSize_pixels() {
+		return new Dimension((viewportWidth * 2 + 1) * tileWidthHeight_Pixels,
+							(viewportHeight * 2 + 1) * tileWidthHeight_Pixels);
+	}
+	
 	static void renderWorld(Graphics2D g, int t){
 		if(Main.getPlayer() == null){
 			return;

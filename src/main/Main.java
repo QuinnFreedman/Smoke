@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import proceduralGeneration.WorldBuilder;
+import world.Deer;
 import world.Tree;
 import cutscene.CutScenes;
 import main.Renderer.RenderMode;
@@ -27,13 +28,13 @@ public abstract class Main{
 	private static Level level;
 	static JPanel canvas;
 	
-	static Level getLevel() {
+	public static Level getLevel() {
 		return level;
 	}
 	static int getTime() {
 		return t;
 	}
-	static PlayerCharacter getPlayer(){
+	public static PlayerCharacter getPlayer(){
 		return player;
 	}
 	//******************************************
@@ -55,16 +56,16 @@ public abstract class Main{
 	//SETUP
 	public static void main(String[] args){
 		//enable opengl hardware acceleration
-		System.setProperty("sun.java2d.opengl","False");
+		//System.setProperty("sun.java2d.opengl","True");
 		
 		setupWindow();
 		setupWorld();
 		
 		//new PathingDebug();;
-		CutScenes.setScene(CutScenes.CANDLE, 20);
+		//CutScenes.setScene(CutScenes.CANDLE, 20);
 		Renderer.fadeFromBlack(50);
-		Renderer.setRenderMode(RenderMode.CUTSCENE);
-		//Renderer.setRenderMode(RenderMode.WORLD);
+		//Renderer.setRenderMode(RenderMode.CUTSCENE);
+		Renderer.setRenderMode(RenderMode.WORLD);
 		gameLoop();
 	}
 	
@@ -102,6 +103,8 @@ public abstract class Main{
 				new Point(5, 4), 
 				Character.Race.HUMAN, 
 				"Mage");
+		
+		new Deer(level, new Point(3,3));
 		
 		//initialize graphics
 		Renderer.initGraphics();
@@ -169,16 +172,18 @@ public abstract class Main{
 	
 	//move sprites
 	private static void simulate(){
-		ArrayList<Chunk> activeChunks = level.getAdjacentChunks(player.getMapLocation());
-		
-		for (Chunk chunk : activeChunks) {
-			chunk.updateEntities();
-			for(Entity entity : chunk.getEntities()){
-				if(entity instanceof Character){
-					((Character) entity).simulate();
+		if(Renderer.getRenderMode() == RenderMode.WORLD && Renderer.getFadeTime() < 15) {
+			ArrayList<Chunk> activeChunks = level.getAdjacentChunks(player.getMapLocation());
+			
+			for (Chunk chunk : activeChunks) {
+				chunk.updateEntities();
+				for(Entity entity : chunk.getEntities()){
+					if(entity instanceof DynamicEntity){
+						((DynamicEntity) entity).simulate();
+					}
 				}
+				chunk.updateEntities();
 			}
-			chunk.updateEntities();
 		}
 	}
 	

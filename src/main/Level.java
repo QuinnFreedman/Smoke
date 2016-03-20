@@ -45,7 +45,7 @@ public class Level{
 	boolean[][] getCollsionMap() { return collisionMap; }
 	Chunk[][] getChunks() { return chunks; }
 	
-	boolean collides(Point p){
+	public boolean collides(Point p){
 		if(p.x < 0 || p.y < 0 || p.x >= size.width || p.y >= size.height){
 			return true;
 		}

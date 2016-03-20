@@ -18,7 +18,7 @@ class Atmosphere {
 	private static Point position = new Point(
 			3 * TopDownGraphics.tileWidthHeight_Pixels, 
 			3 * TopDownGraphics.tileWidthHeight_Pixels);
-	private static FloatPoint actualPositon = new FloatPoint(position);
+	private static Point.Float actualPositon = new Point.Float(position);
 	
 	static void move(float x, float y) {
 		actualPositon.x += x;

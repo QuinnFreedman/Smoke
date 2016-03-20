@@ -28,6 +28,9 @@ public abstract class Renderer{
 	public static RenderMode getRenderMode() {
 		return renderMode;
 	}
+	static int getFadeTime() {
+		return fadeTime;
+	}
 	
 	static void initGraphics(){
 		scene = new BufferedImage(
@@ -79,7 +82,9 @@ public abstract class Renderer{
 			fadeTime += fadeDirection;
 			if(fadeTime == fadeDurration) {
 				fadeDirection = -1;
-				setRenderMode(target);
+				if(target != null) {
+					setRenderMode(target);
+				}
 				target = null;
 			}
 		}

@@ -46,7 +46,7 @@ class PlayerCharacter extends Character{
 	PlayerCharacter(Level level, Point mapPosition, Race race, String cclass) {
 		super(level, mapPosition, race, cclass);
 		this.animFrames = 7;
-		this.sprite = new Character.AnimationSet("Harper", this.animFrames);
+		this.sprite = new Character.AnimationSet("character_tiles", "Harper", this.animFrames);
 		
 	}
 	

@@ -62,47 +62,47 @@ public class Point{
 	public Point copy() {
 		return new Point(this);
 	}
-}
+	
+	public static class Float {
+		public float x;
+		public float y;
+		@Override
+		public String toString(){
+			return "{"+x+","+y+"}";
+		}
 
-class FloatPoint{
-	float x;
-	float y;
-	@Override
-	public String toString(){
-		return "{"+x+","+y+"}";
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			Point other = (Point) obj;
+			if (x != other.x)
+				return false;
+			if (y != other.y)
+				return false;
 			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Point other = (Point) obj;
-		if (x != other.x)
-			return false;
-		if (y != other.y)
-			return false;
-		return true;
-	}
+		}
 
-	FloatPoint(float x, float y){
-		this.x = x;
-		this.y = y;
-	}
-	
-	FloatPoint(){
+		Float(float x, float y){
+			this.x = x;
+			this.y = y;
+		}
 		
-	}
-	FloatPoint(Point p) {
-		this.x = p.x;
-		this.y = p.y;
-	}
-	
-	FloatPoint(FloatPoint p) {
-		this.x = p.x;
-		this.y = p.y;
+		Float(){
+			
+		}
+		Float(Point p) {
+			this.x = p.x;
+			this.y = p.y;
+		}
+		
+		Float(Point.Float p) {
+			this.x = p.x;
+			this.y = p.y;
+		}
 	}
 }

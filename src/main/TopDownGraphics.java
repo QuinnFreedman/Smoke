@@ -1,6 +1,5 @@
 package main;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -142,6 +141,11 @@ public abstract class TopDownGraphics {
 			*/
 			chunk.sortEntites();
 			for(Entity e : chunk.getEntities()) {
+				//TODO DEBUG:
+				assert(e.position != null);
+				assert(e.getSize() != null);
+				assert(e.getSprite(t) != null);
+				
 				g.drawImage(e.getSprite(t),
 						e.position.x - viewportUpperLeft.x, 
 						e.position.y - viewportUpperLeft.y,

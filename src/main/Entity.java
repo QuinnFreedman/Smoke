@@ -38,7 +38,7 @@ public class Entity{
 		return null;
 	}
 	
-	protected Point getMapLocation(){
+	public Point getMapLocation(){
 		return new Point(this.position.x/TopDownGraphics.tileWidthHeight_Pixels,
 						 this.position.y/TopDownGraphics.tileWidthHeight_Pixels);
 	}

@@ -5,9 +5,9 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class DynamicEntity extends Entity {
-	Point targetPosition;
-	Point previousPosition;
-	FloatPoint actualPosition;
+	protected Point targetPosition;
+	protected Point previousPosition;
+	protected Point.Float actualPosition;
 	private int keyframeCountdown = 0;
 	protected int inverseSpeed = 6;
 	private Point trailingPoint;
@@ -16,7 +16,7 @@ public class DynamicEntity extends Entity {
 	void setTrailingPoint(Point trailingPoint) { this.trailingPoint = trailingPoint; }
 	
 	@Override
-	protected Point getMapLocation(){
+	public Point getMapLocation(){
 		return this.targetPosition == null ? 
 				this.position.scale(1f/TopDownGraphics.tileWidthHeight_Pixels) :
 				this.targetPosition.scale(1f/TopDownGraphics.tileWidthHeight_Pixels);
@@ -51,7 +51,7 @@ public class DynamicEntity extends Entity {
 		if(!previousPosition.equals(targetPosition) || trailingPoint == null){
 			this.trailingPoint = new Point(previousPosition);
 			this.previousPosition = new Point(this.targetPosition);
-			this.actualPosition = new FloatPoint(this.targetPosition);
+			this.actualPosition = new Point.Float(this.targetPosition);
 		}
 	}
 	
@@ -83,7 +83,7 @@ public class DynamicEntity extends Entity {
 		this.previousPosition = new Point(targetPosition);
 	}
 	
-	protected class AnimationSet {
+	protected static class AnimationSet {
 		private ArrayList<BufferedImage> north;
 		private ArrayList<BufferedImage> south;
 		private ArrayList<BufferedImage> east;
@@ -121,7 +121,7 @@ public class DynamicEntity extends Entity {
 			this.south = img;
 		}
 		
-		ArrayList<BufferedImage> get(Direction direction) {
+		public ArrayList<BufferedImage> get(Direction direction) {
 			switch(direction){
 			case EAST:
 				return east;
@@ -139,7 +139,7 @@ public class DynamicEntity extends Entity {
 			}
 		}
 		
-		AnimationSet() {
+		private AnimationSet() {
 			north = new ArrayList<BufferedImage>();
 			south = new ArrayList<BufferedImage>();
 			east = new ArrayList<BufferedImage>();
@@ -147,11 +147,11 @@ public class DynamicEntity extends Entity {
 			idle = new ArrayList<BufferedImage>();
 		}
 		
-		AnimationSet(final String name, final int numFrames) {
+		public AnimationSet(final String directory, final String name, final int numFrames) {
 			this();
 			
 			final String[] directions = {"up", "down", "left", "right"};
-			String file = "character_tiles/"+name+"/";
+			String file = "dynamic_entities/"+directory+"/"+name+"/";
 			for(String s : directions) {
 				String dir = file + name + "_" + s + "/" + name + "_" + s + "_";
 				ArrayList<BufferedImage> frames = new ArrayList<BufferedImage>();

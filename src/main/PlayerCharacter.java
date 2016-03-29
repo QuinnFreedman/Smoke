@@ -31,7 +31,7 @@ class PlayerCharacter extends Character{
 	private static Direction moveDirection = Direction.NONE;
 	private static Direction facingDirection = Direction.SHOUTH;
 	
-	private Character.AnimationSet sprite;
+	private AnimationSet sprite;
 	
 	@Override
 	protected BufferedImage getSprite(int t) {
@@ -46,7 +46,8 @@ class PlayerCharacter extends Character{
 	PlayerCharacter(Level level, Point mapPosition, Race race, String cclass) {
 		super(level, mapPosition, race, cclass);
 		this.animFrames = 7;
-		this.sprite = new Character.AnimationSet("character_tiles", "Harper", this.animFrames);
+		//this.sprite = new AnimationSet("character_tiles", "Harper", this.animFrames);
+		this.sprite = new AnimationSet("character_tiles/Harper_spritesheet", this.animFrames);
 		
 	}
 	

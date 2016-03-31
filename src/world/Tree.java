@@ -26,8 +26,8 @@ public class Tree extends Entity {
 		this.zindex = zindex;
 		
 		assert sprite != null;
-		assert sprite.getWidth() % 32 == 0;
-		assert sprite.getHeight() % 32 == 0;
+		//assert sprite.getWidth() % 32 == 0;
+		//assert sprite.getHeight() % 32 == 0;
 		this.size = new Dimension(sprite.getWidth()/32, sprite.getHeight()/32);
 		
 		this.collisionMatrix = new boolean[this.size.height][this.size.width];

@@ -3,6 +3,8 @@ package world;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import debug.out;
+import main.AnimationSet;
 import main.DynamicEntity;
 import main.Entity;
 import main.Level;
@@ -13,18 +15,19 @@ import main.TopDownGraphics;
 public class Deer extends DynamicEntity {
 
 	private int waiting = 0;
-	//private DynamicEntity.AnimationSet sprite;
-	private BufferedImage sprite;
 	
 	public Deer(Level level, Point mapPosition) {
 		super(level, mapPosition);
-		this.animFrames = 8;
-		//this.sprite = new DynamicEntity.AnimationSet("animals", "deer", this.animFrames);
-		this.sprite = Main.loadImage("dynamic_entities/animals/wolf/Wolf");
+		this.animFrames = 2;
+		this.sprite = new AnimationSet("animals/wolf/Wolf_spritesheet", this.animFrames);
 		this.inverseSpeed = 10;
 	}
 	
-	
+	@Override
+	protected BufferedImage getSprite(int t) {
+		if(t % this.inverseSpeed != 0) t = 1;
+		return super.getSprite(t);
+	}
 	
 	@Override
 	protected void doLogic() {
@@ -35,13 +38,6 @@ public class Deer extends DynamicEntity {
 		} else {
 			waiting--;
 		}
-		
-	}
-	
-	@Override
-	protected BufferedImage getSprite(int t) {
-		return this.sprite;
-		//return sprite.get(DynamicEntity.Direction.NORTH).get(0);
 	}
 	
 	private static int manhatten(Point a, Point b){

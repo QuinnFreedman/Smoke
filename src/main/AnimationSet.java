@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import main.DynamicEntity.Direction;
 
-class AnimationSet {
+public class AnimationSet {
 		private ArrayList<BufferedImage> north;
 		private ArrayList<BufferedImage> south;
 		private ArrayList<BufferedImage> east;
@@ -26,7 +26,7 @@ class AnimationSet {
 				return null;
 			}
 		}
-
+		/*
 		void setWest(ArrayList<BufferedImage> img) {
 			this.west = img;
 		}
@@ -42,6 +42,7 @@ class AnimationSet {
 		void setIdle(ArrayList<BufferedImage> img) {
 			this.south = img;
 		}
+		*/
 		
 		public ArrayList<BufferedImage> get(Direction direction) {
 			switch(direction){

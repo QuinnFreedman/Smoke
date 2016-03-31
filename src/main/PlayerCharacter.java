@@ -29,17 +29,6 @@ class PlayerCharacter extends Character{
 		}
 	}
 	
-	private AnimationSet sprite;
-	
-	@Override
-	protected BufferedImage getSprite(int t) {
-		if(this.getMoveDirection() == Direction.NONE) {
-			return this.sprite.get(this.getFacingDirection()).get(0);
-		} else {
-			return this.sprite.get(this.getMoveDirection()).get((t) % this.animFrames);
-		}
-	}
-	
 	PlayerCharacter(Level level, Point mapPosition, Race race, String cclass) {
 		super(level, mapPosition, race, cclass);
 		this.animFrames = 7;

@@ -1,6 +1,9 @@
 package main;
 
 import java.awt.Dimension;
+import java.awt.image.BufferedImage;
+
+import debug.out;
 
 public class DynamicEntity extends Entity {
 	protected Point targetPosition;
@@ -11,12 +14,18 @@ public class DynamicEntity extends Entity {
 	private Point trailingPoint;
 	private Direction moveDirection = Direction.NONE;
 	private Direction facingDirection = Direction.SHOUTH;
+	protected AnimationSet sprite = null;
+	private int framesPerStep = -1;
 
 	Point getTrailingPoint() { return trailingPoint; }
 	void setTrailingPoint(Point trailingPoint) { this.trailingPoint = trailingPoint; }
 	
 	protected Direction getMoveDirection() { return moveDirection; }
 	protected Direction getFacingDirection() { return facingDirection; }
+	
+	protected void setFramesPerStep(int framesPerStep) {
+		this.framesPerStep = framesPerStep;
+	}
 	
 	@Override
 	public Point getMapLocation(){
@@ -29,6 +38,22 @@ public class DynamicEntity extends Entity {
 	protected Dimension getSize(){
 		//TODO calculate 2x1 / 1x2, 1x1 based on moving direction
 		return new Dimension(1, 1);
+	}
+	
+	@Override
+	protected BufferedImage getSprite(int t) {
+		assert (this.animFrames != 0) : "'animFrames' was not specified for "+this.toString();
+		assert (this.sprite != null) : "trying to render a null sprite for entity: "+this.toString();
+		
+		if(framesPerStep > 0) {
+			t = Math.round((float) t/(float) inverseSpeed);
+		}
+		
+		if(this.getMoveDirection() == Direction.NONE || this.getMoveDirection() == null) {
+			return this.sprite.get(this.getFacingDirection()).get(0);
+		} else {
+			return this.sprite.get(this.getMoveDirection()).get((t) % this.animFrames);
+		}
 	}
 	
 	protected void moveTo(Point p){
@@ -101,7 +126,6 @@ public class DynamicEntity extends Entity {
 		this.targetPosition = mapPosition.scale(TopDownGraphics.tileWidthHeight_Pixels);
 		this.previousPosition = new Point(targetPosition);
 	}
-	
 	
 	protected static enum Direction{
 		NORTH,SHOUTH,EAST,WEST,NONE

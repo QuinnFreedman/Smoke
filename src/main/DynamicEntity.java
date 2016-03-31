@@ -1,8 +1,6 @@
 package main;
 
 import java.awt.Dimension;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 public class DynamicEntity extends Entity {
 	protected Point targetPosition;
@@ -11,9 +9,14 @@ public class DynamicEntity extends Entity {
 	private int keyframeCountdown = 0;
 	protected int inverseSpeed = 6;
 	private Point trailingPoint;
+	private Direction moveDirection = Direction.NONE;
+	private Direction facingDirection = Direction.SHOUTH;
 
 	Point getTrailingPoint() { return trailingPoint; }
 	void setTrailingPoint(Point trailingPoint) { this.trailingPoint = trailingPoint; }
+	
+	protected Direction getMoveDirection() { return moveDirection; }
+	protected Direction getFacingDirection() { return facingDirection; }
 	
 	@Override
 	public Point getMapLocation(){
@@ -30,6 +33,18 @@ public class DynamicEntity extends Entity {
 	
 	protected void moveTo(Point p){
 		if(p != null){
+			if(p.x < this.getMapLocation().x) {
+				this.moveDirection = Direction.WEST;
+			} else if(p.x > this.getMapLocation().x) {
+				this.moveDirection = Direction.EAST;
+			} else if(p.y < this.getMapLocation().y) {
+				this.moveDirection = Direction.NORTH;
+			} else if(p.y > this.getMapLocation().y) {
+				this.moveDirection = Direction.SHOUTH;
+			} else {
+				this.moveDirection = Direction.NONE;
+			}
+			
 			this.getChunk().modifyChunkCollider(this, -1);
 			this.targetPosition = p.scale(TopDownGraphics.tileWidthHeight_Pixels);
 			if(p.x < this.getChunk().getPosition().x ||
@@ -48,6 +63,10 @@ public class DynamicEntity extends Entity {
 	
 	//read user input or do AI logic
 	protected void doLogic(){
+		if(moveDirection != Direction.NONE) {
+			this.facingDirection = this.moveDirection;
+		}
+		this.moveDirection = Direction.NONE;
 		if(!previousPosition.equals(targetPosition) || trailingPoint == null){
 			this.trailingPoint = new Point(previousPosition);
 			this.previousPosition = new Point(this.targetPosition);

@@ -155,7 +155,7 @@ public abstract class Main{
 			timeElapsed += timeToExecute;
 			
 			if(frames == 100) {
-				System.out.println(timeElapsed / (float) frames);
+				out.pln(timeElapsed / (float) frames);
 				frames = 0;
 				timeElapsed = 0;
 			}

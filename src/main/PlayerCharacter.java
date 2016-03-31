@@ -28,18 +28,15 @@ class PlayerCharacter extends Character{
 			
 		}
 	}
-	private static Direction moveDirection = Direction.NONE;
-	private static Direction facingDirection = Direction.SHOUTH;
 	
 	private AnimationSet sprite;
 	
 	@Override
 	protected BufferedImage getSprite(int t) {
-		if(PlayerCharacter.moveDirection == Direction.NONE) {
-			return this.sprite.get(PlayerCharacter.facingDirection).get(0);
+		if(this.getMoveDirection() == Direction.NONE) {
+			return this.sprite.get(this.getFacingDirection()).get(0);
 		} else {
-			return this.sprite.get(PlayerCharacter.moveDirection)
-							  .get((t) % this.animFrames);
+			return this.sprite.get(this.getMoveDirection()).get((t) % this.animFrames);
 		}
 	}
 	
@@ -57,39 +54,16 @@ class PlayerCharacter extends Character{
 		int dx = 0;
 		int dy = 0;
 		if(KeyPress.up || KeyPress.upPressed) {
-			moveDirection = Direction.NORTH;
-		} else if(KeyPress.down || KeyPress.downPressed) {
-			moveDirection = Direction.SHOUTH;
-		} else if(KeyPress.left || KeyPress.leftPressed) {
-			moveDirection = Direction.WEST;
-		} else if(KeyPress.right || KeyPress.rightPressed) {
-			moveDirection = Direction.EAST;
-		} else {
-			moveDirection = Direction.NONE;
-		}
-		KeyPress.reset();
-		
-		if(moveDirection != Direction.NONE) {
-			facingDirection = moveDirection;
-		}
-		
-		switch (moveDirection) {
-		case NORTH:
 			dy = -1;
-			break;
-		case SHOUTH:
+		} else if(KeyPress.down || KeyPress.downPressed) {
 			dy = 1;
-			break;
-		case EAST:
-			dx = 1;
-			break;
-		case WEST:
+		} else if(KeyPress.left || KeyPress.leftPressed) {
 			dx = -1;
-			break;
-		case NONE:
-			break;
+		} else if(KeyPress.right || KeyPress.rightPressed) {
+			dx = 1;
 		}
-		
+
+		KeyPress.reset();
 		
 		Point tilePoint = new Point(
 				this.previousPosition.x/TopDownGraphics.tileWidthHeight_Pixels + dx,
@@ -97,8 +71,6 @@ class PlayerCharacter extends Character{
 		
 		if(!Main.getLevel().collides(tilePoint)){
 			this.moveTo(tilePoint);
-		} else {
-			moveDirection = Direction.NONE;
 		}
 		
 	}

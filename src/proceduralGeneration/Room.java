@@ -1,7 +1,10 @@
 package proceduralGeneration;
 
+
 import java.util.ArrayList;
-import main.Level;
+import java.util.Random;
+
+import debug.out;
 import main.Point;
 
 public class Room
@@ -10,20 +13,32 @@ public class Room
 	public int w;
 	public int xpos;
 	public int ypos;
-	public int doors;
-	ArrayList<Point> roomWalls;
-	ArrayList<Point> roomDoors;
-	private Level level;
+	public int numDoors;
+	public ArrayList<Point> roomWalls;
+	public ArrayList<Point> roomDoors;
+	private int levelWidth;
+	private int levelHeight;
 	
-	private static int randomBtwnBiased(int min, int max)
-	{
+	private static int randomBtwnBiased(int min, int max) {
 		return (int) (/*Main.generator.nextDouble()*/ Math.random() * (max - min + 1)) + min;
 	}
-	public static int randomBtwn(int min, int max)
-	{
+	private static int randomBtwn(int min, int max) {
 		//inclusive
 		return (int) Math.floor((/*Main.generator.nextDouble()*/ Math.random() * (max - min + 1)) + min);
 	}
+
+	private static int normalInRange(int min, int max, Random rng) {
+		int range = max - min;
+		double normal;
+		do {
+			normal = rng.nextGaussian();
+			normal = normal/6d * range + min + range/2;
+		} while(normal > max && normal < min);
+		
+		return (int) Math.round(normal);
+	}
+	
+	
 	private void setWalls(){
 		roomWalls = new ArrayList<Point>();
 		roomDoors = new ArrayList<Point>();
@@ -39,7 +54,7 @@ public class Room
 	}
 	private void setDoors(){
 		boolean corner;
-		for(int e=1; e<=doors; e++){
+		for(int e = 1; e <= numDoors; e++){
 			do{	
 				corner = false;			
 				int k = randomBtwn(0, roomWalls.size()-1);
@@ -51,8 +66,8 @@ public class Room
 					(roomWalls.get(k).y == this.h + this.ypos - 1 && roomWalls.get(k).x == this.xpos)
 				){
 					corner = true;
-				}else if(roomWalls.get(k).y == level.getSize().height - 1 ||
-						roomWalls.get(k).x == level.getSize().width - 1 ||
+				}else if(roomWalls.get(k).y == levelHeight - 1 ||
+						roomWalls.get(k).x == levelWidth - 1 ||
 						roomWalls.get(k).y == 0 ||
 						roomWalls.get(k).x == 0
 				){
@@ -67,25 +82,21 @@ public class Room
 		}
 		
 	}
-	Room(Level level){
-		h = randomBtwn(4, 7);
-		w = randomBtwn(4, 7);
-		xpos = randomBtwn(0, level.getSize().width-this.w);
-		ypos = randomBtwn(0, level.getSize().height-this.h);
-		this.level = level;
-		//construct();
+	public Room(int maxWidth, int maxHeight, Random rng){
+		levelHeight = maxHeight;
+		levelWidth = maxWidth;
+		//h = randomBtwn(4, 7);
+		//w = randomBtwn(4, 7);
+		h = normalInRange(4, 7, rng);
+		w = normalInRange(4, 7, rng);
+		//xpos = randomBtwn(1, maxWidth-this.w-1);
+		//ypos = randomBtwn(1, maxHeight-this.h-1);
+		xpos = normalInRange(1, maxWidth-this.w-1, rng);
+		ypos = normalInRange(1, maxHeight-this.h-1, rng);
 	}
-	Room(int h, int w, int x, int y){
-		this.h = h;
-		this.w = w;
-		this.xpos = x;
-		this.ypos = y;
-		//construct();
-	}
+	
 	public void construct(){
-		if(this.level == null)
-			return;
-		doors = randomBtwnBiased(1,3);
+		numDoors = randomBtwnBiased(1,3);
 		setWalls();
 		setDoors();
 	}

@@ -14,6 +14,7 @@ import proceduralGeneration.WorldBuilder;
 import world.Deer;
 import world.Tree;
 import cutscene.CutScenes;
+import debug.debug_dungeon;
 import debug.out;
 import main.Renderer.RenderMode;
 
@@ -58,6 +59,7 @@ public abstract class Main{
 	public static void main(String[] args){
 		//enable opengl hardware acceleration
 		//System.setProperty("sun.java2d.opengl","True");
+		debug_dungeon.buildDungeon();
 		
 		setupWindow();
 		setupWorld();

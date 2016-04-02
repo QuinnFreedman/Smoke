@@ -10,7 +10,8 @@ public class Pathing{
 	private static List<Node> closedList = new ArrayList<Node>();
 	public static List<ArrayList<Node>> paths = new ArrayList<ArrayList<Node>>();
 	
-	public static void setPaths(int[][] walls, ArrayList<Point> doors, ArrayList<Room> rooms){
+	public static void setPaths(int[][] walls, ArrayList<Point> doors, ArrayList<Room> rooms, 
+			boolean outlinePaths){
 		paths.clear();
 		
 		Node[][] nodes = new Node[walls.length][walls[0].length];
@@ -156,47 +157,47 @@ public class Pathing{
 						Node currentTile = nodes[endpoint.y][endpoint.x].parent;
 						if(currentTile != null){
 							while(currentTile.parent != null){
-								//Console.log(currentTile.parent.toString()+": "+currentTile.parent.stringify());
 								paths.get(paths.size()-1).add(currentTile);
 								walls[currentTile.y][currentTile.x] = 3;
 								currentTile = currentTile.parent;
 							}
-						}else{
 						}
 					}
 				}
 			}
 		}
-		//fill in edges of painted area with walls
-		for(ArrayList<Node> path : paths){
-			for(Node node : path){
-				for(int h = 0; h < 8; h++){
-					int localX = node.x;
-					int localY = node.y;
-					if(h == 0){
-						localY++;
-					}else if(h == 1){
-						localX++;
-					}else if(h == 2){
-						localY--;
-					}else if(h == 3){
-						localX--;
-					}else if(h == 4){
-						localY++;
-						localX--;
-					}else if(h == 5){
-						localY++;
-						localX++;
-					}else if(h == 6){
-						localY--;
-						localX--;
-					}else if(h == 7){
-						localY--;
-						localX++;
-					}
-					if(localX >= 0 && localY >= 0 && localY < nodes.length && localX < nodes[0].length){
-						if(walls[localY][localX] == 0){
-							walls[localY][localX] = 1;
+		if(outlinePaths) {
+			//fill in edges of painted area with walls
+			for(ArrayList<Node> path : paths){
+				for(Node node : path){
+					for(int h = 0; h < 8; h++){
+						int localX = node.x;
+						int localY = node.y;
+						if(h == 0){
+							localY++;
+						}else if(h == 1){
+							localX++;
+						}else if(h == 2){
+							localY--;
+						}else if(h == 3){
+							localX--;
+						}else if(h == 4){
+							localY++;
+							localX--;
+						}else if(h == 5){
+							localY++;
+							localX++;
+						}else if(h == 6){
+							localY--;
+							localX--;
+						}else if(h == 7){
+							localY--;
+							localX++;
+						}
+						if(localX >= 0 && localY >= 0 && localY < nodes.length && localX < nodes[0].length){
+							if(walls[localY][localX] == 0){
+								walls[localY][localX] = 1;
+							}
 						}
 					}
 				}
@@ -230,13 +231,11 @@ public class Pathing{
 			}
 			
 		}
-		//Console.log("false");
 		return false;
 	}
 
 	private static int distanceBetween(Point a, Point b){
 		int d = Math.abs(a.x-b.x)+Math.abs(a.y-b.y);
-		//Console.log(" > ("+a.x+","+a.y+")("+b.x+","+b.y+") = "+d);
 		return d;
 	}
 	

@@ -25,8 +25,7 @@ public class Deer extends DynamicEntity {
 	
 	@Override
 	protected BufferedImage getSprite(int t) {
-		if(t % this.inverseSpeed != 0) t = 1;
-		return super.getSprite(t);
+		return super.getSprite(1);
 	}
 	
 	@Override

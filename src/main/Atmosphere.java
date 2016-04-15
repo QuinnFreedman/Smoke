@@ -12,7 +12,7 @@ class Atmosphere {
 	static boolean shadow = true;
 	static boolean light = true;
 	
-	private static BufferedImage smoke = Main.loadImage("atmospheres/MistyMountains");
+	private static BufferedImage smoke = Main.loadImage("atmospheres/mist");
 	private static Dimension textureSize = new Dimension(
 			smoke.getWidth(), smoke.getHeight());
 	private static Point position = new Point(

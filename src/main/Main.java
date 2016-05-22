@@ -59,7 +59,8 @@ public abstract class Main{
 	public static void main(String[] args){
 		//enable opengl hardware acceleration
 		//System.setProperty("sun.java2d.opengl","True");
-		debug_dungeon.buildDungeon();
+		//debug_dungeon.buildDungeon();
+		
 		
 		setupWindow();
 		setupWorld();
@@ -158,7 +159,7 @@ public abstract class Main{
 			timeElapsed += timeToExecute;
 			
 			if(frames == 100) {
-				out.pln(timeElapsed / (float) frames);
+				//out.pln(timeElapsed / (float) frames);
 				frames = 0;
 				timeElapsed = 0;
 			}
@@ -207,8 +208,8 @@ public abstract class Main{
 				break;
 			case INVENTORY:
 				break;
-			case MENU:
-				break;
+			case MAIN_MENU:
+				menu.StartMenu.handleKeyboardInput(e, true);
 			case WORLD:
 				PlayerCharacter.handleKeyboardInput(e, true);
 				break;
@@ -227,8 +228,8 @@ public abstract class Main{
 				break;
 			case INVENTORY:
 				break;
-			case MENU:
-				break;
+			case MAIN_MENU:
+				menu.StartMenu.handleKeyboardInput(e, false);
 			case WORLD:
 				PlayerCharacter.handleKeyboardInput(e, false);
 				break;

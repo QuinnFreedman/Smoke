@@ -8,6 +8,8 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
+import debug.out;
+
 public abstract class Renderer{
 	static final float scale = 2f;
 	private static RenderMode renderMode = RenderMode.NONE;
@@ -68,6 +70,9 @@ public abstract class Renderer{
 		case CUTSCENE:
 			cutscene.CutScenes.render(graphics);
 			break;
+		case MAIN_MENU: 
+			menu.StartMenu.render(graphics);
+			break;
 		default:
 			break;
 		}
@@ -105,6 +110,6 @@ public abstract class Renderer{
 	}
 	
 	public static enum RenderMode{
-		MENU, WORLD, INVENTORY, COMBAT, CUTSCENE, NONE
+		MAIN_MENU, PAUSE_MENU, WORLD, INVENTORY, COMBAT, CUTSCENE, NONE
 	}
 }

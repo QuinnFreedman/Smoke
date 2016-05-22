@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 
+import debug.out;
 import main.Point;
 
 public class Animation {
@@ -30,6 +31,7 @@ public class Animation {
 		
 		framesDir = new File(getClass().getClassLoader().getResource("images").getFile());
 		framesDir = new File(framesDir.getPath()+"/"+path);
+		framesDir = new File(java.net.URLDecoder.decode(framesDir.getPath()));
 		if(!(framesDir.exists() && framesDir.isDirectory())) {
 			System.err.println("Directory \""+framesDir.getPath()+"\" does not exsist");
 		}
@@ -45,7 +47,6 @@ public class Animation {
 		if(!this.loaded){
 			System.out.println("loading animation frames from: "+framesDir.getPath());
 			File[] files = framesDir.listFiles();
-			System.out.println(files);
 			for(File f : files) {
 				String str = f.getPath();
 				frames.add(main.Main.loadImage(

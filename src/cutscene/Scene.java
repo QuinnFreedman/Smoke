@@ -1,8 +1,11 @@
 package cutscene;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Iterator;
+
+import debug.out;
 
 class Scene {
 	private ArrayList<Animation> animations = new ArrayList<Animation>();
@@ -37,7 +40,6 @@ class Scene {
 				}
 			}
 		}
-		
 	}
 	
 	void load() {

@@ -3,6 +3,7 @@ package cutscene;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 
+import debug.out;
 import main.Point;
 import main.Renderer;
 import main.TopDownGraphics;
@@ -64,8 +65,10 @@ public abstract class CutScenes {
 		//scruples
 		SCRUPLES.addAnimation(new Animation("animation_frames/Scruples", 
 				Animation.mode.LOOP_DELAY, 
-				new Point(TopDownGraphics.getViewportSize_pixels().width,
-						TopDownGraphics.getViewportSize_pixels().height),
+				new Point(TopDownGraphics.getViewportSize_pixels().width / 2 
+							- TopDownGraphics.tileWidthHeight_Pixels * 1.5f,
+						TopDownGraphics.getViewportSize_pixels().height / 2 
+						- TopDownGraphics.tileWidthHeight_Pixels * 1.5f),
 				new Dimension(TopDownGraphics.tileWidthHeight_Pixels * 3, 
 						TopDownGraphics.tileWidthHeight_Pixels * 3)).setDelayTime(20));
 		

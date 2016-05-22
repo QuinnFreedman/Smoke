@@ -52,6 +52,11 @@ public class Point{
 		this.y = y;
 	}
 	
+	public Point(float x, float y) {
+		this.x = Math.round(x);
+		this.y = Math.round(y);
+	}
+	
 	public Point(){
 		
 	}

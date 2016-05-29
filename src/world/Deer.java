@@ -4,13 +4,13 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import debug.out;
-import main.AnimationSet;
-import main.DynamicEntity;
-import main.Entity;
-import main.Level;
-import main.Main;
-import main.Point;
-import main.TopDownGraphics;
+import engine.AnimationSet;
+import engine.DynamicEntity;
+import engine.Entity;
+import engine.Level;
+import engine.Main;
+import engine.Point;
+import engine.TopDownGraphics;
 
 public class Deer extends DynamicEntity {
 

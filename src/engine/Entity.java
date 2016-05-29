@@ -1,4 +1,4 @@
-package main;
+package engine;
 
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
@@ -10,7 +10,7 @@ public class Entity{
 	private Chunk chunk;
 	protected int animFrames = 0;
 
-	protected Point getPosition() {
+	public Point getPosition() {
 		return position;
 	}
 	protected void setPosition(Point position) {

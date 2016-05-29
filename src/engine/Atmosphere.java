@@ -1,4 +1,4 @@
-package main;
+package engine;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -7,7 +7,7 @@ import java.awt.RadialGradientPaint;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
-class Atmosphere {
+public class Atmosphere {
 	//DEBUG
 	static boolean shadow = true;
 	static boolean light = true;
@@ -20,7 +20,7 @@ class Atmosphere {
 			3 * TopDownGraphics.tileWidthHeight_Pixels);
 	private static Point.Float actualPositon = new Point.Float(position);
 	
-	static void move(float x, float y) {
+	public static void move(float x, float y) {
 		actualPositon.x += x;
 		actualPositon.y += y;
 		

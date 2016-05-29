@@ -1,7 +1,14 @@
-package main;
+package gameplay;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+
+import engine.Entity;
+import engine.Level;
+import engine.Main;
+import engine.Point;
+import engine.TopDownGraphics;
+import gameplay.Character.Race;
 
 class NPCCharacter extends Character{
 	private Entity target = null;
@@ -27,8 +34,8 @@ class NPCCharacter extends Character{
 		HUNT,TRAIL,FLEE,IDLE,NONE
 	}
 	
-	NPCCharacter(Level level, Point position, Race race, String cclass) {
-		super(level, position, race, cclass);
+	NPCCharacter(Level level, Point position, boolean male, Race race, String cclass) {
+		super(level, position, male, race, cclass);
 		this.inverseSpeed = 8;
 		this.sprite = Main.loadImage("character_tiles/"+this.getRace()+"_"+this.getCclass());
 	}
@@ -99,25 +106,25 @@ class NPCCharacter extends Character{
 				if(target instanceof Character){
 					if(self.followMode == AIMode.TRAIL){
 						if(((Character) target).getTrailingPoint() == null || (
-								Math.abs(((Character) target).targetPosition.x - self.targetPosition.x) <= 
+								Math.abs(((Character) target).getTargetPosition().x - self.targetPosition.x) <= 
 								Math.abs(((Character) target).getTrailingPoint().x - self.targetPosition.x) &&
-								Math.abs(((Character) target).targetPosition.y - self.targetPosition.y) <= 
+								Math.abs(((Character) target).getTargetPosition().y - self.targetPosition.y) <= 
 								Math.abs(((Character) target).getTrailingPoint().y - self.targetPosition.y)
 							)){
-							targetLocation = ((Character) target).targetPosition;
+							targetLocation = ((Character) target).getTargetPosition();
 							followDistance = distance + 1;
 						}else{
 							targetLocation = ((Character) target).getTrailingPoint();
 							followDistance = distance;
 						}
 					}else if(self.followMode == AIMode.HUNT){ //TODO this is awkward
-						targetLocation = ((Character) target).previousPosition;
+						targetLocation = ((Character) target).getPreviousPosition();
 						followDistance = distance + 1;
 					}else{
 						return;
 					}
 				}else{
-					targetLocation = ((Entity) target).position;
+					targetLocation = ((Entity) target).getPosition();
 				}
 				
 				if(!self.isPathing){

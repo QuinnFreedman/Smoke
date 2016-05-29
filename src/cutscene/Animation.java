@@ -7,7 +7,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import debug.out;
-import main.Point;
+import engine.Point;
 
 public class Animation {
 	private ArrayList<BufferedImage> frames = new ArrayList<BufferedImage>();
@@ -49,7 +49,7 @@ public class Animation {
 			File[] files = framesDir.listFiles();
 			for(File f : files) {
 				String str = f.getPath();
-				frames.add(main.Main.loadImage(
+				frames.add(engine.Main.loadImage(
 						str.substring(str.lastIndexOf("images") + 7, str.lastIndexOf('.'))));
 			}
 			this.loaded = true;

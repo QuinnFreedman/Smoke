@@ -1,4 +1,4 @@
-package main;
+package gameplay;
 
 abstract class CharacterClass{
 	protected int health;

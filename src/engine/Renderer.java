@@ -1,4 +1,4 @@
-package main;
+package engine;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 import debug.out;
 
 public abstract class Renderer{
-	static final float scale = 2f;
+	static final float scale = 5f;
 	private static RenderMode renderMode = RenderMode.NONE;
 	private static final Dimension size = TopDownGraphics.getViewportSize();
 	private static BufferedImage scene;
@@ -36,11 +36,12 @@ public abstract class Renderer{
 	
 	static void initGraphics(){
 		scene = new BufferedImage(
-				(int) (size.width * TopDownGraphics.tileWidthHeight_Pixels * scale),
-				(int) (size.height * TopDownGraphics.tileWidthHeight_Pixels  * scale), 
+				(int) (size.width * TopDownGraphics.tileWidthHeight_Pixels /* scale*/),
+				(int) (size.height * TopDownGraphics.tileWidthHeight_Pixels  /* scale*/), 
 				BufferedImage.TYPE_INT_RGB);
 		graphics = scene.createGraphics();
-		graphics.scale(scale, scale);
+		graphics.setFont(Main.getFont());
+		//graphics.scale(scale, scale);
 	}
 	
 	public static void fadeTo(RenderMode mode, int time) {
@@ -105,7 +106,10 @@ public abstract class Renderer{
 		@Override
 		protected void paintComponent(java.awt.Graphics g) {
 			super.paintComponent(g);
-			g.drawImage(scene, 0, 0, this);
+			if(scene != null) {
+				g.drawImage(scene, 0, 0, (int) (scene.getWidth() * scale), 
+						(int) (scene.getHeight() * scale), this);
+			}
 		}
 	}
 	

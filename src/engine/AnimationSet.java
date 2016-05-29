@@ -1,9 +1,9 @@
-package main;
+package engine;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import main.DynamicEntity.Direction;
+import engine.DynamicEntity.Direction;
 
 public class AnimationSet {
 		private ArrayList<BufferedImage> north;
@@ -99,5 +99,10 @@ public class AnimationSet {
 				}
 				this.getByName(directions[y]).addAll(frames);
 			}
+		}
+		
+		public static BufferedImage getSingleFrame(final String spritesheet) {
+			final BufferedImage sheet = Main.loadImage("dynamic_entities/"+spritesheet);
+			return sheet.getSubimage(0, 0, 32, 32);
 		}
 	}

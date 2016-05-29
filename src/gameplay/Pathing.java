@@ -1,7 +1,9 @@
-package main;
+package gameplay;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import engine.Point;
 
 abstract class Pathing{
 	private static List<Node> openList = new ArrayList<Node>();

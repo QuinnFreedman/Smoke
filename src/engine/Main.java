@@ -1,9 +1,13 @@
-package main;
+package engine;
 
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GraphicsEnvironment;
+import java.awt.Menu;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -16,7 +20,11 @@ import world.Tree;
 import cutscene.CutScenes;
 import debug.debug_dungeon;
 import debug.out;
-import main.Renderer.RenderMode;
+import engine.Renderer.RenderMode;
+import gameplay.Character;
+import gameplay.PlayerCharacter;
+import menu.Menu.MenuItem;
+import menu.StartMenu;
 
 public abstract class Main{
 	private static boolean gamePaused = false;
@@ -30,6 +38,12 @@ public abstract class Main{
 	private static Level level;
 	static JPanel canvas;
 	
+	private static Font font = new Font("Courier New", Font.PLAIN, 12);
+	
+	public static Font getFont() {
+		return font;
+	}
+	
 	public static Level getLevel() {
 		return level;
 	}
@@ -38,6 +52,15 @@ public abstract class Main{
 	}
 	public static PlayerCharacter getPlayer(){
 		return player;
+	}
+	
+	public static void setPlayer(boolean male, String race, String cClass) {
+		player = new PlayerCharacter(level,
+				new Point(5, 4),
+				male,
+				Character.Race.HUMAN, //TODO
+				cClass);
+		
 	}
 	//******************************************
 	//Utility
@@ -61,16 +84,29 @@ public abstract class Main{
 		//System.setProperty("sun.java2d.opengl","True");
 		//debug_dungeon.buildDungeon();
 		
+		//load font:
+		try {
+			GraphicsEnvironment ge = 
+		    	GraphicsEnvironment.getLocalGraphicsEnvironment();
+			Font newFont = Font.createFont(Font.TRUETYPE_FONT, new File("assets/font/pixelated.ttf"));
+			ge.registerFont(newFont);
+			font = newFont.deriveFont(14f);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		setupWindow();
 		setupWorld();
 		
-		//new PathingDebug();;
-		//CutScenes.setScene(CutScenes.CANDLE, 20);
-		Renderer.fadeFromBlack(50);
-		//Renderer.setRenderMode(RenderMode.CUTSCENE);
-		Renderer.setRenderMode(RenderMode.WORLD);
+		//new PathingDebug();
+		Renderer.setRenderMode(RenderMode.MAIN_MENU);
 		gameLoop();
+	}
+	
+	public static void start() {
+		CutScenes.setScene(CutScenes.CANDLE, 20);
+		Renderer.fadeFromBlack(50);
+		Renderer.setRenderMode(RenderMode.CUTSCENE);
 	}
 	
 	private static void setupWindow(){
@@ -102,11 +138,6 @@ public abstract class Main{
 		//make world
 		WorldBuilder.WorldData map = WorldBuilder.buildWorld();
 		level = new Level(map.getLevelTextures(), map.getStaticSprites());
-		
-		player = new PlayerCharacter(level,
-				new Point(5, 4), 
-				Character.Race.HUMAN, 
-				"Mage");
 		
 		new Deer(level, new Point(3,3));
 		
@@ -192,7 +223,7 @@ public abstract class Main{
 	}
 	
 	//draw sprites
-	private static void render(){
+	public static void render(){
 		Renderer.render();
 		canvas.repaint();
 	}

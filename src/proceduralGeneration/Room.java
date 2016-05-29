@@ -4,7 +4,7 @@ package proceduralGeneration;
 import java.util.ArrayList;
 import java.util.Random;
 
-import main.Point;
+import engine.Point;
 
 public class Room extends Rectange{
 	public int numDoors;

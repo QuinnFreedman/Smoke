@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import debug.out;
-import main.Point;
+import engine.Point;
 
 public abstract class DungeonBuilder{
 	

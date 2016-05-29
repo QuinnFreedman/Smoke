@@ -8,13 +8,14 @@ import java.util.List;
 public class Menu {
 	private MenuItem rootItem;
 	private int selectedIndex;
-	private MenuItem view = rootItem;
+	private MenuItem view;
 	
 	public Menu(String heading, MenuItem... items) {
 		if(items.length == 0) {
 			throw new IllegalArgumentException("A menu must contain at least one MenuItem");
 		}
 		rootItem = new MenuItem("root", heading, items);
+		view = rootItem;
 		selectedIndex = 0;
 		rootItem.children.get(0).selected = true;
 	}
@@ -35,15 +36,16 @@ public class Menu {
 		}
 	}
 	
-	public String select() {
+	public Selection select() {
+		String value = view.children.get(selectedIndex).getText();
 		if(view.children.get(selectedIndex).children != null) {
 			view.children.get(selectedIndex).selected = false;
 			view = view.children.get(selectedIndex);
 			selectedIndex = 0;
 			view.children.get(0).selected = true;
-			return null;
+			return new Selection(value, false);
 		} else {
-			return view.children.get(selectedIndex).text;
+			return new Selection(value, true);
 		}
 	}
 	
@@ -73,7 +75,7 @@ public class Menu {
 	public static class MenuItem {
 		private String text;
 		private boolean selected = false;
-		private String heading;
+		private String heading = "";
 		private ArrayList<MenuItem> children = null;
 		private MenuItem parent = null;
 
@@ -96,6 +98,25 @@ public class Menu {
 			for(MenuItem child : children) {
 				child.parent = this;
 			}
+		}
+		
+	}
+	
+	public static class Selection {
+		private String value;
+		private boolean finalResult;
+
+		public boolean isFinalResult() {
+			return finalResult;
+		}
+
+		public String getValue() {
+			return value;
+		}
+		
+		private Selection(String value, boolean isLast) {
+			this.value = value;
+			this.finalResult = isLast;
 		}
 		
 	}

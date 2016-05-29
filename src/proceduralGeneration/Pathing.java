@@ -3,7 +3,7 @@ package proceduralGeneration;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.Point;
+import engine.Point;
 
 public class Pathing{
 	private static List<Node> openList = new ArrayList<Node>();

@@ -1,4 +1,4 @@
-package main;
+package engine;
 
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
@@ -17,9 +17,10 @@ public class DynamicEntity extends Entity {
 	protected AnimationSet sprite = null;
 	private int framesPerStep = -1;
 
-	Point getTrailingPoint() { return trailingPoint; }
-	void setTrailingPoint(Point trailingPoint) { this.trailingPoint = trailingPoint; }
-	
+	public Point getPreviousPosition() { return previousPosition; }
+	public Point getTrailingPoint() { return trailingPoint; }
+	public void setTrailingPoint(Point trailingPoint) { this.trailingPoint = trailingPoint; }
+	public Point getTargetPosition() { return targetPosition; }
 	protected Direction getMoveDirection() { return moveDirection; }
 	protected Direction getFacingDirection() { return facingDirection; }
 	

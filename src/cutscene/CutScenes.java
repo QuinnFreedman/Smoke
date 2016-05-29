@@ -4,9 +4,9 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 
 import debug.out;
-import main.Point;
-import main.Renderer;
-import main.TopDownGraphics;
+import engine.Point;
+import engine.Renderer;
+import engine.TopDownGraphics;
 
 public abstract class CutScenes {
 	private static boolean scenesBuilt = false;

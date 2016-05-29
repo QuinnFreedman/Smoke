@@ -6,7 +6,7 @@ import java.util.Random;
 
 import debug.debug_dungeon;
 import debug.out;
-import main.Point;
+import engine.Point;
 
 public abstract class WorldBuilder {
 	static final int[][] levelTextures = new int[][]{

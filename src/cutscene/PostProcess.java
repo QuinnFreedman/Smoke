@@ -7,7 +7,7 @@ import java.awt.RadialGradientPaint;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
-import main.TopDownGraphics;
+import engine.TopDownGraphics;
 
 interface PostProcess {
 	public boolean render(Graphics2D g, int t);

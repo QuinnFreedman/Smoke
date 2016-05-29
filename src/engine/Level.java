@@ -1,4 +1,4 @@
-package main;
+package engine;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
@@ -42,7 +42,7 @@ public class Level{
 	public Dimension getSize() { return size; }
 	int[][] getTextureMap() { return textureMap; }
 	int[][] getStaticSprites() { return spriteMap; }
-	boolean[][] getCollsionMap() { return collisionMap; }
+	public boolean[][] getCollsionMap() { return collisionMap; }
 	Chunk[][] getChunks() { return chunks; }
 	
 	public boolean collides(Point p){

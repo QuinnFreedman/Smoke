@@ -1,4 +1,4 @@
-package main;
+package gameplay;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -9,6 +9,8 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import engine.Point;
 
 class PathingDebug extends JFrame {
 	private JPanel canvas;

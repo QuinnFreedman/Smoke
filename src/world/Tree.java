@@ -3,10 +3,10 @@ package world;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 
-import main.Entity;
-import main.Level;
-import main.Main;
-import main.Point;
+import engine.Entity;
+import engine.Level;
+import engine.Main;
+import engine.Point;
 
 public class Tree extends Entity {
 

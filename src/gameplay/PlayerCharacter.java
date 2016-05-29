@@ -1,11 +1,17 @@
-package main;
+package gameplay;
 
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
 import cutscene.CutScenes;
+import engine.AnimationSet;
+import engine.Atmosphere;
+import engine.Level;
+import engine.Main;
+import engine.Point;
+import engine.TopDownGraphics;
 
-class PlayerCharacter extends Character{
+public class PlayerCharacter extends Character{
 	
 	private static class KeyPress {
 		//keys held down
@@ -29,8 +35,8 @@ class PlayerCharacter extends Character{
 		}
 	}
 	
-	PlayerCharacter(Level level, Point mapPosition, Race race, String cclass) {
-		super(level, mapPosition, race, cclass);
+	public PlayerCharacter(Level level, Point mapPosition, boolean male, Race race, String cclass) {
+		super(level, mapPosition, male, race, cclass);
 		this.animFrames = 7;
 		//this.sprite = new AnimationSet("character_tiles", "Harper", this.animFrames);
 		this.sprite = new AnimationSet("character_tiles/Harper_spritesheet", this.animFrames);
@@ -72,16 +78,16 @@ class PlayerCharacter extends Character{
 		Atmosphere.move(dx * -1.5f, dy * -1.5f);
 	}
 	
-	static void handleKeyboardInput(KeyEvent e, boolean keyPressed){
+	public static void handleKeyboardInput(KeyEvent e, boolean keyPressed){
 		int c = e.getKeyCode();
 		
 		//TODO DEBUG
 		if(keyPressed){
-			if(c == KeyEvent.VK_COMMA) {
+			/*if(c == KeyEvent.VK_COMMA) {
 				Atmosphere.light = !Atmosphere.light;
 			} else if(c == KeyEvent.VK_PERIOD) {
 				Atmosphere.shadow = !Atmosphere.shadow;
-			} else if(c == KeyEvent.VK_1) {
+			} else */if(c == KeyEvent.VK_1) {
 				CutScenes.setScene(CutScenes.SCRUPLES);
 			}
 		}

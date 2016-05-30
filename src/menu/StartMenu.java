@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -99,7 +100,8 @@ public class StartMenu {
 			graphics.drawString(prefix+s+prefix, 100, 100 + (i + 1) * 14);
 		}
 		
-		for(List<BufferedImage> list : preview) {
+		for(int i = 0; i < preview.size(); i++) {
+			List<BufferedImage> list = preview.get(i);
 			if(list != null) {
 				for(BufferedImage image : list) {
 					graphics.drawImage(image, 300, 100, TopDownGraphics.tileWidthHeight_Pixels * 2,

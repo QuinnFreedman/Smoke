@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 import debug.out;
 
 public abstract class Renderer{
-	static final float scale = 5f;
+	static float scale = 5f;
 	private static RenderMode renderMode = RenderMode.NONE;
 	private static final Dimension size = TopDownGraphics.getViewportSize();
 	private static BufferedImage scene;

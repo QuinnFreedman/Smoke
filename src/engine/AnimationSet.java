@@ -86,10 +86,14 @@ public class AnimationSet {
 			
 		}
 		
+		public AnimationSet(final String spritesheet) {
+			this(spritesheet, 7);
+		}
+		
 		public AnimationSet(final String spritesheet, final int numFrames) {
 			this();
 			
-			final String[] directions = {"left", "right", "down", "up"};
+			final String[] directions = {"down", "right", "left", "up"};
 			final BufferedImage sheet = Main.loadImage("dynamic_entities/"+spritesheet);
 			
 			for(int y = 0; y < 4; y++) {

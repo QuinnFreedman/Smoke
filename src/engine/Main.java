@@ -4,6 +4,9 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.Menu;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
@@ -67,7 +70,7 @@ public abstract class Main{
 	//******************************************	
 	public static BufferedImage loadImage(String address){
 		address = "/images/"+address+".png";
-		System.out.println("loading "+address+"...");
+		out.pln("loading "+address+"...");
 		BufferedImage image = null;
 		try {
 			image = ImageIO.read(Main.class.getResource(address));
@@ -116,13 +119,31 @@ public abstract class Main{
 		canvas = new Renderer.RederPanel();
 		window.getContentPane().add(canvas);
 		canvas.setPreferredSize(new Dimension(
-				(int) (TopDownGraphics.getViewportSize().width * 
+				(int) Math.round(TopDownGraphics.getViewportSize().width * 
 						TopDownGraphics.tileWidthHeight_Pixels * Renderer.scale),
-				(int) (TopDownGraphics.getViewportSize().height * 
+				(int) Math.round(TopDownGraphics.getViewportSize().height * 
 						TopDownGraphics.tileWidthHeight_Pixels * Renderer.scale)));
 		window.pack();
 		window.setFocusTraversalKeysEnabled(false);
 		window.addKeyListener(new KeyboardHandler());
+		window.setMinimumSize(new Dimension(
+				TopDownGraphics.getViewportSize().width * TopDownGraphics.tileWidthHeight_Pixels, 
+				TopDownGraphics.getViewportSize().height * TopDownGraphics.tileWidthHeight_Pixels));
+		window.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e) {
+				float scale1 = e.getComponent().getWidth() / 
+						((float) TopDownGraphics.getViewportSize().width * 
+						TopDownGraphics.tileWidthHeight_Pixels);
+				Renderer.scale = scale1;
+				canvas.setPreferredSize(new Dimension(
+						(int) Math.round(TopDownGraphics.getViewportSize().width * 
+								TopDownGraphics.tileWidthHeight_Pixels * Renderer.scale),
+						(int) Math.round(TopDownGraphics.getViewportSize().height * 
+								TopDownGraphics.tileWidthHeight_Pixels * Renderer.scale)));
+				window.setSize(canvas.getPreferredSize());
+			}
+		});
 		window.setVisible(true);
 	}
 	private static void setupWorld(){
@@ -241,6 +262,7 @@ public abstract class Main{
 				break;
 			case MAIN_MENU:
 				menu.StartMenu.handleKeyboardInput(e, true);
+				break;
 			case WORLD:
 				PlayerCharacter.handleKeyboardInput(e, true);
 				break;

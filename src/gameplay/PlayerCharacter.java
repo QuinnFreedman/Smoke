@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
 import cutscene.CutScenes;
+import debug.out;
 import engine.AnimationSet;
 import engine.Atmosphere;
 import engine.Level;
@@ -12,6 +13,9 @@ import engine.Point;
 import engine.TopDownGraphics;
 
 public class PlayerCharacter extends Character{
+
+	private AnimationSet walkingAnimation;
+	private AnimationSet swordAnimation;
 	
 	private static class KeyPress {
 		//keys held down
@@ -38,8 +42,15 @@ public class PlayerCharacter extends Character{
 	public PlayerCharacter(Level level, Point mapPosition, boolean male, Race race, String cclass) {
 		super(level, mapPosition, male, race, cclass);
 		this.animFrames = 7;
-		//this.sprite = new AnimationSet("character_tiles", "Harper", this.animFrames);
-		this.sprite = new AnimationSet("character_tiles/Harper_spritesheet", this.animFrames);
+		
+		if(male) {
+			this.walkingAnimation = this.sprite;
+			this.swordAnimation = new AnimationSet("character_tiles/male_sword_spritesheet");
+		} else {
+			this.walkingAnimation = this.sprite;
+			this.swordAnimation = new AnimationSet("character_tiles/female_sword_spritesheet");
+		}
+		//this.sprite = new AnimationSet("character_tiles/Harper_spritesheet", this.animFrames);
 		
 	}
 	
@@ -80,9 +91,12 @@ public class PlayerCharacter extends Character{
 	
 	public static void handleKeyboardInput(KeyEvent e, boolean keyPressed){
 		int c = e.getKeyCode();
-		
 		//TODO DEBUG
 		if(keyPressed){
+			if(c == KeyEvent.VK_SPACE) {
+				Main.getPlayer().sprite = (Main.getPlayer().sprite == Main.getPlayer().walkingAnimation) ?
+						Main.getPlayer().swordAnimation : Main.getPlayer().walkingAnimation;
+			}
 			/*if(c == KeyEvent.VK_COMMA) {
 				Atmosphere.light = !Atmosphere.light;
 			} else if(c == KeyEvent.VK_PERIOD) {

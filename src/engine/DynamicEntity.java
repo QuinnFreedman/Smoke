@@ -23,10 +23,7 @@ public class DynamicEntity extends Entity {
 	public Point getTargetPosition() { return targetPosition; }
 	protected Direction getMoveDirection() { return moveDirection; }
 	protected Direction getFacingDirection() { return facingDirection; }
-	
-	protected void setFramesPerStep(int framesPerStep) {
-		this.framesPerStep = framesPerStep;
-	}
+	protected int getFramesPerStep() { return framesPerStep; }
 	
 	@Override
 	public Point getMapLocation(){

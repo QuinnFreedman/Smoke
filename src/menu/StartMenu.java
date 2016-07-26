@@ -129,7 +129,7 @@ public class StartMenu {
 				Selection selection = menu.select();
 				switch(page) {
 				case CHOOSE_YOUR_CHARACTER:
-					male = selection.getValue() == "Male";
+					male = selection.getValue().equals("Male");
 					preview.add(null);
 					break;
 				case CHOOSE_YOUR_RACE:
@@ -159,7 +159,7 @@ public class StartMenu {
 			String selected = menu.getSelected();
 			switch(page) {
 			case CHOOSE_YOUR_CHARACTER:
-				if(selected == "Male") {
+				if(selected.equals("Male")) {
 					preview.set(0, Arrays.asList(preLoadedImages.get("Male")));
 				} else {
 					preview.set(0, Arrays.asList(preLoadedImages.get("Female")));

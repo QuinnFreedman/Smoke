@@ -1,8 +1,7 @@
 package proceduralGeneration;
 
 import java.awt.Rectangle;
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 
 import debug.debug_dungeon;
 import debug.out;
@@ -63,19 +62,18 @@ public abstract class WorldBuilder {
 	private static final int WORLD_WIDTH = 1000;
 	private static final int WORLD_HEIGHT = 1000;
 	
-	static int[][] world = new int[WORLD_HEIGHT][WORLD_WIDTH];
+	private static int[][] world = new int[WORLD_HEIGHT][WORLD_WIDTH];
 	static int[][] dynamicTiles = new int[WORLD_HEIGHT][WORLD_WIDTH];
 	
-	static float shape = 1.2f;
-	
-	static float[] levels = {.22f, .32f, .5f, .8f};
-	
+	private static final float[] levels = {.1f, .2f, .33f, .45f};
+	public static final float[] biomeThresholds = {.45f, .55f};
+
 	private static double limit(double x){
 		return -1/(x + 1) + 1;
 	}
 	private static ArrayList<Point> makeRiver(Point origin, double[][] elevation){
 		Point active = origin;
-		ArrayList<Point> river = new ArrayList<Point>();
+		ArrayList<Point> river = new ArrayList<>();
 		boolean[][] isRiver = new boolean[elevation.length][elevation[0].length];
 		for (int y = 0; y < isRiver.length; y++) {
 			for (int x = 0; x < isRiver[0].length; x++) {
@@ -89,10 +87,10 @@ public abstract class WorldBuilder {
 			river.add(active);
 			int x = active.x;
 			int y = active.y;
-			Point[] neighbors = {new Point(y-1, x),
-								 new Point(y, x+1),
-								 new Point(y+1, x),
-								 new Point(y, x-1)};
+			Point[] neighbors = {new Point(x-1, y),
+								 new Point(x, y+1),
+								 new Point(x+1, y),
+								 new Point(x, y-1)};
 			
 			double min = 2;
 			active = null;
@@ -122,175 +120,284 @@ public abstract class WorldBuilder {
 						world[y][x+1] == -1 || 
 						world[y+1][x] == -1 ||
 						world[y][x-1] == -1
-					){
+					) {
 					world[y][x] = 0;
 				}
 			}
 		}
 	}
-	
-	public static void buildWorld2(Random rng){
-		SimplexNoise simplexNoise = new SimplexNoise(200,0.3,(int) (rng.nextDouble()*5000));
 
-	    double[][] normalizer = new double[WORLD_HEIGHT][WORLD_WIDTH];
-	    for(int y = 0; y < WORLD_HEIGHT; y++){
-			for(int x = 0; x < WORLD_WIDTH; x++){
-				normalizer[y][x] = limit(shape*Math.min(
-						(1 - Math.abs(WORLD_WIDTH/2.0 - x)/(WORLD_WIDTH/2.0)),
-		 				(1 - Math.abs(WORLD_HEIGHT/2.0 - y)/(WORLD_HEIGHT/2.0))
-	 				));
-			}
+	private enum Direction {
+		NORTH, SOUTH, EAST, WEST;
+
+		private static final List<Direction> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
+		private static final int SIZE = VALUES.size();
+		static Direction getRandom(Random rng) {
+			return VALUES.get(rng.nextInt(SIZE));
 		}
-	    
+	}
+
+	public static void buildWorld2(Random rng){
+		SimplexNoise simplexNoise = new SimplexNoise(200,0.25,(int) (rng.nextDouble()*5000));
+		SimplexNoise percipNoise = new SimplexNoise(500,0.4,(int) (rng.nextDouble()*5000));
+
+		final Point center = new Point(WORLD_WIDTH/2, WORLD_HEIGHT/2);
+
+		final int maxDistance = Math.max(WORLD_WIDTH, WORLD_HEIGHT) / 2;
+
 	    //CALCULATE ELEVATION
 	    double[][] elevation = new double[WORLD_HEIGHT][WORLD_WIDTH];
-	    double[][] percipitation = new double[WORLD_HEIGHT][WORLD_WIDTH];
+	    double[][] precipitation = new double[WORLD_HEIGHT][WORLD_WIDTH];
 	    
 	    for(int y = 0; y < WORLD_HEIGHT; y++){
 			for(int x = 0; x < WORLD_WIDTH; x++){
-				elevation[y][x] = 0.5*(1+simplexNoise.getNoise(x,y)) * normalizer[y][x];
-				percipitation[y][x] = 0.5*(1+simplexNoise.getNoise(x,y));
+				double r = Math.pow(Math.pow(x - center.x, 4) + Math.pow(y - center.y, 4), .25);
+				double normalizer = r < maxDistance ? 1 - r / maxDistance : 0;
+				elevation[y][x] = 0.5*(1+simplexNoise.getNoise(x,y)) * normalizer;
+				assert(elevation[y][x] >= 0 && elevation[y][x] < 1);
+				precipitation[y][x] = 0.5*(1+percipNoise.getNoise(x,y));
 	        }
 	    }
 	    
 	    //SET BOUNDS
-	    
-	    boolean moveNorth = true;
-	    boolean moveSouth = true;
-	    boolean moveEast = true;
-	    boolean moveWest = true;
-	    Rectangle bounds = new Rectangle((int) (WORLD_WIDTH/2f) - 1, 
-	    		(int) (WORLD_HEIGHT/2f) - 1, 2, 2);
-	    while(moveNorth || moveSouth || moveEast || moveWest){
+//
+//	    boolean moveNorth = true;
+//	    boolean moveSouth = true;
+//	    boolean moveEast = true;
+//	    boolean moveWest = true;
+//	    Rectangle bounds = new Rectangle((int) (WORLD_WIDTH/2f) - 1,
+//	    		(int) (WORLD_HEIGHT/2f) - 1, 2, 2);
+//	    while(moveNorth || moveSouth || moveEast || moveWest){
+//
+//	    	boolean water;
+//	    	//NORTH
+//	    	if(moveNorth){
+//	    		water = false;
+//		    	for(int i = bounds.x; i < bounds.x + bounds.width; i++){
+//		    		if(i < 0 || i == WORLD_WIDTH || elevation[bounds.y][i] < getSeaLevel()){
+//		    			water = true;
+//		    			bounds.y += 10;
+//		    			bounds.height -= 10;
+//		    			break;
+//		    		}
+//		    	}
+//		    	if(water){
+//		    		moveNorth = false;
+//		    	}else{
+//	    			bounds.y -= 10;
+//	    			bounds.height += 10;
+//	    		}
+//	    	}
+//
+//	    	//WEST
+//	    	if(moveWest){
+//		    	water = false;
+//		    	for(int i = bounds.y; i < bounds.y + bounds.height; i++){
+//		    		if(i < 0 || i == WORLD_HEIGHT || elevation[i][bounds.x] < getSeaLevel()){
+//		    			water = true;
+//		    			bounds.x += 10;
+//		    			bounds.width -= 10;
+//		    			break;
+//		    		}
+//		    	}
+//		    	if(water){
+//		    		moveWest = false;
+//		    	}else{
+//	    			bounds.x -= 10;
+//	    			bounds.width += 10;
+//	    		}
+//	    	}
+//
+//	    	//SOUTH
+//	    	if(moveSouth){
+//	    		water = false;
+//		    	for(int i = bounds.x; i < bounds.x + bounds.width; i++){
+//		    		if(i < 0 || i == WORLD_WIDTH ||
+//		    				elevation[bounds.y+bounds.height][i] < getSeaLevel()){
+//		    			water = true;
+//		    			bounds.height -= 10;
+//		    			break;
+//		    		}
+//		    	}
+//		    	if(water){
+//		    		moveSouth = false;
+//		    	}else{
+//	    			bounds.height += 10;
+//	    		}
+//	    	}
+//
+//	    	//EAST
+//	    	if(moveEast){
+//		    	water = false;
+//		    	for(int i = bounds.y; i < bounds.y + bounds.height; i++){
+//		    		if(i < 0 || i == WORLD_HEIGHT ||
+//		    				elevation[i][bounds.x+bounds.width] < getSeaLevel()){
+//		    			water = true;
+//		    			bounds.width -= 10;
+//		    			break;
+//		    		}
+//		    	}
+//		    	if(water){
+//		    		moveEast = false;
+//		    	}else{
+//	    			bounds.width += 10;
+//	    		}
+//	    	}
+//
+//	    }
+//
+//	    //CITIES
+//
+//	    ArrayList<City> cities = new ArrayList<>(3);
+//		while(cities.size() < 3){
+//			cities = new ArrayList<>(3);
+//
+//			while(cities.size() < 3){
+//				int x = (int) (rng.nextDouble()*(bounds.width - City.citySize.width));
+//				int y = (int) (rng.nextDouble()*(bounds.height - City.citySize.height));
+//				cities.add(new City(x, y, City.citySize.width, City.citySize.height));
+//			}
+//
+//			DungeonBuilder.collideRooms(cities, bounds.width, bounds.height, 300);
+//
+//			for(City city : cities){
+//				city.x += bounds.x;
+//				city.y += bounds.y;
+//			}
+//		}
+//
+//		for(City c : cities) {
+//			c.buildCity(rng);
+//			for(int y = 0; y < c.height; y++) {
+//				for(int x = 0; x < c.width; x++) {
+//					if( c.walls[y][x] != 0) {
+//						elevation[c.y + y][c.x + x] = .9;
+//					}
+//				}
+//			}
+//		}
 
-	    	boolean water;
-	    	//NORTH
-	    	if(moveNorth){
-	    		water = false;
-		    	for(int i = bounds.x; i < bounds.x + bounds.width; i++){
-		    		if(i < 0 || i == WORLD_WIDTH || elevation[bounds.y][i] < getSeaLevel()){
-		    			water = true;
-		    			bounds.y += 10;
-		    			bounds.height -= 10;
-		    			break;
-		    		}
-		    	}
-		    	if(water){
-		    		moveNorth = false;
-		    	}else{
-	    			bounds.y -= 10;
-	    			bounds.height += 10;
-	    		}
-	    	}
-	    	
-	    	//WEST
-	    	if(moveWest){
-		    	water = false;
-		    	for(int i = bounds.y; i < bounds.y + bounds.height; i++){
-		    		if(i < 0 || i == WORLD_HEIGHT || elevation[i][bounds.x] < getSeaLevel()){
-		    			water = true;
-		    			bounds.x += 10;
-		    			bounds.width -= 10;
-		    			break;
-		    		}
-		    	}
-		    	if(water){
-		    		moveWest = false;
-		    	}else{
-	    			bounds.x -= 10;
-	    			bounds.width += 10;
-	    		}
-	    	}
-
-	    	//SOUTH
-	    	if(moveSouth){
-	    		water = false;
-		    	for(int i = bounds.x; i < bounds.x + bounds.width; i++){
-		    		if(i < 0 || i == WORLD_WIDTH || 
-		    				elevation[bounds.y+bounds.height][i] < getSeaLevel()){
-		    			water = true;
-		    			bounds.height -= 10;
-		    			break;
-		    		}
-		    	}
-		    	if(water){
-		    		moveSouth = false;
-		    	}else{
-	    			bounds.height += 10;
-	    		}
-	    	}
-	    	
-	    	//EAST
-	    	if(moveEast){
-		    	water = false;
-		    	for(int i = bounds.y; i < bounds.y + bounds.height; i++){
-		    		if(i < 0 || i == WORLD_HEIGHT || 
-		    				elevation[i][bounds.x+bounds.width] < getSeaLevel()){
-		    			water = true;
-		    			bounds.width -= 10;
-		    			break;
-		    		}
-		    	}
-		    	if(water){
-		    		moveEast = false;
-		    	}else{
-	    			bounds.width += 10;
-	    		}
-	    	}
-
-	    }
-	    
-	    //CITIES
-	    
-	    ArrayList<City> cities = new ArrayList<City>(3);
-		while(cities.size() < 3){
-			cities = new ArrayList<City>(3);
-			
-			while(cities.size() < 3){
-				int x = (int) (rng.nextDouble()*(bounds.width - City.citySize.width));
-				int y = (int) (rng.nextDouble()*(bounds.height - City.citySize.height));
-				cities.add(new City(x, y, City.citySize.width, City.citySize.height));
-			}
-			
-			DungeonBuilder.collideRooms(cities, bounds.width, bounds.height, 300);
-			
-			for(City city : cities){
-				city.x += bounds.x;
-				city.y += bounds.y;
-			}
+		ArrayList<Point> river = FloatPathing.path(center, new Point(0,0), elevation);
+		out.pln("river.size() == "+river.size());
+		for(Point p : river) {
+			elevation[p.y][p.x] = 0;
 		}
-	    
+
+		Direction lastSide = null;
+		ArrayList<City> cities = new ArrayList<>(3);
+		for(int i = 0; i < 3; i++) {
+			out.pln("City "+i+"...");
+			Direction side;
+			do {
+				side = Direction.getRandom(rng);
+			} while (side == lastSide);
+			lastSide = side;
+
+			int x = -1;
+			int y = -1;
+			switch (side) {
+				case NORTH:
+					x = (int) (Math.random() * (WORLD_WIDTH - City.citySize.width));
+					y = 0;
+					break;
+				case EAST:
+					x = WORLD_WIDTH - City.citySize.width - 1;
+					y = (int) (Math.random() * (WORLD_HEIGHT - City.citySize.height));
+					break;
+				case SOUTH:
+					x = (int) (Math.random() * (WORLD_WIDTH - City.citySize.width));
+					y = WORLD_HEIGHT - City.citySize.height - 1;
+					break;
+				case WEST:
+					x = 0;
+					y = (int) (Math.random() * (WORLD_HEIGHT - City.citySize.height));
+					break;
+			}
+			double ratioX = (center.x - x) / (float) WORLD_WIDTH * 10;
+			double ratioY = (center.y - y) / (float) WORLD_HEIGHT * 10;
+			out.pln("    side == "+side);
+			while (!(
+					(elevation[y][x] > levels[i] &&
+					elevation[y + City.citySize.height][x] > levels[i] &&
+					elevation[y][x + City.citySize.width] > levels[i] &&
+					elevation[y + City.citySize.height][x + City.citySize.width] > levels[i]) ||
+							(elevation[y][x] > levels[i + 1] &&
+							elevation[y + City.citySize.height][x] > levels[i + 1] &&
+							elevation[y][x + City.citySize.width] > levels[i + 1] &&
+							elevation[y + City.citySize.height][x + City.citySize.width] > levels[i + 1]))) {
+				x = (int) (x + ratioX);
+				y = (int) (y + ratioY);
+			}
+			out.pln("    x == "+x+" y == "+y);
+
+			switch (side) {
+				case NORTH:
+					for(int _x = x; _x < x + City.citySize.width; _x++) {
+						int _y = y + City.citySize.height;
+						while(elevation[_y][_x] > levels[i] || _y > y) {
+							//if(elevation[_y][_x] > levels[i + 1]) {
+								elevation[_y][_x] = levels[i];
+							//}
+							_y--;
+						}
+					}
+					break;
+				case SOUTH:
+					for(int _x = x; _x < x + City.citySize.width; _x++) {
+						int _y = y;
+						while(elevation[_y][_x] > levels[i] || _y < y + City.citySize.height) {
+							//if(elevation[_y][_x] > levels[i + 1]) {
+								elevation[_y][_x] = levels[i];
+							//}
+							_y++;
+						}
+					}
+					break;
+				case EAST:
+					for(int _y = y; _y < y + City.citySize.height; _y++) {
+						int _x = x;
+						while(elevation[_y][_x] > levels[i] || _x < x + City.citySize.width) {
+							//if(elevation[_y][_x] > levels[i + 1]) {
+								elevation[_y][_x] = levels[i];
+							//}
+							_x++;
+						}
+					}
+					break;
+				case WEST:
+					for(int _y = y; _y < y + City.citySize.height; _y++) {
+						int _x = x + City.citySize.width;
+						while(elevation[_y][_x] > levels[i] || _x > x) {
+							elevation[_y][_x] = levels[i];
+							_x--;
+						}
+					}
+					break;
+			}
+
+			cities.add(new City(x, y, City.citySize.width, City.citySize.height));
+		}
+
 		for(City c : cities) {
 			c.buildCity(rng);
 			for(int y = 0; y < c.height; y++) {
 				for(int x = 0; x < c.width; x++) {
 					if( c.walls[y][x] != 0) {
-						elevation[c.y + y][c.x + x] = .9;
+						elevation[c.y + y][c.x + x] = 0;
 					}
 				}
 			}
 		}
-		debug_dungeon.drawHeightmap(elevation, getSeaLevel());
-		/*
-	    //FILL MAP
-	    for(int y = 0; y < WORLD_HEIGHT; y++){
-			for(int x = 0; x < WORLD_WIDTH; x++){
-	            double result = elevation[y][x];
-	            double ratio = limit(shape*1d);
-	            if(result > levels[3]*ratio)
-	            	world[y][x] = 4;
-	            else if(result > levels[2]*ratio)
-	            	world[y][x] = 3;
-	            else if(result > levels[1]*ratio)
-	            	world[y][x] = 2;
-	            else if(result > levels[0]*ratio)
-					world[y][x] = 1;
-				else
-					world[y][x] = 0;
-	        }
-	    }*/
+
+		debug_dungeon.drawHeightmap(elevation, precipitation);
+
 	}
+
 	static float getSeaLevel() {
-		return (float) (levels[0]*limit(shape*1d));
+		return levels[0];
+	}
+
+	public static float[] getLevels() {
+		return levels;
 	}
 }

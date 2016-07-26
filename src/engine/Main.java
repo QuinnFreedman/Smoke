@@ -3,10 +3,8 @@ package engine;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
-import java.awt.Menu;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
@@ -14,8 +12,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import proceduralGeneration.WorldBuilder;
 import world.Deer;
@@ -26,8 +23,6 @@ import debug.out;
 import engine.Renderer.RenderMode;
 import gameplay.Character;
 import gameplay.PlayerCharacter;
-import menu.Menu.MenuItem;
-import menu.StartMenu;
 
 public abstract class Main{
 	private static boolean gamePaused = false;
@@ -63,7 +58,7 @@ public abstract class Main{
 				male,
 				Character.Race.HUMAN, //TODO
 				cClass);
-		
+
 	}
 	//******************************************
 	//Utility
@@ -102,6 +97,7 @@ public abstract class Main{
 		setupWorld();
 		
 		//new PathingDebug();
+		debug_dungeon.buildDungeon();
 		Renderer.setRenderMode(RenderMode.MAIN_MENU);
 		gameLoop();
 	}
@@ -115,8 +111,8 @@ public abstract class Main{
 	private static void setupWindow(){
 		//make window
 		JFrame window = new JFrame();
-		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		canvas = new Renderer.RederPanel();
+		window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		canvas = new Renderer.RenderPanel();
 		window.getContentPane().add(canvas);
 		canvas.setPreferredSize(new Dimension(
 				(int) Math.round(TopDownGraphics.getViewportSize().width * 

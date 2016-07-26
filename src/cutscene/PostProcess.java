@@ -1,20 +1,17 @@
 package cutscene;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.RadialGradientPaint;
-import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
 import engine.TopDownGraphics;
 
 interface PostProcess {
-	public boolean render(Graphics2D g, int t);
+	boolean render(Graphics2D g, int t);
 
 	
 	
-	static final PostProcess CANDLE_POST_PROCESS = new PostProcess() {
+	PostProcess CANDLE_POST_PROCESS = new PostProcess() {
 		int width = 200, 
 			height = 130,
 			center_x = 40,
@@ -41,7 +38,6 @@ interface PostProcess {
 			
 			Dimension size = TopDownGraphics.getViewportSize_pixels();
 			g.drawImage(image, 0, 0, size.width, size.height, null);
-			
 			
 			return false;
 		}

@@ -42,7 +42,7 @@ public abstract class TopDownGraphics {
 		
 	}
 	
-	public static Dimension getViewportSize() {
+	static Dimension getViewportSize() {
 		return new Dimension(viewportWidth * 2 + 1, viewportHeight * 2 + 1);
 	}
 	
@@ -145,7 +145,11 @@ public abstract class TopDownGraphics {
 				assert(e.position != null);
 				assert(e.getSize() != null);
 				assert(e.getSprite(t) != null);
-				
+
+				if(e == Main.getPlayer()) {
+					Atmosphere.drawTorchlight(g, t);
+				}
+
 				g.drawImage(e.getSprite(t),
 						e.position.x - viewportUpperLeft.x, 
 						e.position.y - viewportUpperLeft.y,

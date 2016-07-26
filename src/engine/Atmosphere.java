@@ -42,33 +42,18 @@ public class Atmosphere {
 				g.drawImage(smoke, x + position.x, y + position.y, width, height, null);
 			}
 		}
-		
-		float viewRadius = .5f;
+
 		RadialGradientPaint grad = new RadialGradientPaint(
 		        		 new Point2D.Float(viewport.width/2f, viewport.height/2f),
 		        		 viewport.height/2f,
 		        		 new float[]{0.0f, 1f},
 		        		 new Color[]{new Color(0f,0f,0f,0f), new Color(0f,0f,0f,.9f)});
 		
-		RadialGradientPaint torchlight = new RadialGradientPaint(
-		        		 new Point2D.Float(viewport.width/2f, viewport.height/2f),
-		        		 viewport.height*viewRadius,
-		        		 new float[]{
-		        			 0.0f, 
-		        			 stackedNoise(t)+ 0.25f,
-		        			 0.8f},
-		        		 new Color[]{
-		        			 	new Color(0f,0f,0f,0f), 
-		        			 	new Color(.5f,.4f,0f,.3f * .5f / viewRadius),
-		        			 	new Color(0f,0f,0f,0f)});
+
 		
 		
 		if(shadow) {
 			g.setPaint(grad);
-			g.fillRect(0, 0, viewport.width, viewport.height);
-		}
-		if(light) {
-			g.setPaint(torchlight);
 			g.fillRect(0, 0, viewport.width, viewport.height);
 		}
 	}
@@ -77,5 +62,36 @@ public class Atmosphere {
 		return (float) (Math.sin(2 * t)) * 0.003f
 			 + (float) (Math.sin(.7f * t)) * 0.003f
 		 	 + (float) (Math.sin(0.25f * t)) * 0.01f;
+	}
+
+	public static void drawTorchlight(Graphics2D g, int t) {
+		final int width = Math.round(textureSize.width *
+				(TopDownGraphics.tileWidthHeight_Pixels / 32));
+		final int height = Math.round(textureSize.height *
+				(TopDownGraphics.tileWidthHeight_Pixels / 32));
+		final Dimension viewport = new Dimension(
+				TopDownGraphics.getViewportSize().width * TopDownGraphics.tileWidthHeight_Pixels,
+				TopDownGraphics.getViewportSize().height * TopDownGraphics.tileWidthHeight_Pixels);
+
+		float viewRadius = .5f;
+		RadialGradientPaint torchlight = new RadialGradientPaint(
+				new Point2D.Float(viewport.width/2f, viewport.height/2f),
+				viewport.height*viewRadius,
+				new float[]{
+						0.0f,
+						stackedNoise(t)+ 0.25f,
+						0.8f},
+				/*new Color[]{
+						new Color(0f,0f,0f,0f),
+						new Color(.5f,.4f,0f,.3f * .5f / viewRadius),
+						new Color(0f,0f,0f,0f)}*/
+				new Color[]{
+						new Color(.4f,.28f,0f,.2f),
+						new Color(.6f,.5f,0f,.4f * .5f / viewRadius),
+						new Color(0f,0f,0f,0f)});
+		if(light) {
+			g.setPaint(torchlight);
+			g.fillRect(0, 0, viewport.width, viewport.height);
+		}
 	}
 }

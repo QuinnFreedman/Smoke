@@ -8,8 +8,6 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
-import debug.out;
-
 public abstract class Renderer{
 	static float scale = 5f;
 	private static RenderMode renderMode = RenderMode.NONE;
@@ -19,15 +17,15 @@ public abstract class Renderer{
 	
 	//transitions
 	private static int fadeTime = -1;
-	private static int fadeDurration = 40;
+	private static int fadeDuration = 40;
 	private static int fadeDirection = -1;
-	private static float step = 1f/fadeDurration;
+	private static float step = 1f/ fadeDuration;
 	private static RenderMode target;
 	
-	public static void setRenderMode(RenderMode mode) {
+	static void setRenderMode(RenderMode mode) {
 		renderMode = mode;
 	}
-	public static RenderMode getRenderMode() {
+	static RenderMode getRenderMode() {
 		return renderMode;
 	}
 	static int getFadeTime() {
@@ -36,8 +34,8 @@ public abstract class Renderer{
 	
 	static void initGraphics(){
 		scene = new BufferedImage(
-				(int) (size.width * TopDownGraphics.tileWidthHeight_Pixels /* scale*/),
-				(int) (size.height * TopDownGraphics.tileWidthHeight_Pixels  /* scale*/), 
+				size.width * TopDownGraphics.tileWidthHeight_Pixels,
+				size.height * TopDownGraphics.tileWidthHeight_Pixels,
 				BufferedImage.TYPE_INT_RGB);
 		graphics = scene.createGraphics();
 		graphics.setFont(Main.getFont());
@@ -46,15 +44,15 @@ public abstract class Renderer{
 	
 	public static void fadeTo(RenderMode mode, int time) {
 		fadeTime = 0;
-		fadeDurration = time;
+		fadeDuration = time;
 		fadeDirection = 1;
 		target = mode;
-		step = 1f/fadeDurration;
+		step = 1f/ fadeDuration;
 	}
 	
 	static void fadeFromBlack(int time) {
 		fadeTime = time;
-		fadeDurration = -1;
+		fadeDuration = -1;
 		fadeDirection = -1;
 		step = 1f/fadeTime;
 	}
@@ -86,7 +84,7 @@ public abstract class Renderer{
 					size.height * TopDownGraphics.tileWidthHeight_Pixels);
 			graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
 			fadeTime += fadeDirection;
-			if(fadeTime == fadeDurration) {
+			if(fadeTime == fadeDuration) {
 				fadeDirection = -1;
 				if(target != null) {
 					setRenderMode(target);
@@ -98,8 +96,8 @@ public abstract class Renderer{
 	}
 	
 	@SuppressWarnings("serial")
-	static class RederPanel extends JPanel {
-		RederPanel() {
+	static class RenderPanel extends JPanel {
+		RenderPanel() {
 			super();
 			this.setBackground(Color.BLACK);
 		}
@@ -113,7 +111,7 @@ public abstract class Renderer{
 		}
 	}
 	
-	public static enum RenderMode{
+	public enum RenderMode{
 		MAIN_MENU, PAUSE_MENU, WORLD, INVENTORY, COMBAT, CUTSCENE, NONE
 	}
 }

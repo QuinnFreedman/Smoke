@@ -47,14 +47,17 @@ public class Character extends DynamicEntity {
 			itemSet.put(ItemSet.HEAD, new Item.AssassinHead());
 			itemSet.put(ItemSet.CHEST, new Item.AssassinChest());
 			itemSet.put(ItemSet.FEET, new Item.AssassinFeet());
+			break;
 		case "Knight":
 			itemSet.put(ItemSet.HEAD, new Item.KnightHead());
 			itemSet.put(ItemSet.CHEST, new Item.KnightChest());
 			itemSet.put(ItemSet.FEET, new Item.KnightFeet());
+			break;
 		case "Mage":
 			itemSet.put(ItemSet.HEAD, new Item.MageHead());
 			itemSet.put(ItemSet.CHEST, new Item.MageChest());
 			itemSet.put(ItemSet.FEET, new Item.MageFeet());
+			break;
 		}
 	}
 	

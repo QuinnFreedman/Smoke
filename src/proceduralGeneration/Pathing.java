@@ -241,9 +241,7 @@ public class Pathing{
 	
 }
 
-class Node extends Point{
-	float gf; //float move cost
-	float ff; //float f
+class Node extends Point {
 	int h;//heuristic
 	int g;//movement cost
 	int f;//g+h
@@ -253,7 +251,7 @@ class Node extends Point{
 	Node(int x, int y, boolean passable){
 		this(x,y);
 		isPassable = passable;
-	};
+	}
 	
 	Node(int x, int y){
 		super(x,y);

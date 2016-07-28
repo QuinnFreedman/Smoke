@@ -2,18 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fa5e9c11-4faf-41c6-a4f0-b7fcb6ef6887" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/proceduralGeneration/AStar.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/proceduralGeneration/Rectangle.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/proceduralGeneration/FloatPathing.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/proceduralGeneration/Rectange.java" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/heightmap.png" afterPath="$PROJECT_DIR$/heightmap.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/debug/debug_dungeon.java" afterPath="$PROJECT_DIR$/src/debug/debug_dungeon.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proceduralGeneration/City.java" afterPath="$PROJECT_DIR$/src/proceduralGeneration/City.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proceduralGeneration/DungeonBuilder.java" afterPath="$PROJECT_DIR$/src/proceduralGeneration/DungeonBuilder.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proceduralGeneration/Pathing.java" afterPath="$PROJECT_DIR$/src/proceduralGeneration/Pathing.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proceduralGeneration/Room.java" afterPath="$PROJECT_DIR$/src/proceduralGeneration/Room.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proceduralGeneration/WorldBuilder.java" afterPath="$PROJECT_DIR$/src/proceduralGeneration/WorldBuilder.java" />
     </list>
     <ignored path="Smoke.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -62,9 +51,7 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1330">
               <caret line="43" column="0" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -540,7 +527,14 @@
       <option name="project" value="LOCAL" />
       <updated>1469560802028</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Roads work">
+      <created>1469734841218</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1469734841218</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -584,7 +578,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="New procedural generation algorithm, other changes..." />
-    <option name="LAST_COMMIT_MESSAGE" value="New procedural generation algorithm, other changes..." />
+    <MESSAGE value="Roads work" />
+    <option name="LAST_COMMIT_MESSAGE" value="Roads work" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -611,9 +606,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1976">
           <caret line="60" column="107" selection-start-line="60" selection-start-column="107" selection-end-line="60" selection-end-column="107" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -646,6 +639,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4028">
           <caret line="110" column="0" selection-start-line="110" selection-start-column="0" selection-end-line="110" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -696,9 +690,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1634">
           <caret line="51" column="41" selection-start-line="51" selection-start-column="41" selection-end-line="51" selection-end-column="41" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -726,6 +718,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4028">
           <caret line="110" column="0" selection-start-line="110" selection-start-column="0" selection-end-line="110" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -776,9 +769,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1634">
           <caret line="51" column="41" selection-start-line="51" selection-start-column="41" selection-end-line="51" selection-end-column="41" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -806,6 +797,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4028">
           <caret line="110" column="0" selection-start-line="110" selection-start-column="0" selection-end-line="110" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -970,6 +962,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="152">
           <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -977,9 +970,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1330">
           <caret line="43" column="0" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>

@@ -40,7 +40,7 @@ public abstract class debug_dungeon {
 		} catch (IOException e) {
 			
 		}*/
-		
+
 		WorldBuilder.buildWorld2(rng);
 		
 	}

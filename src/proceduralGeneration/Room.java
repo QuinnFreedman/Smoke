@@ -6,7 +6,7 @@ import java.util.Random;
 
 import engine.Point;
 
-public class Room extends Rectange{
+public class Room extends Rectangle {
 	public int numDoors;
 	public ArrayList<Point> roomWalls;
 	public ArrayList<Point> roomDoors;

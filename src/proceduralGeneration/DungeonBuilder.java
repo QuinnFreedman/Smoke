@@ -3,16 +3,15 @@ package proceduralGeneration;
 import java.util.ArrayList;
 import java.util.Random;
 
-import debug.out;
 import engine.Point;
 
-public abstract class DungeonBuilder{
+abstract class DungeonBuilder{
 	
-	public static int[][] buildDungeon(int dungeonWidth, int dungeonHeight, 
-			int numRooms, Random rng) {
+	static int[][] buildDungeon(int dungeonWidth, int dungeonHeight,
+								int numRooms, Random rng) {
 		
 		int[][] dungeon = new int[dungeonHeight][dungeonWidth];
-		ArrayList<Room> rooms = new ArrayList<Room>(numRooms);
+		ArrayList<Room> rooms = new ArrayList<>(numRooms);
 		for(int i = 0; i < numRooms; i++) {
 			rooms.add(new Room(dungeonWidth, dungeonHeight, rng));
 		}
@@ -35,7 +34,7 @@ public abstract class DungeonBuilder{
 			}
 		}
 		
-		ArrayList<Point> doors = new ArrayList<Point>();
+		ArrayList<Point> doors = new ArrayList<>();
 		for(int i = 0; i < rooms.size(); i++){
 			for(int e = 0; e < rooms.get(i).roomDoors.size(); e++){
 				doors.add(rooms.get(i).roomDoors.get(e));
@@ -46,11 +45,11 @@ public abstract class DungeonBuilder{
 		return dungeon;
 	}
 	
-	private static void collideRooms(ArrayList<? extends Rectange> rooms, int width, int height){
+	private static void collideRooms(ArrayList<? extends Rectangle> rooms, int width, int height){
 		collideRooms(rooms, width, height, 1);
 	}
 	
-	static void collideRooms(ArrayList<? extends Rectange> rooms, int width, int height, int padding){
+	static void collideRooms(ArrayList<? extends Rectangle> rooms, int width, int height, int padding){
 		int[][] overlapWeights = new int[height][width];
 		ArrayList<int[]> vectors = new ArrayList<int[]>();
 		
@@ -123,7 +122,7 @@ public abstract class DungeonBuilder{
 		}
 	}
 	
-	private static void setWeights(int[][] overlapWeight, ArrayList<? extends Rectange> rooms, int padding){
+	private static void setWeights(int[][] overlapWeight, ArrayList<? extends Rectangle> rooms, int padding){
 		for(int y = 0; y < overlapWeight.length; y++){
 			for(int x = 0; x < overlapWeight[0].length; x++){
 				overlapWeight[y][x] = 0;				

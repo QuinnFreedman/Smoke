@@ -1,7 +1,7 @@
 package proceduralGeneration;
 
-import java.awt.Rectangle;
 import java.util.*;
+import java.util.List;
 
 import debug.debug_dungeon;
 import debug.out;
@@ -137,29 +137,29 @@ public abstract class WorldBuilder {
 		}
 	}
 
-	public static void buildWorld2(Random rng){
-		SimplexNoise simplexNoise = new SimplexNoise(200,0.25,(int) (rng.nextDouble()*5000));
-		SimplexNoise percipNoise = new SimplexNoise(500,0.4,(int) (rng.nextDouble()*5000));
+	public static void buildWorld2(Random rng) {
+		SimplexNoise simplexNoise = new SimplexNoise(200, 0.25, (int) (rng.nextDouble() * 5000));
+		SimplexNoise percipNoise = new SimplexNoise(500, 0.4, (int) (rng.nextDouble() * 5000));
 
-		final Point center = new Point(WORLD_WIDTH/2, WORLD_HEIGHT/2);
+		final Point center = new Point(WORLD_WIDTH / 2, WORLD_HEIGHT / 2);
 
 		final int maxDistance = Math.max(WORLD_WIDTH, WORLD_HEIGHT) / 2;
 
-	    //CALCULATE ELEVATION
-	    double[][] elevation = new double[WORLD_HEIGHT][WORLD_WIDTH];
-	    double[][] precipitation = new double[WORLD_HEIGHT][WORLD_WIDTH];
-	    
-	    for(int y = 0; y < WORLD_HEIGHT; y++){
-			for(int x = 0; x < WORLD_WIDTH; x++){
+		//CALCULATE ELEVATION
+		double[][] elevation = new double[WORLD_HEIGHT][WORLD_WIDTH];
+		double[][] precipitation = new double[WORLD_HEIGHT][WORLD_WIDTH];
+
+		for (int y = 0; y < WORLD_HEIGHT; y++) {
+			for (int x = 0; x < WORLD_WIDTH; x++) {
 				double r = Math.pow(Math.pow(x - center.x, 4) + Math.pow(y - center.y, 4), .25);
 				double normalizer = r < maxDistance ? 1 - r / maxDistance : 0;
-				elevation[y][x] = 0.5*(1+simplexNoise.getNoise(x,y)) * normalizer;
-				assert(elevation[y][x] >= 0 && elevation[y][x] < 1);
-				precipitation[y][x] = 0.5*(1+percipNoise.getNoise(x,y));
-	        }
-	    }
-	    
-	    //SET BOUNDS
+				elevation[y][x] = 0.5 * (1 + simplexNoise.getNoise(x, y)) * normalizer;
+				assert (elevation[y][x] >= 0 && elevation[y][x] < 1);
+				precipitation[y][x] = 0.5 * (1 + percipNoise.getNoise(x, y));
+			}
+		}
+
+		//SET BOUNDS
 //
 //	    boolean moveNorth = true;
 //	    boolean moveSouth = true;
@@ -277,16 +277,10 @@ public abstract class WorldBuilder {
 //			}
 //		}
 
-		ArrayList<Point> river = FloatPathing.path(center, new Point(0,0), elevation);
-		out.pln("river.size() == "+river.size());
-		for(Point p : river) {
-			elevation[p.y][p.x] = 0;
-		}
-
 		Direction lastSide = null;
 		ArrayList<City> cities = new ArrayList<>(3);
-		for(int i = 0; i < 3; i++) {
-			out.pln("City "+i+"...");
+		for (int i = 0; i < 3; i++) {
+			out.pln("City " + i + "...");
 			Direction side;
 			do {
 				side = Direction.getRandom(rng);
@@ -315,59 +309,59 @@ public abstract class WorldBuilder {
 			}
 			double ratioX = (center.x - x) / (float) WORLD_WIDTH * 10;
 			double ratioY = (center.y - y) / (float) WORLD_HEIGHT * 10;
-			out.pln("    side == "+side);
+			out.pln("    side == " + side);
 			while (!(
 					(elevation[y][x] > levels[i] &&
-					elevation[y + City.citySize.height][x] > levels[i] &&
-					elevation[y][x + City.citySize.width] > levels[i] &&
-					elevation[y + City.citySize.height][x + City.citySize.width] > levels[i]) ||
+							elevation[y + City.citySize.height][x] > levels[i] &&
+							elevation[y][x + City.citySize.width] > levels[i] &&
+							elevation[y + City.citySize.height][x + City.citySize.width] > levels[i]) ||
 							(elevation[y][x] > levels[i + 1] &&
-							elevation[y + City.citySize.height][x] > levels[i + 1] &&
-							elevation[y][x + City.citySize.width] > levels[i + 1] &&
-							elevation[y + City.citySize.height][x + City.citySize.width] > levels[i + 1]))) {
+									elevation[y + City.citySize.height][x] > levels[i + 1] &&
+									elevation[y][x + City.citySize.width] > levels[i + 1] &&
+									elevation[y + City.citySize.height][x + City.citySize.width] > levels[i + 1]))) {
 				x = (int) (x + ratioX);
 				y = (int) (y + ratioY);
 			}
-			out.pln("    x == "+x+" y == "+y);
+			out.pln("    x == " + x + " y == " + y);
 
 			switch (side) {
 				case NORTH:
-					for(int _x = x; _x < x + City.citySize.width; _x++) {
+					for (int _x = x; _x < x + City.citySize.width; _x++) {
 						int _y = y + City.citySize.height;
-						while(elevation[_y][_x] > levels[i] || _y > y) {
+						while (elevation[_y][_x] > levels[i] || _y > y) {
 							//if(elevation[_y][_x] > levels[i + 1]) {
-								elevation[_y][_x] = levels[i];
+							elevation[_y][_x] = levels[i];
 							//}
 							_y--;
 						}
 					}
 					break;
 				case SOUTH:
-					for(int _x = x; _x < x + City.citySize.width; _x++) {
+					for (int _x = x; _x < x + City.citySize.width; _x++) {
 						int _y = y;
-						while(elevation[_y][_x] > levels[i] || _y < y + City.citySize.height) {
+						while (elevation[_y][_x] > levels[i] || _y < y + City.citySize.height) {
 							//if(elevation[_y][_x] > levels[i + 1]) {
-								elevation[_y][_x] = levels[i];
+							elevation[_y][_x] = levels[i];
 							//}
 							_y++;
 						}
 					}
 					break;
 				case EAST:
-					for(int _y = y; _y < y + City.citySize.height; _y++) {
+					for (int _y = y; _y < y + City.citySize.height; _y++) {
 						int _x = x;
-						while(elevation[_y][_x] > levels[i] || _x < x + City.citySize.width) {
+						while (elevation[_y][_x] > levels[i] || _x < x + City.citySize.width) {
 							//if(elevation[_y][_x] > levels[i + 1]) {
-								elevation[_y][_x] = levels[i];
+							elevation[_y][_x] = levels[i];
 							//}
 							_x++;
 						}
 					}
 					break;
 				case WEST:
-					for(int _y = y; _y < y + City.citySize.height; _y++) {
+					for (int _y = y; _y < y + City.citySize.height; _y++) {
 						int _x = x + City.citySize.width;
-						while(elevation[_y][_x] > levels[i] || _x > x) {
+						while (elevation[_y][_x] > levels[i] || _x > x) {
 							elevation[_y][_x] = levels[i];
 							_x--;
 						}
@@ -378,19 +372,67 @@ public abstract class WorldBuilder {
 			cities.add(new City(x, y, City.citySize.width, City.citySize.height));
 		}
 
-		for(City c : cities) {
+		List<List<Point>> roads = new ArrayList<>();
+
+		for (int _city = 0; _city < 2; _city++) {
+			int grain = 50;
+			final int city = _city;
+			List<Point> road = AStar.path(new Point((cities.get(city).x + City.citySize.width) / grain,
+							(cities.get(city).y + City.citySize.width) / grain),
+					new Point((cities.get(city + 1).x + City.citySize.width) / grain,
+							(cities.get(city + 1).y + City.citySize.width) / grain),
+					new AStar.MapHolder.CoarseMapHolder(elevation, grain),
+					new AStar.Config.CorseRoadConfig() {
+						@Override
+						public boolean isPassable(AStar.MapHolder map, AStar.Nodef from, AStar.Nodef to) {
+							double value = elevation[to.y * grain][to.x * grain];
+							return value <= levels[city + 2] && value > levels[0];
+						}
+					});
+			for (int i = 0; i < road.size(); i++) {
+				road.set(i, road.get(i).scale(grain));
+			}
+
+			AStar.Config config = new AStar.Config.RoadConfig() {
+				@Override
+				public boolean isPassable(AStar.MapHolder map, AStar.Nodef from, AStar.Nodef to) {
+					double value = map.getValue(to.x, to.y);
+					out.pln("getValue("+to.x+", "+to.y+") == "+value);
+					return value <= levels[city + 2] && value >= levels[0];
+				}
+			};
+			List<Point> fullRoad = new ArrayList<>(road.size());
+			for (int i = 1; i < road.size(); i++) {
+				Point from = road.get(i - 1);
+				Point to = road.get(i);
+				out.pln("from " + from + " to " + to);
+				Rectangle bounds = new Rectangle(from, to);
+				List<Point> segment = AStar.path(from.translate(-bounds.x, -bounds.y), to.translate(-bounds.x, -bounds.y),
+						new AStar.MapHolder.FineMapHolder(elevation, bounds), config);
+				for (Point p : segment) {
+					fullRoad.add(p.translate(bounds.x, bounds.y));
+				}
+			}
+			roads.add(fullRoad);
+		}
+
+		for(List<Point> road : roads) {
+			for(Point p : road) {
+				elevation[p.y][p.x] = 0;
+			}
+		}
+
+		for (City c : cities) {
 			c.buildCity(rng);
-			for(int y = 0; y < c.height; y++) {
-				for(int x = 0; x < c.width; x++) {
-					if( c.walls[y][x] != 0) {
+			for (int y = 0; y < c.height; y++) {
+				for (int x = 0; x < c.width; x++) {
+					if (c.walls[y][x] != 0) {
 						elevation[c.y + y][c.x + x] = 0;
 					}
 				}
 			}
 		}
-
 		debug_dungeon.drawHeightmap(elevation, precipitation);
-
 	}
 
 	static float getSeaLevel() {

@@ -1,10 +1,8 @@
 package proceduralGeneration;
 import java.awt.Dimension;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 
-class City extends Rectange {
+class City extends Rectangle {
 	static final Dimension citySize = new Dimension(80,80);
 	int[][] walls;
 	

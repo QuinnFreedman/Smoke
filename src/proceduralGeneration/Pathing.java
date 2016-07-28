@@ -241,7 +241,7 @@ public class Pathing{
 	
 }
 
-class Node extends Point {
+class Node extends engine.Point {
 	int h;//heuristic
 	int g;//movement cost
 	int f;//g+h

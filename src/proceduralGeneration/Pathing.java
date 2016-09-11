@@ -5,12 +5,12 @@ import java.util.List;
 
 import engine.Point;
 
-public class Pathing{
-	private static List<Node> openList = new ArrayList<Node>();
-	private static List<Node> closedList = new ArrayList<Node>();
-	public static List<ArrayList<Node>> paths = new ArrayList<ArrayList<Node>>();
+class Pathing{
+	private static List<Node> openList = new ArrayList<>();
+	private static List<Node> closedList = new ArrayList<>();
+	private static List<ArrayList<Node>> paths = new ArrayList<>();
 	
-	public static void setPaths(int[][] walls, ArrayList<Point> doors, ArrayList<Room> rooms, 
+	static void setPaths(int[][] walls, List<Room> rooms,
 			boolean outlinePaths){
 		paths.clear();
 		

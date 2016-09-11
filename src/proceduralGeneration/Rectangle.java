@@ -18,8 +18,8 @@ class Rectangle {
 	Rectangle(Point aBound, Point bBound) {
 		this.x = Math.min(aBound.x, bBound.x);
 		this.y = Math.min(aBound.y, bBound.y);
-		this.width = Math.max(aBound.x, bBound.x) - this.x;
-		this.height = Math.max(aBound.y, bBound.y) - this.y;
+		this.width = Math.max(aBound.x, bBound.x) - this.x + 2;
+		this.height = Math.max(aBound.y, bBound.y) - this.y + 2;
 	}
 	
 	public Rectangle() {

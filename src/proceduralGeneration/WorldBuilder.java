@@ -2,9 +2,11 @@ package proceduralGeneration;
 
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import debug.debug_dungeon;
 import debug.out;
+import engine.Direction;
 import engine.Point;
 
 public abstract class WorldBuilder {
@@ -24,7 +26,7 @@ public abstract class WorldBuilder {
 		{ 1,  1,  1,  1,  1,  1,  1,  1,  1,  6,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, 1},
 		{ 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, 1}
 	};
-	
+
 	static final int[][] staticSprites = new int[][]{
 		{ 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 0},
 		{ 0,  0,  0,  0,  0,  0,-51, -9, -9, -9, -9, -9,-15,  0,  0,  0,  0,  0,  0,  0, 0},
@@ -41,13 +43,13 @@ public abstract class WorldBuilder {
 		{ 0,  0,  0,  0,  0,  0,  0,-52, -9,  0, -9,-25,  0,  0,  0,  0,  0,  0,  0,  0, 0},
 		{ 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 0}
 	};
-	
-	
+
+
 	public static WorldData buildWorld() {
 		assert levelTextures.length > 10 && levelTextures[0].length > 10;
 		return new WorldData(levelTextures, staticSprites);
 	}
-		
+
 	public static class WorldData {
 		private int[][] levelTextures;
 		private int[][] staticSprites;
@@ -58,88 +60,19 @@ public abstract class WorldBuilder {
 			this.staticSprites = staticSprites;
 		}
 	}
-	
+
 	private static final int WORLD_WIDTH = 1000;
 	private static final int WORLD_HEIGHT = 1000;
-	
+
 	private static int[][] world = new int[WORLD_HEIGHT][WORLD_WIDTH];
 	static int[][] dynamicTiles = new int[WORLD_HEIGHT][WORLD_WIDTH];
-	
+
 	private static final float[] levels = {.1f, .2f, .33f, .45f};
 	public static final float[] biomeThresholds = {.45f, .55f};
 
-	private static double limit(double x){
-		return -1/(x + 1) + 1;
-	}
-	private static ArrayList<Point> makeRiver(Point origin, double[][] elevation){
-		Point active = origin;
-		ArrayList<Point> river = new ArrayList<>();
-		boolean[][] isRiver = new boolean[elevation.length][elevation[0].length];
-		for (int y = 0; y < isRiver.length; y++) {
-			for (int x = 0; x < isRiver[0].length; x++) {
-				isRiver[y][x] = false;
-			}
-		}
-		
-		int itt = 0;
-		while(itt < 500){
-			itt++;
-			river.add(active);
-			int x = active.x;
-			int y = active.y;
-			Point[] neighbors = {new Point(x-1, y),
-								 new Point(x, y+1),
-								 new Point(x+1, y),
-								 new Point(x, y-1)};
-			
-			double min = 2;
-			active = null;
-			for(Point p : neighbors){
-				double pVal = elevation[p.y][p.x];
-				if(pVal < getSeaLevel())
-					return river;
-				if(isRiver[p.y][p.x])
-					continue;
-				else if(pVal < min){
-					min = pVal;
-					active = p;
-				}
-			}
-			world[y][x] = -1;
-			
-			if(active == null)
-				return river;
-		}
-		return null;
-	}
-	
-	private static void fillRivers(double[][] elevation){
-		for(int y = 1; y < WORLD_HEIGHT - 1; y++){
-			for(int x = 1; x < WORLD_WIDTH - 1; x++){
-				if(world[y-1][x] == -1 ||
-						world[y][x+1] == -1 || 
-						world[y+1][x] == -1 ||
-						world[y][x-1] == -1
-					) {
-					world[y][x] = 0;
-				}
-			}
-		}
-	}
-
-	private enum Direction {
-		NORTH, SOUTH, EAST, WEST;
-
-		private static final List<Direction> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
-		private static final int SIZE = VALUES.size();
-		static Direction getRandom(Random rng) {
-			return VALUES.get(rng.nextInt(SIZE));
-		}
-	}
-
 	public static void buildWorld2(Random rng) {
 		SimplexNoise simplexNoise = new SimplexNoise(200, 0.25, (int) (rng.nextDouble() * 5000));
-		SimplexNoise percipNoise = new SimplexNoise(500, 0.4, (int) (rng.nextDouble() * 5000));
+		SimplexNoise precipNoise = new SimplexNoise(500, 0.4, (int) (rng.nextDouble() * 5000));
 
 		final Point center = new Point(WORLD_WIDTH / 2, WORLD_HEIGHT / 2);
 
@@ -155,127 +88,9 @@ public abstract class WorldBuilder {
 				double normalizer = r < maxDistance ? 1 - r / maxDistance : 0;
 				elevation[y][x] = 0.5 * (1 + simplexNoise.getNoise(x, y)) * normalizer;
 				assert (elevation[y][x] >= 0 && elevation[y][x] < 1);
-				precipitation[y][x] = 0.5 * (1 + percipNoise.getNoise(x, y));
+				precipitation[y][x] = 0.5 * (1 + precipNoise.getNoise(x, y));
 			}
 		}
-
-		//SET BOUNDS
-//
-//	    boolean moveNorth = true;
-//	    boolean moveSouth = true;
-//	    boolean moveEast = true;
-//	    boolean moveWest = true;
-//	    Rectangle bounds = new Rectangle((int) (WORLD_WIDTH/2f) - 1,
-//	    		(int) (WORLD_HEIGHT/2f) - 1, 2, 2);
-//	    while(moveNorth || moveSouth || moveEast || moveWest){
-//
-//	    	boolean water;
-//	    	//NORTH
-//	    	if(moveNorth){
-//	    		water = false;
-//		    	for(int i = bounds.x; i < bounds.x + bounds.width; i++){
-//		    		if(i < 0 || i == WORLD_WIDTH || elevation[bounds.y][i] < getSeaLevel()){
-//		    			water = true;
-//		    			bounds.y += 10;
-//		    			bounds.height -= 10;
-//		    			break;
-//		    		}
-//		    	}
-//		    	if(water){
-//		    		moveNorth = false;
-//		    	}else{
-//	    			bounds.y -= 10;
-//	    			bounds.height += 10;
-//	    		}
-//	    	}
-//
-//	    	//WEST
-//	    	if(moveWest){
-//		    	water = false;
-//		    	for(int i = bounds.y; i < bounds.y + bounds.height; i++){
-//		    		if(i < 0 || i == WORLD_HEIGHT || elevation[i][bounds.x] < getSeaLevel()){
-//		    			water = true;
-//		    			bounds.x += 10;
-//		    			bounds.width -= 10;
-//		    			break;
-//		    		}
-//		    	}
-//		    	if(water){
-//		    		moveWest = false;
-//		    	}else{
-//	    			bounds.x -= 10;
-//	    			bounds.width += 10;
-//	    		}
-//	    	}
-//
-//	    	//SOUTH
-//	    	if(moveSouth){
-//	    		water = false;
-//		    	for(int i = bounds.x; i < bounds.x + bounds.width; i++){
-//		    		if(i < 0 || i == WORLD_WIDTH ||
-//		    				elevation[bounds.y+bounds.height][i] < getSeaLevel()){
-//		    			water = true;
-//		    			bounds.height -= 10;
-//		    			break;
-//		    		}
-//		    	}
-//		    	if(water){
-//		    		moveSouth = false;
-//		    	}else{
-//	    			bounds.height += 10;
-//	    		}
-//	    	}
-//
-//	    	//EAST
-//	    	if(moveEast){
-//		    	water = false;
-//		    	for(int i = bounds.y; i < bounds.y + bounds.height; i++){
-//		    		if(i < 0 || i == WORLD_HEIGHT ||
-//		    				elevation[i][bounds.x+bounds.width] < getSeaLevel()){
-//		    			water = true;
-//		    			bounds.width -= 10;
-//		    			break;
-//		    		}
-//		    	}
-//		    	if(water){
-//		    		moveEast = false;
-//		    	}else{
-//	    			bounds.width += 10;
-//	    		}
-//	    	}
-//
-//	    }
-//
-//	    //CITIES
-//
-//	    ArrayList<City> cities = new ArrayList<>(3);
-//		while(cities.size() < 3){
-//			cities = new ArrayList<>(3);
-//
-//			while(cities.size() < 3){
-//				int x = (int) (rng.nextDouble()*(bounds.width - City.citySize.width));
-//				int y = (int) (rng.nextDouble()*(bounds.height - City.citySize.height));
-//				cities.add(new City(x, y, City.citySize.width, City.citySize.height));
-//			}
-//
-//			DungeonBuilder.collideRooms(cities, bounds.width, bounds.height, 300);
-//
-//			for(City city : cities){
-//				city.x += bounds.x;
-//				city.y += bounds.y;
-//			}
-//		}
-//
-//		for(City c : cities) {
-//			c.buildCity(rng);
-//			for(int y = 0; y < c.height; y++) {
-//				for(int x = 0; x < c.width; x++) {
-//					if( c.walls[y][x] != 0) {
-//						elevation[c.y + y][c.x + x] = .9;
-//					}
-//				}
-//			}
-//		}
 
 		Direction lastSide = null;
 		ArrayList<City> cities = new ArrayList<>(3);
@@ -287,26 +102,10 @@ public abstract class WorldBuilder {
 			} while (side == lastSide);
 			lastSide = side;
 
-			int x = -1;
-			int y = -1;
-			switch (side) {
-				case NORTH:
-					x = (int) (Math.random() * (WORLD_WIDTH - City.citySize.width));
-					y = 0;
-					break;
-				case EAST:
-					x = WORLD_WIDTH - City.citySize.width - 1;
-					y = (int) (Math.random() * (WORLD_HEIGHT - City.citySize.height));
-					break;
-				case SOUTH:
-					x = (int) (Math.random() * (WORLD_WIDTH - City.citySize.width));
-					y = WORLD_HEIGHT - City.citySize.height - 1;
-					break;
-				case WEST:
-					x = 0;
-					y = (int) (Math.random() * (WORLD_HEIGHT - City.citySize.height));
-					break;
-			}
+			Point startingPoint = getRandomPointOnSide(side, rng);
+			int x = startingPoint.x;
+			int y = startingPoint.y;
+
 			double ratioX = (center.x - x) / (float) WORLD_WIDTH * 10;
 			double ratioY = (center.y - y) / (float) WORLD_HEIGHT * 10;
 			out.pln("    side == " + side);
@@ -372,66 +171,178 @@ public abstract class WorldBuilder {
 			cities.add(new City(x, y, City.citySize.width, City.citySize.height));
 		}
 
+		for (City c : cities) {
+			c.buildCity(rng);
+			for(Room room : c.getRooms()) {
+				for (int y = 0; y < room.height; y++) {
+					for (int x = 0; x < room.width; x++) {
+						precipitation[c.y + room.y + y][c.x + room.x + x] = -1;
+					}
+				}
+			}
+		}
+
 		List<List<Point>> roads = new ArrayList<>();
+		long startTime = System.currentTimeMillis();
 
 		for (int _city = 0; _city < 2; _city++) {
 			int grain = 50;
 			final int city = _city;
-			List<Point> road = AStar.path(new Point((cities.get(city).x + City.citySize.width) / grain,
-							(cities.get(city).y + City.citySize.width) / grain),
-					new Point((cities.get(city + 1).x + City.citySize.width) / grain,
-							(cities.get(city + 1).y + City.citySize.width) / grain),
+			City city1 = cities.get(city);
+			City city2 = cities.get(city + 1);
+
+			//approx start/end points
+			Point start = new Point(city1.x + City.citySize.width / 2, city1.y + City.citySize.height / 2);
+			Point end = new Point(city2.x + City.citySize.width / 2, city2.y + City.citySize.height / 2);
+
+
+			city1.buildCity(rng);
+			for(Rectangle r : city1.getRooms())
+			for (int y = 0; y < r.height; y++) {
+				for (int x = 0; x < r.width; x++) {
+					elevation[city1.y + r.y + y][city1.x + r.x + x] = 0;
+				}
+			}
+
+			List<Point> road = AStar.path(start.scale(1f/grain), end.scale(1f/grain),
 					new AStar.MapHolder.CoarseMapHolder(elevation, grain),
-					new AStar.Config.CorseRoadConfig() {
+					new AStar.Config.CoarseRoadConfig() {
 						@Override
 						public boolean isPassable(AStar.MapHolder map, AStar.Nodef from, AStar.Nodef to) {
 							double value = elevation[to.y * grain][to.x * grain];
 							return value <= levels[city + 2] && value > levels[0];
 						}
 					});
+
 			for (int i = 0; i < road.size(); i++) {
 				road.set(i, road.get(i).scale(grain));
 			}
+
+			//Set exact start/end points
+			int differenceX = city1.x - city2.x;
+			int differenceY = city1.y - city2.y;
+			if (Math.abs(differenceX) > Math.abs(differenceY)) {
+				if(differenceX > 0) {
+					start = city1.getAttachmentPoint(Direction.WEST);
+					end = city2.getAttachmentPoint(Direction.EAST);
+				} else {
+					start = city1.getAttachmentPoint(Direction.EAST);
+					end = city2.getAttachmentPoint(Direction.WEST);
+				}
+			} else {
+				if(differenceY > 0) {
+					start = city1.getAttachmentPoint(Direction.NORTH);
+					end = city2.getAttachmentPoint(Direction.SOUTH);
+				} else {
+					start = city1.getAttachmentPoint(Direction.SOUTH);
+					end = city2.getAttachmentPoint(Direction.NORTH);
+				}
+			}
+
+			for(Direction d : Direction.getDirections()) {
+				Point p = start.translate(d, 1);
+				if(elevation[p.y][p.x] != 0) {
+					out.pln("start: "+p+" -> "+start);
+					start = p;
+					break;
+				}
+			}
+			for(Direction d : Direction.getDirections()) {
+				Point p = end.translate(d, 1);
+				if(elevation[p.y][p.x] != 0) {
+					out.pln("end:   "+p+" -> "+end);
+					end = p;
+					break;
+				}
+			}
+
+			out.pln("end:   "+road.get(0)+" -> "+end);
+			road.set(0, end);
+			out.pln("start: "+road.get(road.size() - 1)+" -> "+start);
+			road.set(road.size() - 1, start);
 
 			AStar.Config config = new AStar.Config.RoadConfig() {
 				@Override
 				public boolean isPassable(AStar.MapHolder map, AStar.Nodef from, AStar.Nodef to) {
 					double value = map.getValue(to.x, to.y);
-					out.pln("getValue("+to.x+", "+to.y+") == "+value);
 					return value <= levels[city + 2] && value >= levels[0];
 				}
+
+				@Override
+				public double moveCost(AStar.MapHolder map, AStar.Nodef from, AStar.Nodef to) {
+					return precipitation[to.y][to.x] == -1 ? super.moveCost(map, from, to)/2d :
+							super.moveCost(map, from, to);
+				}
 			};
-			List<Point> fullRoad = new ArrayList<>(road.size());
+			List<Point> fullRoad = /*AStar.path(start, end,
+						new AStar.MapHolder.FineMapHolder(elevation, new Rectangle(0,0,WORLD_WIDTH,WORLD_HEIGHT)), config);//=*/ new ArrayList<>(road.size());
 			for (int i = 1; i < road.size(); i++) {
 				Point from = road.get(i - 1);
 				Point to = road.get(i);
-				out.pln("from " + from + " to " + to);
-				Rectangle bounds = new Rectangle(from, to);
-				List<Point> segment = AStar.path(from.translate(-bounds.x, -bounds.y), to.translate(-bounds.x, -bounds.y),
-						new AStar.MapHolder.FineMapHolder(elevation, bounds), config);
-				for (Point p : segment) {
-					fullRoad.add(p.translate(bounds.x, bounds.y));
+//				Rectangle bounds = new Rectangle(0,0,WORLD_WIDTH,WORLD_HEIGHT);//new Rectangle(from, to);
+//				List<Point> segment = AStar.path(from.translate(-bounds.x, -bounds.y), to.translate(-bounds.x, -bounds.y),
+//						new AStar.MapHolder.FineMapHolder(elevation, bounds), config);
+				List<Point> segment = AStar.path(from, to, new AStar.MapHolder.LazyMapHolder(elevation), config);
+				if(segment != null) {
+//					fullRoad.addAll(segment.stream().map(p -> p.translate(bounds.x, bounds.y)).collect(Collectors.toList()));
+					fullRoad.addAll(segment);
+				} else {
+					System.err.println("null path!");
 				}
 			}
 			roads.add(fullRoad);
 		}
 
+		out.pln("done in "+(System.currentTimeMillis() - startTime)+"ms");
+
 		for(List<Point> road : roads) {
 			for(Point p : road) {
-				elevation[p.y][p.x] = 0;
+				precipitation[p.y][p.x] = -1;
 			}
 		}
 
 		for (City c : cities) {
-			c.buildCity(rng);
 			for (int y = 0; y < c.height; y++) {
 				for (int x = 0; x < c.width; x++) {
 					if (c.walls[y][x] != 0) {
-						elevation[c.y + y][c.x + x] = 0;
+						precipitation[c.y + y][c.x + x] = -1;
 					}
 				}
 			}
 		}
+
+		//make rivers
+		AStar.Config riverConfig = new AStar.Config.RoadConfig() {
+			//TODO
+		};
+		for (int i = 0; i < 1; i++) {
+			int grain = 20;
+			Point end = getRandomPointOnSide(Direction.getRandom(rng), rng);
+			AStar.MapHolder.CoarseMapHolder coarseMapHolder = new AStar.MapHolder.CoarseMapHolder(elevation, grain);
+			List<Point> river = AStar.path(center.scale(1f/grain), end.scale(1f/grain), coarseMapHolder, coarseRiverConfig);
+			if (river != null) {
+				for (int j = 0; j < river.size(); j++) {
+					river.set(j, river.get(j).scale(grain));
+				}
+				for (int j = 0; j < river.size() - 1; j++) {
+					Point from = river.get(j);
+					Point to = river.get(j + 1);
+					Point coarseFrom = from.scale(1f/grain);
+					Point coarseTo = to.scale(1f/grain);
+					if (coarseMapHolder.getValue(coarseFrom.x, coarseFrom.y) > levels[0] ||
+							coarseMapHolder.getValue(coarseTo.x, coarseTo.y) > levels[0]) {
+						List<Point> fill = AStar.path(from, to, new AStar.MapHolder.LazyMapHolder(elevation),
+								new AStar.Config.RoadConfig());
+						if (fill != null) {
+							for (Point p : fill) {
+								elevation[p.y][p.x] = 0;
+							}
+						}
+					}
+				}
+			}
+		}
+
 		debug_dungeon.drawHeightmap(elevation, precipitation);
 	}
 
@@ -441,5 +352,29 @@ public abstract class WorldBuilder {
 
 	public static float[] getLevels() {
 		return levels;
+	}
+
+	private static Point getRandomPointOnSide(Direction side, Random rng) {
+		int x = -1;
+		int y = -1;
+		switch (side) {
+			case NORTH:
+				x = rng.nextInt(WORLD_WIDTH - City.citySize.width);
+				y = 0;
+				break;
+			case EAST:
+				x = WORLD_WIDTH - City.citySize.width - 1;
+				y = rng.nextInt(WORLD_HEIGHT - City.citySize.height);
+				break;
+			case SOUTH:
+				x = rng.nextInt(WORLD_WIDTH - City.citySize.width);
+				y = WORLD_HEIGHT - City.citySize.height - 1;
+				break;
+			case WEST:
+				x = 0;
+				y = rng.nextInt(WORLD_HEIGHT - City.citySize.height);
+				break;
+		}
+		return new Point(x, y);
 	}
 }

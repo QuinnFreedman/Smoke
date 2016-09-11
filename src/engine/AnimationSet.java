@@ -3,8 +3,6 @@ package engine;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import engine.DynamicEntity.Direction;
-
 public class AnimationSet {
 		private ArrayList<BufferedImage> north;
 		private ArrayList<BufferedImage> south;
@@ -52,7 +50,7 @@ public class AnimationSet {
 				return idle;
 			case NORTH:
 				return north;
-			case SHOUTH:
+			case SOUTH:
 				return south;
 			case WEST:
 				return west;

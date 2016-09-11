@@ -1,17 +1,26 @@
 package proceduralGeneration;
+import debug.out;
+import engine.Direction;
+import engine.Point;
+
 import java.awt.Dimension;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 class City extends Rectangle {
 	static final Dimension citySize = new Dimension(80,80);
+	private static final int NUM_ROOMS = 20;
 	int[][] walls;
+	private List<Room> rooms;
 	
-	public City(int x, int y, int width, int hieght) {
+	City(int x, int y, int width, int hieght) {
 		super(x, y, width, hieght);
 	}
 	
 	void buildCity(Random rng){
-		walls = DungeonBuilder.buildDungeon(citySize.width, citySize.height, 20, rng);
+		rooms = new ArrayList<>(NUM_ROOMS);
+		walls = DungeonBuilder.buildDungeon(citySize.width, citySize.height, NUM_ROOMS, rng, rooms);
 		
 		/*for(int r = 0; r < 2; r++){
 			ArrayList<Integer> road = roadsNorthSouth.get(r);
@@ -33,6 +42,50 @@ class City extends Rectangle {
 			}
 		}*/
 		
+	}
+
+	Point getAttachmentPoint(Direction direction) {
+		if (rooms == null) {
+			throw new IllegalStateException("City must be built before attachment point can be retrieved");
+		}
+		Point p = null;
+		for (Room room : rooms) {
+			for(Point door : room.roomDoors) {
+				if (p == null) {
+					p = door;
+					continue;
+				}
+				switch (direction) {
+					case NORTH:
+						if(door.y < p.y) {
+							p = door;
+						}
+						break;
+					case SOUTH:
+						if(door.y > p.y) {
+							p = door;
+						}
+						break;
+					case EAST:
+						if(door.x > p.x) {
+							p = door;
+						}
+						break;
+					case WEST:
+						if(door.x < p.x) {
+							p = door;
+						}
+						break;
+					default:
+						throw new IllegalArgumentException("direction must me a valid direction");
+				}
+			}
+		}
+		return p.translate(this.x, this.y);
+	}
+
+	public List<Room> getRooms() {
+		return rooms;
 	}
 	
 

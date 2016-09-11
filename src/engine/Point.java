@@ -32,11 +32,30 @@ public class Point{
 	}
 	
 	public Point scale(float scalar){
-		return new Point((int) (this.x * scalar), (int) (this.y * scalar));
+		return new Point(Math.round(this.x * scalar), Math.round(this.y * scalar));
+	}
+
+	public Point scale(int scalar){
+		return new Point(this.x * scalar, this.y * scalar);
 	}
 	
 	public Point translate(int x, int y) {
 		return new Point(this.x + x, this.y + y);
+	}
+
+	public Point translate(Direction direction, int scalar) {
+		switch (direction) {
+			case NORTH:
+				return translate(0, -scalar);
+			case SOUTH:
+				return translate(0, scalar);
+			case EAST:
+				return translate(scalar, 0);
+			case WEST:
+				return translate(-scalar, 0);
+			default:
+				return copy();
+		}
 	}
 	
 	public Point add(Point p) {

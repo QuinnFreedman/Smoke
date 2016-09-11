@@ -1,17 +1,24 @@
 package proceduralGeneration;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import engine.Point;
 
-abstract class DungeonBuilder{
-	
+abstract class DungeonBuilder {
+
+	static int[][] buildDungeon(int dungeonWidth, int dungeonHeight, int numRooms, Random rng) {
+		return buildDungeon(dungeonWidth, dungeonHeight, numRooms, rng, new ArrayList<>(numRooms));
+	}
+
+
 	static int[][] buildDungeon(int dungeonWidth, int dungeonHeight,
-								int numRooms, Random rng) {
-		
+								int numRooms, Random rng, final List<Room> rooms) {
+		if (!rooms.isEmpty()) {
+			throw new IllegalArgumentException("rooms must be empty");
+		}
 		int[][] dungeon = new int[dungeonHeight][dungeonWidth];
-		ArrayList<Room> rooms = new ArrayList<>(numRooms);
 		for(int i = 0; i < numRooms; i++) {
 			rooms.add(new Room(dungeonWidth, dungeonHeight, rng));
 		}
@@ -34,22 +41,15 @@ abstract class DungeonBuilder{
 			}
 		}
 		
-		ArrayList<Point> doors = new ArrayList<>();
-		for(int i = 0; i < rooms.size(); i++){
-			for(int e = 0; e < rooms.get(i).roomDoors.size(); e++){
-				doors.add(rooms.get(i).roomDoors.get(e));
-			}
-		}
-		
-		Pathing.setPaths(dungeon, doors, rooms, false);
+		Pathing.setPaths(dungeon, rooms, false);
 		return dungeon;
 	}
 	
-	private static void collideRooms(ArrayList<? extends Rectangle> rooms, int width, int height){
+	private static void collideRooms(List<? extends Rectangle> rooms, int width, int height){
 		collideRooms(rooms, width, height, 1);
 	}
 	
-	static void collideRooms(ArrayList<? extends Rectangle> rooms, int width, int height, int padding){
+	static void collideRooms(List<? extends Rectangle> rooms, int width, int height, int padding){
 		int[][] overlapWeights = new int[height][width];
 		ArrayList<int[]> vectors = new ArrayList<int[]>();
 		
@@ -122,7 +122,7 @@ abstract class DungeonBuilder{
 		}
 	}
 	
-	private static void setWeights(int[][] overlapWeight, ArrayList<? extends Rectangle> rooms, int padding){
+	private static void setWeights(int[][] overlapWeight, List<? extends Rectangle> rooms, int padding){
 		for(int y = 0; y < overlapWeight.length; y++){
 			for(int x = 0; x < overlapWeight[0].length; x++){
 				overlapWeight[y][x] = 0;				

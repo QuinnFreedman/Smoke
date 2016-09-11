@@ -4,11 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-import engine.AnimationSet;
-import engine.DynamicEntity;
-import engine.Level;
-import engine.Point;
-import engine.TopDownGraphics;
+import engine.*;
 
 public class Character extends DynamicEntity {
 	private Race race;

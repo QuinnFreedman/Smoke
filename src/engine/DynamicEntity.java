@@ -13,7 +13,7 @@ public class DynamicEntity extends Entity {
 	protected int inverseSpeed = 6;
 	private Point trailingPoint;
 	private Direction moveDirection = Direction.NONE;
-	private Direction facingDirection = Direction.SHOUTH;
+	private Direction facingDirection = Direction.SOUTH;
 	protected AnimationSet sprite = null;
 	private int framesPerStep = -1;
 
@@ -63,7 +63,7 @@ public class DynamicEntity extends Entity {
 			} else if(p.y < this.getMapLocation().y) {
 				this.moveDirection = Direction.NORTH;
 			} else if(p.y > this.getMapLocation().y) {
-				this.moveDirection = Direction.SHOUTH;
+				this.moveDirection = Direction.SOUTH;
 			} else {
 				this.moveDirection = Direction.NONE;
 			}
@@ -123,9 +123,5 @@ public class DynamicEntity extends Entity {
 		super(level, mapPosition, new Dimension(1,1));
 		this.targetPosition = mapPosition.scale(TopDownGraphics.tileWidthHeight_Pixels);
 		this.previousPosition = new Point(targetPosition);
-	}
-	
-	protected static enum Direction{
-		NORTH,SHOUTH,EAST,WEST,NONE
 	}
 }

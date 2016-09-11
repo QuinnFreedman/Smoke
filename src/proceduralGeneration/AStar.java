@@ -65,6 +65,50 @@ class AStar {
         Nodef getNode(int x, int y);
         double getValue(int x, int y);
 
+        class LazyMapHolder implements MapHolder {
+            private int height;
+            private int width;
+            private double[][] map;
+            private Nodef[][] nodes;
+
+            LazyMapHolder(double[][] map) {
+                this.map = map;
+
+                this.height = map.length;
+                this.width = map[0].length;
+                this.nodes = new Nodef[height][width];
+            }
+            @Override
+            public int getWidth() {
+                return width;
+            }
+
+            @Override
+            public int getHeight() {
+                return height;
+            }
+
+            @Override
+            public Nodef getNode(int x, int y) {
+                if(x >= width || y >= height || x < 0 || y < 0) {
+                    throw new IndexOutOfBoundsException("("+x+","+y+") does not fit in ("+width+","+height+")");
+                }
+                if(nodes[y][x] == null) {
+                    nodes[y][x] = new Nodef(x, y);
+                }
+                return nodes[y][x];
+            }
+
+            @Override
+            public double getValue(int x, int y) {
+                if(x >= width || y >= height || x < 0 || y < 0) {
+                    throw new IndexOutOfBoundsException("("+x+","+y+") does not fit in ("+width+","+height+")");
+                }
+
+                return map[y][x];
+            }
+        }
+
         class FineMapHolder implements MapHolder {
             private int height;
             private int width;
@@ -77,13 +121,13 @@ class AStar {
             FineMapHolder(double[][] map, Rectangle bounds) {
                 this.map = map;
                 this.upperLeftBound = new Point(bounds.x, bounds.y);
-                this.lowerRightBound = upperLeftBound.translate(bounds.width + 1, bounds.height + 1);
+                this.lowerRightBound = upperLeftBound.translate(bounds.width - 1, bounds.height - 1);
 
                 if(upperLeftBound.x < 0 || upperLeftBound.x > lowerRightBound.x
                         || upperLeftBound.y < 0 || upperLeftBound.y > lowerRightBound.y
                         || lowerRightBound.x < upperLeftBound.x || lowerRightBound.x >= map[0].length
                         || lowerRightBound.y < upperLeftBound.y || lowerRightBound.y >= map.length) {
-                    throw new IllegalArgumentException("Point out of bounds");
+                    throw new IllegalArgumentException("Point "+upperLeftBound+" or "+lowerRightBound+" out of bounds");
                 }
                 this.height = lowerRightBound.y - upperLeftBound.y;
                 this.width = lowerRightBound.x - upperLeftBound.x;
@@ -168,6 +212,9 @@ class AStar {
 
             @Override
             public double getValue(int x, int y) {
+                if(x >= width || y >= height || x < 0 || y < 0) {
+                    throw new IndexOutOfBoundsException("("+x+","+y+") does not fit in ("+width+","+height+")");
+                }
                 if(reducedMap[y][x] == -1) {
                     double total = 0;
                     int yStart = y * grain;
@@ -191,12 +238,19 @@ class AStar {
         double moveCost(MapHolder map, Nodef from, Nodef to);
         boolean isPassable(MapHolder map, Nodef from, Nodef to);
 
-        Config gradientDescent = new Config() {
+        class GradientDescent implements Config {
+            double seaLevel;
+            GradientDescent(double seaLevel) {
+                this.seaLevel = seaLevel;
+            }
+
             @Override
             public double distanceBetween(MapHolder map, int x1, int y1, int x2, int y2) {
+                if (map.getValue(x2, y2) <= seaLevel) return 0;
+
                 double z1 = map.getValue(x1, y1) * 500;
                 double z2 = map.getValue(x2, y2) * 500;
-                return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2) + (z1 - z2) * (z1 - z2));
+                return Math.cbrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2) + (z1 - z2) * (z1 - z2));
             }
 
             @Override
@@ -213,6 +267,33 @@ class AStar {
                 if (node.y + 1 < height)
                     neighbors.add(map.getNode(node.x, node.y + 1));
 
+                return neighbors;
+            }
+
+            @Override
+            public double moveCost(MapHolder map, Nodef from, Nodef to) {
+//                double z1 = map.getValue(from.x, from.y) * 10000;
+//                double z2 = map.getValue(to.x, to.y) * 10000;
+//                return Math.cbrt((from.x - to.x) * (from.x - to.x) + (from.y - to.y) * (from.y - to.y) + (z1 - z2) * (z1 - z2));
+                return distanceBetween(map, from.x, from.y, to.x, to.y);//1 + map[to.y][to.x] - map[from.y][from.x];
+            }
+
+            @Override
+            public boolean isPassable(MapHolder map, Nodef from, Nodef to) {
+                return true;
+            }
+        }
+
+        class CoarseGradientDescent extends GradientDescent {
+            CoarseGradientDescent(double seaLevel) {
+                super(seaLevel);
+            }
+
+            @Override
+            public List<Nodef> getNeighbors(MapHolder map, Nodef node) {
+                int height = map.getHeight();
+                int width = map.getWidth();
+                List<Nodef> neighbors = super.getNeighbors(map, node);
                 if (node.x > 0 && node.y > 0)
                     neighbors.add(map.getNode(node.x - 1, node.y - 1));
                 if (node.x > 0 && node.y + 1 < height)
@@ -221,31 +302,16 @@ class AStar {
                     neighbors.add(map.getNode(node.x + 1, node.y - 1));
                 if (node.x + 1 < width && node.y + 1 < height)
                     neighbors.add(map.getNode(node.x + 1, node.y + 1));
-
                 return neighbors;
             }
-
-            @Override
-            public double moveCost(MapHolder map, Nodef from, Nodef to) {
-
-                double z1 = map.getValue(from.x, from.y) * 10000;
-                double z2 = map.getValue(to.x, to.y) * 10000;
-                return Math.sqrt((from.x - to.x) * (from.x - to.x) + (from.y - to.y) * (from.y - to.y) + (z1 - z2) * (z1 - z2));
-                //return distanceBetween(map, from.x, from.y, to.x, to.y);//1 + map[to.y][to.x] - map[from.y][from.x];
-            }
-
-            @Override
-            public boolean isPassable(MapHolder map, Nodef from, Nodef to) {
-                return true;
-            }
-        };
+        }
 
         class RoadConfig implements Config {
             @Override
             public double distanceBetween(MapHolder map, int x1, int y1, int x2, int y2) {
                 double z1 = map.getValue(x1, y1) * 500;
                 double z2 = map.getValue(x2, y2) * 500;
-                return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2) + (z1 - z2) * (z1 - z2));
+                return Math.cbrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2) + (z1 - z2) * (z1 - z2));
             }
 
             @Override
@@ -268,8 +334,8 @@ class AStar {
             @Override
             public double moveCost(MapHolder map, Nodef from, Nodef to) {
 
-                double z1 = map.getValue(from.x, from.y) * 10000;
-                double z2 = map.getValue(to.x, to.y) * 10000;
+                double z1 = map.getValue(from.x, from.y) * 500;
+                double z2 = map.getValue(to.x, to.y) * 500;
                 return Math.sqrt((from.x - to.x) * (from.x - to.x) + (from.y - to.y) * (from.y - to.y) + (z1 - z2) * (z1 - z2));
                 //return distanceBetween(map, from.x, from.y, to.x, to.y);//1 + map[to.y][to.x] - map[from.y][from.x];
             }
@@ -280,7 +346,7 @@ class AStar {
             }
         }
 
-        class CorseRoadConfig extends RoadConfig {
+        class CoarseRoadConfig extends RoadConfig {
             @Override
             public List<Nodef> getNeighbors(MapHolder map, Nodef node) {
                 List<Nodef> neighbors = super.getNeighbors(map, node);

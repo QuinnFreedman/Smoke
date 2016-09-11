@@ -13,7 +13,7 @@ import proceduralGeneration.WorldBuilder;
 public abstract class debug_dungeon {
 	
 	public static void buildDungeon() {
-		long seed = (long) (Math.random() * Long.MAX_VALUE);
+		long seed = (long) (Math.random() * Long.MAX_VALUE); //8094307174919142400L
 		out.pln("Seed = "+seed);
 		out.pln("building world...");
 		Random rng = new Random(seed);
@@ -60,6 +60,10 @@ public abstract class debug_dungeon {
 						percipitation[y][x] < WorldBuilder.biomeThresholds[0] ? colorToHsv(new Color(0f, .9f, 0f))[0] :
 						percipitation[y][x] < WorldBuilder.biomeThresholds[1] ? colorToHsv(new Color(0f, .9f, .7f))[0] :
 								colorToHsv(new Color(0f, .6f, .8f))[0]);
+
+				if(percipitation[y][x] < 0) {
+					b = 1;
+				}
 
 				Color color = Color.getHSBColor(h, .5f, b);
 				img.setRGB(x, y, color.getRGB());
